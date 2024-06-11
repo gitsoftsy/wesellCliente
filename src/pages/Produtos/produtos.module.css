@@ -1,0 +1,112 @@
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  padding-top: 3em;
+  height: 100%;
+  gap: 1em;
+}
+
+.containerFiltros {
+  position: relative;
+  flex: 0 0 300px;
+  user-select: none;
+  padding-right: 2em;
+}
+
+.containerFiltros ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+  padding: 0;
+  font-size: 16px;
+}
+
+.containerFiltros ul li {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.containerFiltros ul li label {
+  cursor: pointer;
+}
+.containerFiltros ul span {
+  width: fit-content;
+  margin-top: 2px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--laranja);
+}
+
+.containerFiltros ul span:hover {
+  color: var(--cinza-secundario);
+}
+
+.containerProdutos {
+  flex: 1;
+  height: 100%;
+}
+
+.containerFiltros ul li input[type="checkbox"] {
+  margin-top: 0;
+  border: 1px solid #a3a3a3d0;
+  box-shadow: none;
+  transform: scale(1.2);
+  width: 14px;
+  height: 14px;
+}
+
+.containerFiltros ul li input[type="checkbox"]:checked {
+  border-color: #0d6efd;
+}
+
+.areaOrdenacao {
+  display: flex;
+  justify-content: space-between;
+}
+
+.areaOrdenacao .sortBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: min-content;
+}
+
+.sortBy {
+  width: 170px;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group h3 {
+  margin-bottom: 10px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.price-inputs input[type="number"] {
+  width: 70px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.price-inputs span {
+  font-size: 18px;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin-bottom: 10px;
+}

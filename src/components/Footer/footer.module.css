@@ -1,0 +1,42 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.expandFooter {
+  padding: 0.3em 1.2em;
+  background-color: #fff;
+  font-weight: 500;
+  color: var(--cinza-secundario);
+  width: fit-content;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.expandFooter p {
+  margin-bottom: 0.4em;
+}
+
+.content nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 1em;
+  padding-top: 1.5em;
+  margin-bottom: 0.8em;
+}
+
+.content nav a {
+  color: var(--preto-secundario);
+}
+.content p {
+  margin-bottom: 0;
+  color: #aeabac;
+}
+.areaInfoFooter {
+  background-color: #fff;
+  padding-bottom: 1em;
+  transition: max-height 0.9s;
+  overflow: hidden;
+}

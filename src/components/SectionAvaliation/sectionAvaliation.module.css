@@ -1,0 +1,73 @@
+.infoAvaliation{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: auto;
+}
+
+.commentsAvaliation{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.textStar{
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    align-items: center;
+}
+
+.textStar p:nth-child(1){
+    padding: 0;
+    margin: 0;
+    padding-top: 5px;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.textStar span{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rankings{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.avaliationClients{
+    display: flex;
+    flex-direction: column;
+}
+
+.avaliationClients h1, .commentsAvaliation h1{
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-top: 10px;
+}
+
+.boxCards{
+    display: flex;
+    gap: 4px;
+}
+
+.boxImg{
+    display: flex;
+    gap: 16px;
+    padding-top: 1rem;
+}
+
+.boxImg img{
+    width: 200px;
+    height: auto;
+    border-radius: 6px;
+}
+
+.commentsAvaliation h1{
+    margin-top: 3.5rem;
+}
+

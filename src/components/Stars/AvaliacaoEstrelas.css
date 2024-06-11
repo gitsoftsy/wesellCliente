@@ -1,0 +1,6 @@
+.avaliacao-estrelas {
+    display: flex;
+    align-items: center;
+    font-size: 1.5em;
+    gap: 5px;
+}

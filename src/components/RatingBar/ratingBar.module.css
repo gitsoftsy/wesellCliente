@@ -1,0 +1,15 @@
+.bar{
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    font-size: 1rem;
+    height: max-content;
+}
+
+.ratingBarBg{
+    background-color: #f0f0f0;
+    width: 200px;
+    height: 10px;
+    border-radius: 16px;
+}
+

@@ -1,0 +1,40 @@
+.areaTendencias {
+    padding: 2.5em 0;
+}
+
+.areaTendencias h5 {
+    font-weight: bolder;
+    color: #383838;
+}
+
+.carrosselCategorias {
+    padding-top: 2em !important;
+}
+
+.nomeCategoria {
+    font-size: 1.2em;
+    margin-bottom: 0;
+}
+
+.cardTendencia {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    cursor: pointer;
+}
+.cardTendencia div {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 160px;
+}
+.cardTendencia img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.247));
+    -webkit-filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.247));
+    object-fit: cover;
+}

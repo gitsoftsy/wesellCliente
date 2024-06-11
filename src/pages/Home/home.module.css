@@ -1,0 +1,40 @@
+.areaProdutosOfertaDia {
+    position: relative;
+    height: 360px;
+    background-color: var(--cinza);
+}
+
+.areaCategorias {
+    height: 330px;
+}
+
+.areaBannerDestaque {
+    height: auto;
+    background-color: var(--cinza);
+}
+.areaProdutosBuscados {
+    background-color: var(--cinza);
+}
+.areaProdutosHistorico {
+    height: auto;
+    background: linear-gradient(to bottom, #fff, var(--cinza));
+}
+.areaLinkGerado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3em !important;
+    padding-bottom: 3em !important;
+}
+
+.areaLinkGerado p {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+.areaLinkGerado button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    margin-top: 1em;
+}

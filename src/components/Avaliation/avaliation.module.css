@@ -1,0 +1,65 @@
+.boxAvaliation{
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.boxAvaliation span, .boxAvaliation p{
+    color: #000;
+}
+
+.boxAvaliation span {
+    font-weight: 500;
+}
+
+.lineAvaliation{
+    display: flex;
+    gap: 0.5rem;
+}
+
+.lineAvaliation p {
+    color: #000;
+}
+
+.avaliacao-estrelas {
+    display: flex;
+    font-size: 1.5em;
+    gap: 5px;
+}
+
+/* .carrosselImagens{
+    position: absolute;
+    top: -110px;
+    padding: 0.5em !important;
+} */
+
+.carrosselImagens{
+    display: flex;
+    margin-bottom: 20px;
+    background-color: tomato;
+    max-width: 80vw;
+}
+
+.carrosselImagens img{
+    width: 100%;
+}
+
+.boxImg{
+    display: flex;
+    gap: 12px;
+}
+
+.img{
+    width: 100px;
+}
+
+.stars{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stars p{
+    padding: 0;
+    margin: 0;
+    padding-top: 8px;
+}

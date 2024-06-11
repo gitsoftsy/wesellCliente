@@ -1,0 +1,68 @@
+.areaLink {
+  padding-top: 3em;
+}
+
+.sectionFilter {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2.5em;
+  padding-bottom: 1.5em;
+  gap: 1em;
+}
+
+.sectionFilter p {
+  color: var(--laranja);
+}
+
+.sectionFilter > p {
+  text-align: center;
+  font-size: 1.3em;
+  font-weight: 600;
+  border-bottom: 2px solid var(--laranja);
+  padding: 6px 1em;
+  width: fit-content;
+}
+
+.areaSearch{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.areaSearch p {
+  margin-bottom: 0;
+  cursor: pointer;
+  font-size: 1.3em;
+}
+
+.inputSearch {
+  width: 85%;
+}
+
+.areaFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding: 1.5em 0;
+}
+
+.areaOptions {
+  display: flex;
+  gap: 1em;
+}
+
+.search {
+  position: relative;
+}
+
+.search input[type="text"] {
+  border-top-right-radius: 0.375rem !important;
+  border-bottom-right-radius: 0.375rem !important;
+}
+
+.search span {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+}

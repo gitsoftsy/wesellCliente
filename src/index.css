@@ -1,0 +1,129 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --preto: #121010;
+  --preto-secundario: #1e1e1e;
+  --laranja: #f49516;
+  --amarelo: #faf004;
+  --cinza: #dedede;
+  --cinza-secundario: #5c5c5c;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+  background: #fff;
+  overflow-x: hidden;
+}
+main {
+  min-height: 100vh;
+}
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  background-color: #fff;
+  width: 60px;
+  height: 55px;
+}
+
+.swiper-button-prev {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.swiper-button-next {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.swiper-button-prev:after,
+.swiper-rtl,
+.swiper-button-next:after {
+  color: #858585;
+  font-weight: bolder;
+  font-size: 2em;
+}
+
+.swiper-button-prev {
+  left: 0;
+}
+
+.swiper-button-next {
+  right: 0;
+}
+
+.btn-primary {
+  height: fit-content;
+  background-color: var(--laranja);
+  border-color: var(--laranja);
+}
+
+.btn-primary:hover {
+  background-color: #e69020;
+  border-color: var(--laranja);
+}
+
+.btn-primary:active {
+  background-color: var(--laranja) !important;
+  border-color: var(--laranja) !important;
+}
+
+a.page-link {
+  color: var(--preto-secundario);
+}
+
+.page-item:not(:first-child) .page-link:hover {
+  color: var(--preto-secundario);
+}
+.active > .page-link,
+.page-link.active {
+  background-color: var(--preto-secundario);
+  border-color: var(--preto-secundario);
+}
+
+a.page-link:focus {
+  box-shadow: 0 0 0 0.25rem rgba(10, 10, 10, 0.25) !important;
+}
+
+ul.pagination {
+  gap: 2px;
+}
+.btn-outline-roxo {
+  color: var(--cinza-secundario) !important;
+  border-color: var(--cinza);
+}
+
+.btn-outline-roxo:hover {
+  color: var(--cinza-secundario) !important;
+  border-color: var(--laranja) !important;
+}
+
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check) + .btn:active {
+  color: #fff !important;
+  background-color: var(--laranja);
+  border-color: var(--laranja);
+}
