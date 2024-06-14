@@ -9,17 +9,18 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        setLoading(true)
         let dadosLogin = {
             email: email,
             senha: password,
             perfil: "COMPRADOR"
         }
 
-        Swal.showLoading()
         await axios.post(url_base + `/login`, dadosLogin, {
             headers: {
                 'Content-Type': 'application/json'
@@ -30,6 +31,7 @@ export default function Login() {
             navigate('/')
         }).catch((error) => {
             console.log(error.message);
+            toast.error(error.message);
         })
     };
 
@@ -70,7 +72,9 @@ export default function Login() {
                                 required
                             />
 
-                            <button type="submit">Entrar</button>
+                            <button type="submit">
+                                {loading ? <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> : 'Entrar'}
+                            </button>
                         </form>
                         <p>Caso ainda não tenha cadastro, clique <a href="/signup">Aqui!</a></p>
                     </div>
