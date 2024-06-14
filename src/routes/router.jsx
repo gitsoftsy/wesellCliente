@@ -5,6 +5,7 @@ import DetalhesProduto from "../pages/DetalhesProduto";
 import RelatorioVendas from "../pages/RelatorioVendas";
 import ProdutosVendidos from "../pages/ProdutosVendidos";
 import Produtos from "../pages/Produtos";
+import Login from "../pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: "produtos", element: <Produtos /> }
     ],
   },
+  { path: "/login", element: <Login /> }
 ]);
 
 export default router;
