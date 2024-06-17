@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       { path: "relatorio-de-vendas", element: <RelatorioVendas /> },
       { path: "produtos-vendidos", element: <ProdutosVendidos /> },
       { path: "produtos", element: <Produtos /> },
-      { path: "/dados-pessoais", element: <DadosPessoais /> },
+      { path: "/minha-conta", element: <DadosPessoais /> },
       { path: "carrinho", element: <Carrinho /> }
     ],
   },

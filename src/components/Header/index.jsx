@@ -5,7 +5,7 @@ import { IoCaretDown } from "react-icons/io5";
 import { PiShoppingCartLight } from "react-icons/pi";
 import NavBar from "../NavBar";
 import { Link } from "react-router-dom";
-import { FiSearch, FiUser } from "react-icons/fi";
+import { FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
 import { BsClipboardData } from "react-icons/bs";
 import { AiOutlineBank } from "react-icons/ai";
 
@@ -46,38 +46,29 @@ export default function Header() {
               >
                 <li>
                   <Link
-                    to={"/relatorio-de-vendas"}
+                    to={"/minha-conta/pedidos"}
                     className={`${styles.dropdownItem} dropdown-item`}
                   >
-                    <MdInsertChartOutlined size={18} />
-                    Relátorio de vendas
+                    <FiPackage size={18} />
+                    Pedidos
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to={"/produtos-vendidos"}
-                    className={`${styles.dropdownItem} dropdown-item`}
-                  >
-                    <BsClipboardData size={18} />
-                    Produtos vendidos
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={""}
+                    to={"/minha-conta"}
                     className={`${styles.dropdownItem} dropdown-item`}
                   >
                     <FiUser size={18} />
-                    Meus dados pessoais
+                    Cadastro
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to={""}
+                    to={"/logout"}
                     className={`${styles.dropdownItem} dropdown-item`}
                   >
-                    <AiOutlineBank size={18} />
-                    Meus dados bancários
+                    <FiLogOut size={18} />
+                    Sair da conta
                   </Link>
                 </li>
               </ul>

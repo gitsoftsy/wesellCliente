@@ -3,14 +3,20 @@ import axios from "axios";
 import ReactInputMask from "react-input-mask";
 import { toast } from "react-toastify";
 import { url_base } from "../../services/apis";
-import "./dadosPessoais.module.css";
+import styles from "./dadosPessoais.module.css";
 import InputPasswordToggle from "../../components/InputPasswordToggle";
 
 export default function DadosPessoais() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmCassword, setConfirmPassword] = useState('')
+  const [user, setUser] = useState('')
+  const [cpf, setCpf] = useState('')
+  const [name, setName] = useState('')
 
   return (
-    <div className="container">
-      <div className="content-user">
+    <div className={`container ${styles.container}`}>
+      <div className={`content-user ${styles.contentUser}`}>
         <form onSubmit={''/*handleSubmit*/}>
           <h2 className="text-center">Minha conta</h2>
           <p className="text-center">

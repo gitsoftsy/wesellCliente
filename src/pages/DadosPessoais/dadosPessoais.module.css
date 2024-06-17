@@ -1,17 +1,12 @@
-.content-user {
+.content-user,
+.contentUser {
   padding: 7em 0;
   display: flex;
   justify-content: center;
 }
-.btns-minha-conta {
-  display: flex;
-  justify-content: space-between;
-}
-.uf-minha-conta {
-  padding-left: 1em;
-}
 
-.content-user form {
+.content-user form,
+.contentUser form {
   width: 100%;
   max-width: 600px;
   color: #3f3f3f;
@@ -28,7 +23,8 @@
 }
 
 @media screen and (max-width: 767px) {
-  .content-user {
+  .content-user,
+  .contentUser {
     padding: 4em 0;
   }
   .content-user #btn-altera-senha {
@@ -36,13 +32,5 @@
   }
   .content-user form p {
     display: none;
-  }
-  .btns-minha-conta {
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.5em;
-  }
-  .btns-minha-conta button {
-    width: 100%;
   }
 }
