@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import styles from './cardRecommendation.module.css'
 
 const CardRecommendation = (props) => {
