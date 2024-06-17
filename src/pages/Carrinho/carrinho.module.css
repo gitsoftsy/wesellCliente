@@ -1,0 +1,108 @@
+.containerCart {
+  background-color: var(--cinza);
+  min-height: 100vh;
+}
+
+.contentCart {
+  padding-top: 3em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.contentCart aside h4 {
+  margin: 0;
+}
+
+.cardItensCarrinho {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2em;
+  height: auto;
+}
+
+.titleCarrinho {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  padding-top: 2em;
+}
+
+.titleCarrinho p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cinza-secundario);
+}
+
+.cardResumo {
+  display: flex;
+  flex-direction: column;
+  padding: 0 2em;
+  height: auto;
+}
+.titleResumo {
+  padding-top: 2em;
+  border-bottom: 2px solid var(--cinza);
+}
+/* card produto */
+.cardItemCarrinho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2em 0;
+  border-top: 2px solid var(--cinza);
+  height: 140px;
+}
+
+.areaImg {
+  width: 15%;
+  height: 100%;
+}
+
+.areaImg img {
+  max-width: 100%;
+  height: 100%;
+}
+
+.areaQtd {
+  width: 13%;
+  border: 1px solid var(--cinza);
+  border-radius: 5px;
+  font-size: 1.4em;
+  padding: 2px 0.3em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.areaValor {
+  text-align: end;
+  width: 18%;
+  font-size: 1.5em;
+}
+.areaValor p {
+  margin: 0;
+}
+
+.areaDescricao {
+  width: 55%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.areaDescricao p {
+  margin: 0;
+}
+.estoque {
+  color: green;
+  margin-bottom: auto !important;
+}
+.spans {
+  display: flex;
+  gap: 1em;
+  color: rgb(37, 69, 252);
+}
+.spans span {
+  cursor: pointer;
+}

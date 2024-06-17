@@ -1,32 +1,66 @@
-import { Link } from 'react-router-dom'
-import styles from './carrinho.module.css'
-import { MdOutlineAccessTime } from 'react-icons/md'
-import { FiShoppingCart } from 'react-icons/fi'
+import { FiMinus, FiPlus } from "react-icons/fi";
+import styles from "./carrinho.module.css";
 
 export default function Carrinho() {
-    return (
-        <section id={styles.carrinho} className='container pt-4'>
-            <div className="col-12 title-carrinho d-flex justify-content-between">
-                <h2 className="mb-0 text-secondary">Meu carrinho</h2>
-
-                <div className="d-flex gap-3">
-                    <Link
-                        className="btn btn-sm rounded-pill btn-secondary text-white px-3 d-flex align-items-center justify-content-center"
-                        to="/minha-conta/pedidos"
-                    >
-                        <MdOutlineAccessTime className="me-2" size={22} />
-                        Histórico de compras
-                    </Link>
-                    <Link
-                        className="btn btn-sm rounded-pill btn-danger px-3 d-flex align-items-center justify-content-center"
-                        onClick={''}
-                    >
-                        <FiShoppingCart size={20} className="me-2" />
-                        Limpar carrinho
-                    </Link>
-                </div>
+  return (
+    <div className={styles.containerCart}>
+      <section className={`container ${styles.contentCart}`}>
+        <section className={`${styles.cardItensCarrinho} card col-8`}>
+          <div className={styles.titleCarrinho}>
+            <h5>Carrinho de compras</h5>
+            <p>Preço</p>
+          </div>
+          <div className={styles.cardItemCarrinho}>
+            <div className={styles.areaImg}>
+              <img
+                src="https://images.kabum.com.br/produtos/fotos/238671/console-sony-playstation-5_1634132554_g.jpg"
+                alt="teste"
+              />
             </div>
-            <hr />
+            <div className={styles.areaDescricao}>
+              <p>Playstation 5, com voucher do jogo EA Sports FC 24</p>
+              <p className={styles.estoque}>Em estoque</p>
+              <div className={styles.spans}>
+                <span>Remover</span>
+                <span>Salvar para mais tarde</span>
+              </div>
+            </div>
+            <div className={styles.areaQtd}>
+              <FiMinus /> 1 <FiPlus />
+            </div>
+            <div className={styles.areaValor}>
+              <p>R$ 3.329,99</p>
+            </div>
+          </div>
+          <div className={styles.cardItemCarrinho}>
+            <div className={styles.areaImg}>
+              <img
+                src="https://images.kabum.com.br/produtos/fotos/238671/console-sony-playstation-5_1634132554_g.jpg"
+                alt="teste"
+              />
+            </div>
+            <div className={styles.areaDescricao}>
+              <p>Playstation 5, com voucher do jogo EA Sports FC 24</p>
+              <p className={styles.estoque}>Em estoque</p>
+              <div className={styles.spans}>
+                <span>Remover</span>
+                <span>Salvar para mais tarde</span>
+              </div>
+            </div>
+            <div className={styles.areaQtd}>
+              <FiMinus /> 1 <FiPlus />
+            </div>
+            <div className={styles.areaValor}>
+              <p>R$ 1.229,00</p>
+            </div>
+          </div>
         </section>
-    )
+        <aside className={`${styles.cardResumo} col-3 card`}>
+          <div className={styles.titleResumo}>
+            <h5>Resumo da compra</h5>
+          </div>
+        </aside>
+      </section>
+    </div>
+  );
 }

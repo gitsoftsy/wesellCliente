@@ -14,7 +14,7 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.headerTop}>
         <div className={`${styles.headerContainer} container`}>
-          <Link to='/'>
+          <Link to="/">
             <img src={Logo} alt="Logo Wesell" />
           </Link>
           <form className={styles.searchForm}>
@@ -82,7 +82,12 @@ export default function Header() {
                 </li>
               </ul>
             </span>
-            <PiShoppingCartLight size={40} color="fff" />
+            <Link to='/carrinho'>
+              <PiShoppingCartLight
+                size={40}
+                color="fff"
+              />
+            </Link>
           </span>
         </div>
       </div>
