@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import styles from "./carrosselCategorias.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import styles from "./carrosselCategorias.module.css";
 
 export default function CarrosselCategorias({ dadosApi }) {
   return (
@@ -18,16 +18,22 @@ export default function CarrosselCategorias({ dadosApi }) {
         modules={[Autoplay]}
         className={styles.carrosselCategorias}
       >
-        {dadosApi.map((item) => (
-          <SwiperSlide key={item.id}>
-            <div className={styles.cardTendencia}>
-              <div>
-                <img src={item.imagem} alt={item.nome} />
+        {dadosApi.map((item) => {
+          const newPathImagem = item.pathImagem?.replace(
+            "/opt/apache-tomcat-9.0.89/webapps/ROOT",
+            "http://ec2-18-235-243-90.compute-1.amazonaws.com:8080"
+          );
+          return (
+            <SwiperSlide key={item.idCategoria}>
+              <div className={styles.cardTendencia}>
+                <div>
+                  <img src={newPathImagem} alt={item.categoria} />
+                </div>
+                <p className={styles.nomeCategoria}>{item.categoria}</p>
               </div>
-              <p className={styles.nomeCategoria}>{item.nome}</p>
-            </div>
-          </SwiperSlide>
-        ))}
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { url_base, url_base2 } from "../../services/apis";
 import styles from "./produto.module.css";
 import FavoriteIcon from "../../components/Heart";
 import AvaliacaoEstrelas from "../../components/Stars";
 import GridProdutos from "../../components/GridProdutos";
 import SectionAvaliation from "../../components/SectionAvaliation";
 import { toast } from "react-toastify";
+import { url_base2 } from "../../services/apis";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});

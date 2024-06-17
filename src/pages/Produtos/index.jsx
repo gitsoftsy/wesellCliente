@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import GridProdutos from "../../components/GridProdutos";
 import styles from "./produtos.module.css";
 import axios from "axios";
-import url_base from "../../services/url_base";
 import DoubleRangeSlider from "../../components/DoubleRangeSlider";
+import { url_base2 } from "../../services/apis";
 
 export default function Produtos() {
   const [produtos, setProdutos] = useState([]);
@@ -47,7 +47,7 @@ export default function Produtos() {
   useEffect(() => {
     async function getProdutos() {
       await axios
-        .get(url_base + `/produtos`)
+        .get(url_base2 + `/produtos`)
         .then((response) => {
           setProdutos(response.data);
         })

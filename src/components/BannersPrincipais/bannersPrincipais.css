@@ -1,0 +1,35 @@
+.customSwiper .swiper-button-prev,
+.customSwiper .swiper-button-next {
+  background-color: #fff;
+  width: 60px;
+  height: 55px;
+}
+
+.customSwiper .swiper-button-prev {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.customSwiper .swiper-button-next {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.customSwiper .swiper-button-prev:after,
+.customSwiper .swiper-rtl,
+.customSwiper .swiper-button-next:after {
+  color: #858585;
+  font-weight: bolder;
+  font-size: 2em;
+}
+
+.customSwiper .swiper-button-prev {
+  left: 0;
+}
+
+.customSwiper .swiper-button-next {
+  right: 0;
+}
+.customSwiper img {
+  width: 100%;
+}

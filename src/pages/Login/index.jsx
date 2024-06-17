@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from "axios";
-import { url_base } from "../../services/apis";
 import styles from "./login.module.css";
 import logo from "../../assets/wesell_vertical_azul.png";
 import { useNavigate } from 'react-router-dom';
+import { url_base } from '../../services/apis';
 
 export default function Login() {
     const [email, setEmail] = useState('');

@@ -1,25 +1,73 @@
 import { useEffect, useState } from "react";
-import Banners from "../../components/Banners";
+import BannersPrincipais from "../../components/BannersPrincipais";
 import CarrosselProdutos from "../../components/CarrosselProdutos";
 import styles from "./home.module.css";
 import axios from "axios";
 import { toast } from "react-toastify";
 import CarrosselCategorias from "../../components/CarrosselCategorias";
-import BannerDestaque from "../../components/BannerDestaque";
+import BannersSecundarios from "../../components/BannersSecundarios";
 import GridProdutos from "../../components/GridProdutos";
 import { MdContentCopy } from "react-icons/md";
-import url_base from "../../services/url_base";
+import { url_base, url_base2 } from "../../services/apis.js";
+import useContexts from "../../hooks/useContext.js";
 
 export default function Home() {
   const [produtosOfertaDia, setProdutosOfertaDia] = useState([]);
-  const [produtosMaisBuscados, setProdutosMaisBuscados] = useState([]);
+  const [produtosRecentes, setProdutosRecentes] = useState([]);
   const [historicoProdutos, setHistoricoProdutos] = useState([]);
-  const [tendencias, setTendencias] = useState([]);
+  const [bannersPrinDesktop, setBannersPrinDesktop] = useState([]);
+  const [bannersSecDesktop, setBannersSecDesktop] = useState([]);
+  const [bannersPrinMobile, setBannersPrinMobile] = useState([]);
+  const [bannersSecMobile, setBannersSecMobile] = useState([]);
+  const { categorias } = useContexts();
+
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    async function getBanners() {
+      await axios
+        .get(url_base + "/banners/ativos")
+        .then((response) => {
+          const bannersCliente = response.data.filter(
+            (item) => item.tipoBanner === "C"
+          );
+
+          const filterBanners = (localBanner, tipoDispositivo) =>
+            bannersCliente.filter(
+              (item) =>
+                item.localBanner === localBanner &&
+                item.tipoDispositivo === tipoDispositivo
+            );
+
+          const principaisDesktop = filterBanners("P", "D");
+          const secundariosDesktop = filterBanners("S", "D");
+          const principaisMobile = filterBanners("P", "M");
+          const secundariosMobile = filterBanners("S", "M");
+
+          setBannersPrinDesktop(principaisDesktop);
+          setBannersSecDesktop(secundariosDesktop);
+          setBannersPrinMobile(principaisMobile);
+          setBannersSecMobile(secundariosMobile);
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    }
+    getBanners();
+
     async function getProdutosOfertaDia() {
       await axios
-        .get(url_base + "/produtosOfertaDia")
+        .get(url_base2 + "/produtosOfertaDia")
         .then((response) => {
           setProdutosOfertaDia(response.data);
         })
@@ -29,33 +77,21 @@ export default function Home() {
     }
     getProdutosOfertaDia();
 
-    async function getTendencias() {
+    async function getProdutosAdicionadosRecentemente() {
       await axios
-        .get(url_base + "/tendencias")
+        .get(url_base2 + "/produtosMaisBuscados")
         .then((response) => {
-          setTendencias(response.data);
+          setProdutosRecentes(response.data);
         })
         .catch((error) => {
           toast.error(error.message);
         });
     }
-    getTendencias();
-
-    async function getProdutosMaisBuscados() {
-      await axios
-        .get(url_base + "/produtosMaisBuscados")
-        .then((response) => {
-          setProdutosMaisBuscados(response.data);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    }
-    getProdutosMaisBuscados();
+    getProdutosAdicionadosRecentemente();
 
     async function getHistoricoProdutos() {
       await axios
-        .get(url_base + "/historicoProdutos")
+        .get(url_base2 + "/historicoProdutos")
         .then((response) => {
           setHistoricoProdutos(response.data);
         })
@@ -78,28 +114,33 @@ export default function Home() {
 
   return (
     <>
-      <section className={styles.areaBanner}>
-        <Banners />
+      <section className={styles.areaBannerPrincipal}>
+        <BannersPrincipais banners={isMobile ? bannersPrinMobile : bannersPrinDesktop} />
       </section>
       <section className={styles.areaProdutosOfertaDia}>
         <CarrosselProdutos produtos={produtosOfertaDia} />
       </section>
       <section className={`${styles.areaCategorias} shadow-sm`}>
-        <CarrosselCategorias dadosApi={tendencias} />
+        <CarrosselCategorias dadosApi={categorias} />
       </section>
-      <section className={styles.areaBannerDestaque}>
-        <BannerDestaque />
+      <section className={styles.areaBannerSecundario}>
+        <BannersSecundarios banners={isMobile ? bannersSecMobile : bannersSecDesktop}/>
       </section>
       <section className={styles.areaProdutosBuscados}>
         <GridProdutos
-        qtdVisivel={4}
-        titleVisivel={true}
+          qtdVisivel={4}
+          titleVisivel={true}
           nomeSecao="PRODUTOS MAIS BUSCADOS"
-          produtos={produtosMaisBuscados}
+          produtos={produtosRecentes}
         />
       </section>
       <section className={styles.areaProdutosHistorico}>
-        <GridProdutos titleVisivel={true} qtdVisivel={4} nomeSecao="SEU HISTÓRICO" produtos={historicoProdutos} />
+        <GridProdutos
+          titleVisivel={true}
+          qtdVisivel={4}
+          nomeSecao="SEU HISTÓRICO"
+          produtos={historicoProdutos}
+        />
       </section>
       <div
         className="modal fade"

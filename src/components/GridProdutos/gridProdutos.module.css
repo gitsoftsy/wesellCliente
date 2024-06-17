@@ -1,31 +1,35 @@
 .gridProdutos {
-    padding: 3em 0 !important;
-}
-
-.gridProdutos h5 {
+    padding: 3em 0;
+  }
+  
+  .gridProdutos h5 {
     font-weight: bolder;
     color: #383838;
     margin-bottom: 3em;
-}
-.areaProdutos {
+  }
+  .areaProdutos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
     gap: 25px;
-}
-
-.areaProdutos h5 {
+  }
+  
+  .areaProdutos h5 {
     font-weight: bolder;
     color: #383838;
-}
-
-.loadItens {
+  }
+  
+  .loadItens {
     color: #383838;
-    width: fit-content;  
+    width: fit-content;
     cursor: pointer;
     margin: 0 auto;
     margin-top: 3em;
     margin-bottom: 0;
-    padding: 0.4em;
-    border: 1px solid var(--cinza-secundario);
-    border-radius: 6px;
-}
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid transparent;
+  }
+  
+  .loadItens:hover {
+    border-bottom: 1px solid var(--cinza-secundario);
+  }
+  

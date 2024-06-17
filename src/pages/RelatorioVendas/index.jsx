@@ -14,9 +14,9 @@ import styles from "./relatorioVendas.module.css";
 import { format } from "date-fns";
 import axios from "axios";
 import { toast } from "react-toastify";
-import url_base from "../../services/url_base.js";
 import { MdOutlineSearch } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { url_base2 } from "../../services/apis.js";
 
 export default function RelatorioVendas() {
   const [showSaldo, setShowSaldo] = useState(false);
@@ -33,7 +33,7 @@ export default function RelatorioVendas() {
   useEffect(() => {
     async function getRelatorioVendas() {
       await axios
-        .get(url_base + "/relatorioVendas")
+        .get(url_base2 + "/relatorioVendas")
         .then((response) => {
           setVendas(response.data);
           setTableData(response.data);

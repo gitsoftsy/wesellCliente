@@ -4,8 +4,8 @@ import { FiFilter, FiSearch } from "react-icons/fi";
 import GridProdutos from "../../components/GridProdutos";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import url_base from "../../services/url_base";
 import { toast } from "react-toastify";
+import { url_base2 } from "../../services/apis";
 
 export default function ProdutosVendidos() {
   const [produtos, setProdutos] = useState([]);
@@ -15,7 +15,7 @@ export default function ProdutosVendidos() {
   useEffect(() => {
     async function getProdutos() {
       await axios
-        .get(url_base + "/produtosVendidos")
+        .get(url_base2 + "/produtosVendidos")
         .then((response) => {
           setProdutos(response.data);
           setProdutosFiltrados(response.data);

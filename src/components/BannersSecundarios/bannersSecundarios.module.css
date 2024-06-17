@@ -1,0 +1,17 @@
+.areaBanner {
+    padding: 3.5em 0;
+}
+
+.areaBanner h5 {
+    font-weight: bolder;
+    color: #383838;
+}
+
+.carrossel {
+    margin-top: 3em;
+    height: 320px;
+}
+
+.carrossel img {
+    width: 100%;
+}
