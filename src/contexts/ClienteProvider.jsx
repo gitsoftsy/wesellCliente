@@ -13,6 +13,7 @@ ClienteProvider.propTypes = {
 export default function ClienteProvider({ children }) {
   const [categorias, setCategorias] = useState([]);
 
+
   useEffect(() => {
     async function getCategorias() {
       await axios
@@ -27,13 +28,34 @@ export default function ClienteProvider({ children }) {
     getCategorias();
   }, []);
 
+  function addToCart(product) {
+    const carrinho = localStorage.getItem("wesell-items-in-cart");
+
+    let productsInCart = JSON.parse(carrinho) || [];
+
+    const hasCurso = productsInCart.some(
+      (productInCart) => productInCart.id === product.id
+    );
+
+    if (hasCurso) {
+      toast.warning("Este produto já está no carrinho.");
+      return;
+    }
+
+    productsInCart.push(product);
+    localStorage.setItem(
+      "wesell-items-in-cart",
+      JSON.stringify(productsInCart)
+    );
+    toast.success("Adicionado com sucesso!");
+  }
+
   const dados = {
     categorias,
+    addToCart
   };
 
   return (
-    <ClienteContext.Provider value={dados}>
-      {children}
-    </ClienteContext.Provider>
+    <ClienteContext.Provider value={dados}>{children}</ClienteContext.Provider>
   );
 }

@@ -1,65 +1,83 @@
-import { FiMinus, FiPlus } from "react-icons/fi";
+import CardProdutoCarrinho from "../../components/CardProdutoCarrinho";
 import styles from "./carrinho.module.css";
+import { useEffect, useState } from "react";
 
 export default function Carrinho() {
+  const [produtos, setProdutos] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    const productsInCart = localStorage.getItem("wesell-items-in-cart");
+    const products = JSON.parse(productsInCart) || [];
+
+    setProdutos(products);
+  }, []);
+
+  function removeProduct(id) {
+    setProdutos((produtosAntigos) => {
+      const produtosFiltrados = produtosAntigos.filter(
+        (item) => item.id !== id
+      );
+
+      localStorage.setItem(
+        "wesell-items-in-cart",
+        JSON.stringify(produtosFiltrados)
+      );
+
+      return produtosFiltrados;
+    });
+  }
+
+  function handleQuantidadeChange(idCurso, novaQuantidade) {
+    setProdutos((cursosAntigos) => {
+      const novoCarrinho = cursosAntigos.map((curso) =>
+        curso.id === idCurso ? { ...curso, quantidade: novaQuantidade } : curso
+      );
+
+      const subtotalCalculado = novoCarrinho.reduce(
+        (acc, curso) => acc + curso.valor * curso.quantidade,
+        0
+      );
+
+      setTotal(subtotalCalculado);
+
+      return novoCarrinho;
+    });
+  }
+
   return (
     <div className={styles.containerCart}>
       <section className={`container ${styles.contentCart}`}>
-        <section className={`${styles.cardItensCarrinho} card col-8`}>
+        <section className={`${styles.cardItensCarrinho} card`}>
           <div className={styles.titleCarrinho}>
             <h5>Carrinho de compras</h5>
             <p>Preço</p>
           </div>
-          <div className={styles.cardItemCarrinho}>
-            <div className={styles.areaImg}>
-              <img
-                src="https://images.kabum.com.br/produtos/fotos/238671/console-sony-playstation-5_1634132554_g.jpg"
-                alt="teste"
-              />
-            </div>
-            <div className={styles.areaDescricao}>
-              <p>Playstation 5, com voucher do jogo EA Sports FC 24</p>
-              <p className={styles.estoque}>Em estoque</p>
-              <div className={styles.spans}>
-                <span>Remover</span>
-                <span>Salvar para mais tarde</span>
-              </div>
-            </div>
-            <div className={styles.areaQtd}>
-              <FiMinus /> 1 <FiPlus />
-            </div>
-            <div className={styles.areaValor}>
-              <p>R$ 3.329,99</p>
-            </div>
-          </div>
-          <div className={styles.cardItemCarrinho}>
-            <div className={styles.areaImg}>
-              <img
-                src="https://images.kabum.com.br/produtos/fotos/238671/console-sony-playstation-5_1634132554_g.jpg"
-                alt="teste"
-              />
-            </div>
-            <div className={styles.areaDescricao}>
-              <p>Playstation 5, com voucher do jogo EA Sports FC 24</p>
-              <p className={styles.estoque}>Em estoque</p>
-              <div className={styles.spans}>
-                <span>Remover</span>
-                <span>Salvar para mais tarde</span>
-              </div>
-            </div>
-            <div className={styles.areaQtd}>
-              <FiMinus /> 1 <FiPlus />
-            </div>
-            <div className={styles.areaValor}>
-              <p>R$ 1.229,00</p>
-            </div>
-          </div>
+          {produtos.map((item) => (
+            <CardProdutoCarrinho
+              item={item}
+              removeProduct={removeProduct}
+              onQuantidadeChange={(novaQuantidade) =>
+                handleQuantidadeChange(item.id, novaQuantidade)
+              }
+              key={item.id}
+            />
+          ))}
         </section>
-        <aside className={`${styles.cardResumo} col-3 card`}>
+        <div className={`${styles.cardResumo} card`}>
           <div className={styles.titleResumo}>
             <h5>Resumo da compra</h5>
           </div>
-        </aside>
+          <div className={styles.infoResumo}>
+            <span>
+              <p>Produtos (2)</p> <p>R$ 4.560,00</p>
+            </span>
+            <span className={styles.spanTotal}>
+              <p>Total</p> <p>R$ 4.560,00</p>
+            </span>
+          </div>
+          <button className="btn btn-primary">Continuar a compra</button>
+        </div>
       </section>
     </div>
   );

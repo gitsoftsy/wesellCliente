@@ -2,9 +2,11 @@
 import styles from "./cardproduto.module.css";
 import formatCurrencyBR from "../../hooks/formatCurrency";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import useContexts from "../../hooks/useContext";
 
 export default function CardProduto({ produto }) {
+  const { addToCart } = useContexts();
+
   const removerAcentos = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
@@ -13,10 +15,6 @@ export default function CardProduto({ produto }) {
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/\//g, "");
-
-  function addToCart() {
-    toast.success("Adicionado com sucesso.");
-  }
 
   return (
     <div className={`${styles.cardProduto}`}>
@@ -43,8 +41,12 @@ export default function CardProduto({ produto }) {
           </p>
         </div>
         <section className={styles.areaBtn}>
-          <button className={styles.btnBuy} type="button" onClick={addToCart}>
-             Adicionar ao carrinho
+          <button
+            className={styles.btnBuy}
+            type="button"
+            onClick={() => addToCart({ ...produto, qtd: 1 })}
+          >
+            Adicionar ao carrinho
           </button>
         </section>
       </section>

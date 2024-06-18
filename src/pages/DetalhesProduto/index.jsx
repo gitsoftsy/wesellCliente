@@ -8,11 +8,14 @@ import GridProdutos from "../../components/GridProdutos";
 import SectionAvaliation from "../../components/SectionAvaliation";
 import { toast } from "react-toastify";
 import { url_base2 } from "../../services/apis";
+import useContexts from "../../hooks/useContext";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
   const [selectedImage, setSelectedImage] = useState("");
   const [produtosMaisBuscados, setProdutosMaisBuscados] = useState([]);
+
+  const { addToCart } = useContexts();
 
   const handleThumbnailClick = (imageUrl) => {
     setSelectedImage(imageUrl);
@@ -156,7 +159,7 @@ export default function DetalhesProduto() {
                 </div>
                 <div className={styles.purchase_addCart}>
                   <button className={styles.purchase}>Comprar</button>
-                  <button className={styles.addCart}>
+                  <button type="button" className={styles.addCart} onClick={() => addToCart({ ...produto, qtd: 1 })}>
                     Adicionar ao carrinho
                   </button>
                 </div>
