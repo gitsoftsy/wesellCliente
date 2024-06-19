@@ -1,15 +1,18 @@
-.bar{
+.bar {
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 20px;
     font-size: 1rem;
     height: max-content;
 }
 
-.ratingBarBg{
+.stars {
+    width: 78px;
+}
+
+.ratingBarBg {
     background-color: #f0f0f0;
     width: 200px;
     height: 10px;
     border-radius: 16px;
 }
-

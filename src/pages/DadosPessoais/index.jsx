@@ -32,7 +32,7 @@ export default function DadosPessoais() {
             </label>
             <input
               type="email"
-              className="form-control form-control-lg"
+              className={`form-control form-control-lg ${styles.disabled}`}
               id="email"
               value={''}
               readOnly
@@ -102,7 +102,7 @@ export default function DadosPessoais() {
               mask="999.999.999-99"
               maskChar={null}
               type="tel"
-              className="form-control form-control-lg"
+              className={`form-control form-control-lg ${styles.disabled}`}
               id="cpf"
               name="cpf"
               value={''}

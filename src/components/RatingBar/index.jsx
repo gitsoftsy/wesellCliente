@@ -14,8 +14,8 @@ const RatingnBar = (props) => {
 
     return (
         <div className={styles.bar}>
-            <span> {props.estrelas} estrelas</span>
-            <div className={styles.ratingBarBg}><div style={barPosition} className={styles.teste}></div></div>
+            <span className={styles.stars}> {props.estrelas} estrelas</span>
+            <div className={styles.ratingBarBg}><div style={barPosition}></div></div>
             <span>{props.porcentagem}%</span>
         </div>
     )

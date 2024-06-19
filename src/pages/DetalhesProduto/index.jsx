@@ -7,13 +7,15 @@ import AvaliacaoEstrelas from "../../components/Stars";
 import GridProdutos from "../../components/GridProdutos";
 import SectionAvaliation from "../../components/SectionAvaliation";
 import { toast } from "react-toastify";
-import { url_base2 } from "../../services/apis";
+import { url_base, url_base2, url_img } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
   const [selectedImage, setSelectedImage] = useState("");
   const [produtosMaisBuscados, setProdutosMaisBuscados] = useState([]);
+  const [isFavoritado, setIsFavoritado] = useState(false);
+  const [listImages, setListImages] = useState([])
 
   const { addToCart } = useContexts();
 
@@ -25,12 +27,22 @@ export default function DetalhesProduto() {
 
   async function getProduto() {
     await axios
-      .get(url_base2 + `/produtos/${id}`)
+      .get(url_base + `/produtos/${id}`)
       .then((response) => {
         setProduto(response.data);
-        if (response.data.imagens.length > 0) {
-          setSelectedImage(response.data.imagens[0]);
-        }
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+
+    await axios
+      .get(url_base + `/imagens/produto/${id}`)
+      .then((response) => {
+        setListImages(response.data);
+        let caminho = response.data[0].imagem.split('ROOT')
+        console.log(caminho);
+        setSelectedImage(`${url_img}${caminho[1]}`);
       })
       .catch((error) => {
         console.log(error.message);
@@ -38,6 +50,10 @@ export default function DetalhesProduto() {
   }
 
   useEffect(() => {
+    let favoritos =
+      JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
+    let favoritado = favoritos.some(item => item.id === id);
+    setIsFavoritado(favoritado);
     getProduto();
     async function getProdutosMaisBuscados() {
       await axios
@@ -55,8 +71,22 @@ export default function DetalhesProduto() {
   }, []);
 
   useEffect(() => {
+    const listIds = JSON.parse(localStorage.getItem('historicoProdutosComprador'))
+
+    if (listIds == undefined) {
+      const newList = [id]
+      localStorage.setItem('historicoProdutosComprador', JSON.stringify(newList))
+    } else {
+      listIds.unshift(id)
+    }
+
     window.scrollTo(0, 0);
     getProduto();
+
+    const favoritos =
+      JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
+    const favoritado = favoritos.some(item => item.id === id);
+    setIsFavoritado(favoritado);
   }, [id]);
 
   let porcentagens = {
@@ -75,17 +105,17 @@ export default function DetalhesProduto() {
             <div className={`${styles.areaImagens}`}>
               <div className={styles.thumbnails_mainImage}>
                 <div className={styles.thumbnails}>
-                  {produto.imagens?.map((image) => (
+                  {listImages?.map((image) => (
                     <img
-                      key={image}
-                      src={image}
+                      key={image.idImagemProduto}
+                      src={`${url_img}${image.imagem.split('ROOT')[1]}`}
                       alt={`Thumbnail`}
                       className={styles.thumbnail}
-                      onMouseEnter={() => handleThumbnailClick(image)}
+                      onMouseEnter={() => handleThumbnailClick(`${url_img}${image.imagem.split('ROOT')[1]}`)}
                     />
                   ))}
                 </div>
-                <div className={styles.mainImage}>
+                <div className={styles.boxMainImage}>
                   <img
                     src={selectedImage}
                     alt="Imagem principal"
@@ -97,50 +127,56 @@ export default function DetalhesProduto() {
               <div className={styles.desc}>
                 <div className={styles.description_stars}>
                   <div className={styles.favoriteIcon}>
-                    <FavoriteIcon />
+                    <FavoriteIcon favoritado={isFavoritado} produto={produto} handleFavorite={setIsFavoritado} />
                   </div>
-                  <h6 className={styles.description}>{produto.descricao}</h6>
+                  <h6>{produto.nomeProduto}</h6>
                   <div className={styles.stars}>
-                    <span className={styles.textStar}>{produto.avaliacao}</span>
+                    <span className={styles.textStar}>{produto.avaliacao ? produto.avaliacao : '0.0'}</span>
                     <AvaliacaoEstrelas
-                      numeroAvaliacao={produto.avaliacao}
+                      numeroAvaliacao={produto.avaliacao ? produto.avaliacao : 0}
                       color="#5089D9"
                     />
                     <span className={styles.textStar}>
-                      ({produto.avaliacaoTotal})
+                      {produto.avaliacao ? `(${produto.avaliacao})` : 'Sem avaliações'}
                     </span>
                   </div>
                 </div>
                 <div className={styles.soldPlus_console}>
-                  <span className={styles.soldPlus}>Mais Vendidos</span>
-                  <a className={styles.console}>
-                    {produto.hierarquiaCategoria}º em {produto.categoria}
-                  </a>
+                  <span className={styles.soldPlus}>{produto.categorias ? produto.categorias.categoria : ''}</span>
                 </div>
                 <div>
                   <div className={styles.values}>
+                    <hr />
+                    <h4>Valor produto:</h4>
                     <span className={styles.values_liquid}>
-                      <s>R${produto.valor}</s>
+                      <s>{`R$${produto.preco + (produto.preco / 10)}`}</s>
                     </span>
                     <h5 className={styles.values_deduction}>
-                      R${produto.valorComDesconto}
+                      R${produto.preco}
                       <sub>,00</sub>
                     </h5>
                   </div>
+                  {produto.quantidadeParcela ?
+                    <div className={styles}>
+
+                      <span>em </span>
+                      <span className={styles.interestFree}>
+                        {`${produto.quantidadeParcela}x de ${produto.preco / produto.quantidadeParcela} sem juros`}
+                      </span>
+                    </div> : ""
+                  }
                   <div className={styles}>
+
                     <span>em </span>
                     <span className={styles.interestFree}>
-                      10x R${produto.valorParcela} sem juros
+                      {`10x de 36,90 sem juros`}
                     </span>
                   </div>
-                  <a className={styles.methodPayments}>
-                    Ver os meios de pagamento
-                  </a>
                 </div>
               </div>
               <div className={styles.frete}>
                 <div className={styles.freeShipping_deadline_calculate}>
-                  <h5 className={styles.freeShipping}>Frete Grátis</h5>
+                  <h5 className={styles.freeShipping}>Calcule o frete</h5>
                   <span className={styles.deadline}>
                     Saiba os prazos de entrega e as formas de envio.
                   </span>
@@ -150,12 +186,7 @@ export default function DetalhesProduto() {
                 </div>
                 <div className={styles.stock_quantity_unit}>
                   <span className={styles.stock}>Estoque disponivel</span>
-                  <span className={styles.quantity}>
-                    Quantidade: {produto.qtdEstoque} unidade (+5 disponivel)
-                  </span>
-                  <span className={styles.unit}>
-                    Você pode comprar apenas 1 Unidade
-                  </span>
+                  <a href="#" className={styles.unit}>Consulte o regulamento</a>
                 </div>
                 <div className={styles.purchase_addCart}>
                   <button className={styles.purchase}>Comprar</button>
@@ -168,16 +199,24 @@ export default function DetalhesProduto() {
           </section>
           <section className={styles.descriptionProduct}>
             <h2 className={styles.descriptionDetailed}>Descrição do Produto</h2>
-            <p>{produto.descricaoDetalhada}</p>
+            {/* Tranforma descrição do produto que vem em Html - obs: esta off pois a tela ainda n esta consumindo os dados das apis*/}
+            {/* {parse(produto.descricaoDetalhada)} */}
+            {produto.descrProduto}
           </section>
         </div>
       </section>
       <section className={styles.areaBranca}>
         <section className={`${styles.areaAvaliacoes} container rounded-4`}>
           <SectionAvaliation
-            numeroAvaliacao="4"
+            numeroAvaliacao={produto.avaliacao ? produto.avaliacao : 0}
             color="amarelo"
-            porcentagem={porcentagens}
+            porcentagem={produto.porcentagens ? produto.porcentagens : {
+              cinco: 0,
+              quatro: 0,
+              tres: 0,
+              dois: 0,
+              um: 0
+            }}
           />
         </section>
         <section className={`${styles.areaProdutosSimilares} rounded-4`}>

@@ -27,7 +27,7 @@ const SectionAvaliation = (props) => {
           <span>
             <p>{props.numeroAvaliacao}.0</p>
             <AvaliacaoEstrelas
-              numeroAvaliacao={4}
+              numeroAvaliacao={props.numeroAvaliacao}
               color={style.color}
               font={style.fontSize}
             />
@@ -41,51 +41,20 @@ const SectionAvaliation = (props) => {
           <RatingnBar estrelas="2" porcentagem={props.porcentagem.dois} />
           <RatingnBar estrelas="1" porcentagem={props.porcentagem.um} />
         </div>
-        <div className={styles.avaliationClients}>
-          <h1>Avaliações de clientes</h1>
-          <div className={styles.boxCards}>
-            <CardRecommendation status={true} value={100} />
-            <CardRecommendation status={false} value={0} />
-          </div>
-        </div>
+        {props.avaliacaoCliente ?
+          <div className={styles.avaliationClients}>
+            <h1>Avaliações de clientes</h1>
+            <div className={styles.boxCards}>
+              <CardRecommendation status={true} value={100} />
+              <CardRecommendation status={false} value={0} />
+            </div>
+          </div> : ''
+        }
+
       </div>
       <div className={styles.commentsAvaliation}>
-        {images.length > 0 ? (
-          images.length > 3 ? (
-              <Swiper
-                slidesPerView={3}
-                spaceBetween={1}
-                loop={true}
-                autoplay={{
-                  delay: 3000,
-                  disableOnInteraction: false,
-                }}
-                modules={[Autoplay]}
-                className={styles.carrosselImagens}
-              >
-                {images.map((img, index) => {
-                  <SwiperSlide key={index}>
-                    <img src={img} alt={`Imagem ${index + 1}`} className={styles.img}/>
-                  </SwiperSlide>;
-                })}
-              </Swiper>
-          ) : (
-            <div className={styles.boxImg}>
-              {images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  className={styles.img}
-                  alt={`Imagem ${index + 1}`}
-                />
-              ))}
-            </div>
-          )
-        ) : (
-          ""
-        )}
-        <h1>Avaliações com imagens e vídeos</h1>
-        <Avaliation numeroAvaliacao="4" />
+        <h1>Avaliações de clientes</h1>
+        {/* <Avaliation numeroAvaliacao="4" /> */}
       </div>
     </>
   );

@@ -4,12 +4,28 @@ import { MdInsertChartOutlined } from "react-icons/md";
 import { IoCaretDown } from "react-icons/io5";
 import { PiShoppingCartLight } from "react-icons/pi";
 import NavBar from "../NavBar";
-import { Link } from "react-router-dom";
-import { FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
+import { FiLogIn, FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
 import { BsClipboardData } from "react-icons/bs";
 import { AiOutlineBank } from "react-icons/ai";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const navigate = useNavigate()
+  const [user, setUser] = useState({})
+
+  const logout = () => {
+    localStorage.removeItem('wesell-user-comprador')
+    window.location.reload()
+  }
+
+  useEffect(() => {
+    const jsonUser = JSON.parse(localStorage.getItem('wesell-user-comprador'))
+    if (jsonUser) {
+      setUser(jsonUser)
+    }
+  }, [])
+
   return (
     <header className={styles.header}>
       <div className={styles.headerTop}>
@@ -29,7 +45,7 @@ export default function Header() {
 
           <span className={styles.areaIconCar}>
             <span className="dropdown-center">
-              <p>Olá, Giovanna</p>
+              <p>Olá, {user.nome ? user.nome.split(' ')[0] : 'Bem vindo'}</p>
               <p
                 className={`${styles.dropdownToggle} dropdown-toggle`}
                 data-bs-auto-close="outside"
@@ -40,38 +56,66 @@ export default function Header() {
                   Minha conta <IoCaretDown />
                 </strong>
               </p>
-              <ul
-                className="dropdown-menu links-drop"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li>
-                  <Link
-                    to={"/minha-conta/pedidos"}
-                    className={`${styles.dropdownItem} dropdown-item`}
-                  >
-                    <FiPackage size={18} />
-                    Pedidos
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"/minha-conta"}
-                    className={`${styles.dropdownItem} dropdown-item`}
-                  >
-                    <FiUser size={18} />
-                    Cadastro
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"/logout"}
-                    className={`${styles.dropdownItem} dropdown-item`}
-                  >
-                    <FiLogOut size={18} />
-                    Sair da conta
-                  </Link>
-                </li>
-              </ul>
+              {user.id ?
+                <ul
+                  className="dropdown-menu links-drop"
+                  aria-labelledby="dropdownMenuButton"
+                >
+
+                  <li>
+                    <Link
+                      to={"/minha-conta/pedidos"}
+                      className={`${styles.dropdownItem} dropdown-item`}
+                    >
+                      <FiPackage size={18} />
+                      Pedidos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/minha-conta"}
+                      className={`${styles.dropdownItem} dropdown-item`}
+                    >
+                      <FiUser size={18} />
+                      Cadastro
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/"}
+                      className={`${styles.dropdownItem} dropdown-item`}
+                      onClick={logout}
+                    >
+                      <FiLogOut size={18} />
+                      Sair da conta
+                    </Link>
+                  </li>
+                </ul>
+                :
+                <ul
+                  className="dropdown-menu links-drop"
+                  aria-labelledby="dropdownMenuButton"
+                >
+                  <li>
+                    <Link
+                      to={"/registro"}
+                      className={`${styles.dropdownItem} dropdown-item`}
+                    >
+                      <FiUser size={18} />
+                      Criar conta
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to={"/"}
+                      className={`${styles.dropdownItem} dropdown-item`}
+                    >
+                      <FiLogIn size={18} />
+                      Login
+                    </Link>
+                  </li>
+                </ul>
+              }
             </span>
             <Link to='/carrinho'>
               <PiShoppingCartLight

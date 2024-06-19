@@ -27,11 +27,17 @@ export default function Login() {
             }
         }).then((response) => {
             console.log(response.data)
-            localStorage.setItem('user', response.data)
+            localStorage.setItem('wesell-user-comprador', JSON.stringify(response.data))
             navigate('/')
         }).catch((error) => {
             console.log(error.message);
-            toast.error(error.message);
+            if (error.response.data == '' && error.response.status == 404) {
+                toast.error('Email ou senha inválidos');
+                setLoading(false)
+            } else {
+                toast.error(error.message);
+                setLoading(false)
+            }
         })
     };
 

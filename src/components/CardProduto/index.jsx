@@ -19,7 +19,7 @@ export default function CardProduto({ produto }) {
   return (
     <div className={`${styles.cardProduto}`}>
       <Link
-        to={`/produto/${produto.id}/${nomeAtualizado}`}
+        to={`/produto/${204}/${nomeAtualizado}`}
         className={styles.areaImg}
       >
         <img
@@ -29,7 +29,7 @@ export default function CardProduto({ produto }) {
       </Link>
       <section className={styles.infoProduto}>
         <Link
-          to={`/produto/${produto.id}/${nomeAtualizado}`}
+          to={`/produto/${204}/${nomeAtualizado}`}
           className={styles.areaDescricao}
         >
           <h6 className={styles.descricao}>{produto.descricao}</h6>

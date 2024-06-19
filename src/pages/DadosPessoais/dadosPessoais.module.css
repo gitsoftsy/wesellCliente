@@ -5,6 +5,10 @@
   justify-content: center;
 }
 
+.disabled {
+  color: #888888 !important;
+}
+
 .content-user form,
 .contentUser form {
   width: 100%;
