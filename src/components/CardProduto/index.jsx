@@ -1,7 +1,7 @@
   /* eslint-disable react/prop-types */
   import styles from "./cardproduto.module.css";
   import formatCurrencyBR from "../../hooks/formatCurrency";
-  import { Link } from "react-router-dom";
+  import { Link, useNavigate } from "react-router-dom";
   import useContexts from "../../hooks/useContext";
   import { useEffect, useState } from "react";
   import axios from "axios";
@@ -10,6 +10,8 @@
   export default function CardProduto({ produto }) {
     const { addToCart } = useContexts();
     const [srcImage, setSrcImage] = useState('')
+    const navigate = useNavigate();
+    
 
     useEffect(() => {
 
@@ -69,7 +71,7 @@
             <button
               className={styles.btnBuy}
               type="button"
-              onClick={() => addToCart({ ...produto, qtd: 1 })}
+              onClick={() => {addToCart({ ...produto, qtd: 1 }), navigate('/carrinho')}}
             >
               Adicionar ao carrinho
             </button>

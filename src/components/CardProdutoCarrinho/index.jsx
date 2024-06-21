@@ -8,6 +8,10 @@ export default function CardProdutoCarrinho({
   item,
   removeProduct,
   onQuantidadeChange,
+  savedItemsArea,
+  saveItem,
+  removeProductSave,
+  addToCart
 }) {
   const removerAcentos = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -35,11 +39,20 @@ export default function CardProdutoCarrinho({
         </Link>
         <p className={styles.estoque}>Em estoque</p>
         <div className={styles.spans}>
-          <span onClick={() => removeProduct(item.id)}>Excluir</span>
-          <span>Salvar para mais tarde</span>
+          {savedItemsArea ? (
+            <>
+              <span onClick={() => removeProductSave(item.id)}>Remover</span>
+              <span onClick={() => {addToCart(item), removeProductSave(item.id)}}>Adicionar ao carrinho</span>
+            </>
+          ) : (
+            <>
+              <span onClick={() => removeProduct(item.id)}>Remover</span>
+              <span onClick={() => saveItem(item)}>Salvar para mais tarde</span>
+            </>
+          )}
         </div>
       </div>
-      <div className={styles.areaQtd}>
+      <div className={styles.areaQtd} hidden={savedItemsArea}>
         <FiMinus
           size={24}
           onClick={() => onQuantidadeChange(Math.max(1, item.qtd - 1))}

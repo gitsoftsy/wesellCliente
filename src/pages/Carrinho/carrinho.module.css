@@ -18,6 +18,13 @@
   flex-direction: column;
   padding: 0 2em;
   height: fit-content !important;
+  width: 100%;
+}
+
+.sectionItensCarrinho {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
   width: 70%;
 }
 
@@ -45,7 +52,9 @@
   height: fit-content !important;
   width: 28%;
 }
-.titleResumo, .infoResumo {
+
+.titleResumo,
+.infoResumo {
   border-bottom: 2px solid var(--cinza);
 }
 .infoResumo span {
@@ -59,4 +68,27 @@
   font-weight: 600;
   font-size: 1.2em;
   margin-bottom: 8px;
+}
+
+.cardResumo2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding-bottom: 2em;
+  height: fit-content !important;
+  width: 28%;
+}
+.titleResumo2 {
+  padding: 2em 1.5em;
+  color: #d6d6d6;
+  border-bottom: 2px solid var(--cinza);
+}
+.titleResumo2 h5 {
+  margin: 0;
+}
+#textoSemProduto {
+  padding: 0 1.5em;
+  font-size: 13px;
+  margin: 0;
+  color: #d6d6d6;
 }
