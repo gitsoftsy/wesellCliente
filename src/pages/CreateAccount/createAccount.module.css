@@ -1,0 +1,22 @@
+.containerLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.containerLogin .sectionLogin {
+    width: 90%;
+    max-width: 550px;
+}
+.containerLogin .card-login {
+    padding: 1em 0;
+}
+.sectionLogin h1 {
+    color: #474747;
+}
+@media screen and (max-width: 767px) {
+    .containerLogin {
+        padding-top: 0em;
+    }
+}

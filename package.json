@@ -21,6 +21,7 @@
     "react-input-mask": "^2.0.4",
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.23.0",
+    "react-step-wizard": "^5.3.11",
     "react-toastify": "^10.0.5",
     "swiper": "^11.1.1"
   },

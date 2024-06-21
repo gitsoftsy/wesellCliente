@@ -107,7 +107,7 @@ export default function Header() {
                   </li>
                   <li>
                     <Link
-                      to={"/"}
+                      to={"/login"}
                       className={`${styles.dropdownItem} dropdown-item`}
                     >
                       <FiLogIn size={18} />

@@ -12,7 +12,13 @@ ClienteProvider.propTypes = {
 
 export default function ClienteProvider({ children }) {
   const [categorias, setCategorias] = useState([]);
+  const [client, setClient] = useState(
+    JSON.parse(localStorage.getItem("wesell-login-cliente"))
+  );
 
+  function storageClient(data) {
+    localStorage.setItem("wesell-login-cliente", JSON.stringify(data));
+  }
 
   useEffect(() => {
     async function getCategorias() {
@@ -52,7 +58,10 @@ export default function ClienteProvider({ children }) {
 
   const dados = {
     categorias,
-    addToCart
+    addToCart,
+    client,
+    setClient,
+    storageClient
   };
 
   return (
