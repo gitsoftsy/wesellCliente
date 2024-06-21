@@ -1,55 +1,80 @@
-/* eslint-disable react/prop-types */
-import styles from "./cardproduto.module.css";
-import formatCurrencyBR from "../../hooks/formatCurrency";
-import { Link } from "react-router-dom";
-import useContexts from "../../hooks/useContext";
+  /* eslint-disable react/prop-types */
+  import styles from "./cardproduto.module.css";
+  import formatCurrencyBR from "../../hooks/formatCurrency";
+  import { Link } from "react-router-dom";
+  import useContexts from "../../hooks/useContext";
+  import { useEffect, useState } from "react";
+  import axios from "axios";
+  import { url_base, url_img } from "../../services/apis";
 
-export default function CardProduto({ produto }) {
-  const { addToCart } = useContexts();
+  export default function CardProduto({ produto }) {
+    const { addToCart } = useContexts();
+    const [srcImage, setSrcImage] = useState('')
 
-  const removerAcentos = (str) => {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  };
+    useEffect(() => {
 
-  const nomeAtualizado = removerAcentos(produto.descricao)
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/\//g, "");
+      async function getImagensProduto() {
+        await axios
+          .get(url_base + `/imagens/produto/${produto.idProduto}`)
+          .then((response) => {
+            console.log(response)
+            if (response.data.length > 0) {
+              let caminho = response.data[0].imagem.split('ROOT')
+              console.log(caminho)
+              setSrcImage(`${url_img}${caminho[1]}`);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            console.log(error.message);
+          });
+      }
+      getImagensProduto();
+    })
 
-  return (
-    <div className={`${styles.cardProduto}`}>
-      <Link
-        to={`/produto/${204}/${nomeAtualizado}`}
-        className={styles.areaImg}
-      >
-        <img
-          src={produto.imagem ? produto.imagem : produto.imagens[0]}
-          alt={produto.descricao}
-        />
-      </Link>
-      <section className={styles.infoProduto}>
+    // const removerAcentos = (str) => {
+    //   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // };
+
+    // const nomeAtualizado = removerAcentos(produto.descrProduto)
+    //   .toLowerCase()
+    //   .replace(/\s+/g, "-")
+    //   .replace(/\//g, "");
+
+    return (
+      <div className={`${styles.cardProduto}`}>
         <Link
-          to={`/produto/${204}/${nomeAtualizado}`}
-          className={styles.areaDescricao}
+          to={`/produto/${produto.idProduto}/${produto.nomeProduto}`}
+          className={styles.areaImg}
         >
-          <h6 className={styles.descricao}>{produto.descricao}</h6>
+          <img
+            src={srcImage ? srcImage : 'https://imgs.casasbahia.com.br/55060824/1g.jpg'}
+            alt={produto.descrProduto}
+          />
         </Link>
-        <div>
-          <p className={styles.valor}>{formatCurrencyBR(produto.valor)}</p>
-          <p className={styles.infoParcelas}>
-            em até 12x de R$ 139,90 sem juros
-          </p>
-        </div>
-        <section className={styles.areaBtn}>
-          <button
-            className={styles.btnBuy}
-            type="button"
-            onClick={() => addToCart({ ...produto, qtd: 1 })}
+        <section className={styles.infoProduto}>
+          <Link
+            to={`/produto/${produto.idProduto}/${produto.nomeProduto}`}
+            className={styles.areaDescricao}
           >
-            Adicionar ao carrinho
-          </button>
+            <h6 className={styles.descricao}>{produto.descricao}</h6>
+          </Link>
+          <div>
+            <p className={styles.valor}>{produto.preco ? formatCurrencyBR(produto.preco) : formatCurrencyBR(produto.valor)}</p>
+            <p className={styles.infoParcelas}>
+              em até 12x de R$ 139,90 sem juros
+            </p>
+          </div>
+          <section className={styles.areaBtn}>
+            <button
+              className={styles.btnBuy}
+              type="button"
+              onClick={() => addToCart({ ...produto, qtd: 1 })}
+            >
+              Adicionar ao carrinho
+            </button>
+          </section>
         </section>
-      </section>
-    </div>
-  );
-}
+      </div>
+    );
+  }

@@ -14,7 +14,6 @@
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",
     "exceljs": "^4.4.0",
-    "json-server": "^1.0.0-beta.0",
     "rc-slider": "^10.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -33,6 +32,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "json-server": "^1.0.0-beta.1",
     "vite": "^5.2.0"
   }
 }

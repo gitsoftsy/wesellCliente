@@ -89,9 +89,17 @@ export default function Home() {
     getProdutosAdicionadosRecentemente();
 
     async function getHistoricoProdutos() {
+      const listaIds = JSON.parse(localStorage.getItem('historicoProdutosComprador'))
+
       await axios
-        .get(url_base2 + "/historicoProdutos")
+        .post(url_base + "/produtos/recentes", {
+          ids: listaIds
+        })
         .then((response) => {
+          console.log('====================================');
+          console.log(listaIds);
+          console.log(response);
+          console.log('====================================');
           setHistoricoProdutos(response.data);
         })
         .catch((error) => {
@@ -113,7 +121,7 @@ export default function Home() {
         <CarrosselCategorias dadosApi={categorias} />
       </section>
       <section className={styles.areaBannerSecundario}>
-        <BannersSecundarios banners={isMobile ? bannersSecMobile : bannersSecDesktop}/>
+        <BannersSecundarios banners={isMobile ? bannersSecMobile : bannersSecDesktop} />
       </section>
       <section className={styles.areaProdutosBuscados}>
         <GridProdutos

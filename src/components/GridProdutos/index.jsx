@@ -14,10 +14,10 @@ export default function GridProdutos({ nomeSecao, produtos, qtdVisivel, titleVis
 
   return (
     <div className={`${styles.gridProdutos} container`}>
-      {titleVisivel && (<h5>{nomeSecao}</h5>)}
+      {titleVisivel && (<h5>{nomeSecao}</h5>)}    
       <div className={styles.areaProdutos}>
         {produtos.slice(0, visibleCount).map((produto) => (
-          <CardProduto produto={produto} key={produto.id} />
+          <CardProduto produto={produto} key={produto.idProduto} />
         ))}
       </div>
       {hasMore && (
