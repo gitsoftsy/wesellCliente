@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import styles from "./produto.module.css";
 import FavoriteIcon from "../../components/Heart";
 import AvaliacaoEstrelas from "../../components/Stars";
@@ -9,6 +9,7 @@ import SectionAvaliation from "../../components/SectionAvaliation";
 import { toast } from "react-toastify";
 import { url_base, url_base2, url_img } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
+import formatCurrencyBR from "../../hooks/formatCurrency";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
@@ -16,6 +17,7 @@ export default function DetalhesProduto() {
   const [produtosMaisBuscados, setProdutosMaisBuscados] = useState([]);
   const [isFavoritado, setIsFavoritado] = useState(false);
   const [listImages, setListImages] = useState([])
+  const path = useLocation()
 
   const { addToCart } = useContexts();
 
@@ -23,7 +25,22 @@ export default function DetalhesProduto() {
     setSelectedImage(imageUrl);
   };
 
-  const { id } = useParams();
+  const { id, vendedor, nomeProduto } = useParams();
+
+
+  useEffect(() => {
+
+    if (path.pathname.includes('static')) {
+      const jsonPage = {
+        idProduto: 204,
+        idVendedor: 2,
+        nomeVendedor: 'Luiz',
+        url: path.pathname
+      }
+
+      localStorage.setItem('statusPage', JSON.stringify(jsonPage))
+    }
+  }, [])
 
   async function getProduto() {
     await axios
@@ -41,7 +58,6 @@ export default function DetalhesProduto() {
       .then((response) => {
         setListImages(response.data);
         let caminho = response.data[0].imagem.split('ROOT')
-        console.log(caminho);
         setSelectedImage(`${url_img}${caminho[1]}`);
       })
       .catch((error) => {
@@ -149,11 +165,10 @@ export default function DetalhesProduto() {
                     <hr />
                     <h4>Valor produto:</h4>
                     <span className={styles.values_liquid}>
-                      <s>{`R$${produto.preco + (produto.preco / 10)}`}</s>
+                      <s>{`${formatCurrencyBR(produto.preco + (produto.preco / 10))}`}</s>
                     </span>
                     <h5 className={styles.values_deduction}>
-                      R${produto.preco}
-                      <sub>,00</sub>
+                      {formatCurrencyBR(produto.preco)}
                     </h5>
                   </div>
                   {produto.quantidadeParcela ?
@@ -163,15 +178,14 @@ export default function DetalhesProduto() {
                       <span className={styles.interestFree}>
                         {`${produto.quantidadeParcela}x de ${produto.preco / produto.quantidadeParcela} sem juros`}
                       </span>
-                    </div> : ""
+                    </div> :
+                    <div className={styles}>
+                      <span>em </span>
+                      <span className={styles.interestFree}>
+                        {`10x de 36,90 sem juros`}
+                      </span>
+                    </div>
                   }
-                  <div className={styles}>
-
-                    <span>em </span>
-                    <span className={styles.interestFree}>
-                      {`10x de 36,90 sem juros`}
-                    </span>
-                  </div>
                 </div>
               </div>
               <div className={styles.frete}>

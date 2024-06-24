@@ -26,9 +26,16 @@ export default function Login() {
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
+
+            const statusPage = JSON.parse(localStorage.getItem('statusPage'))
             console.log(response.data)
             localStorage.setItem('wesell-user-comprador', JSON.stringify(response.data))
-            navigate('/')
+
+            if (statusPage == undefined) {
+                navigate('/home')
+            } else {
+                navigate(statusPage.url)
+            }
         }).catch((error) => {
             console.log(error.message);
             if (error.response.data == '' && error.response.status == 404) {

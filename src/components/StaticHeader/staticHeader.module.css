@@ -1,0 +1,99 @@
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+}
+
+.headerTop {
+    height: 80px;
+    width: 100%;
+    background-color: var(--preto);
+}
+.headerTop div {
+    height: 100%;
+    width: 100%;
+}
+.headerTop img {
+    height: 55px;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.searchForm {
+    position: relative;
+}
+.searchForm input[type="text"] {
+    background: #fff;
+    margin: 0;
+    width: 600px;
+    height: 2.5em;
+    padding-left: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #797979d5;
+    border: 1px solid #5c5c5c;
+    border-radius: 2px;
+    outline: none;
+}
+.searchForm input[type="text"]::placeholder {
+    font-weight: 500;
+    color: #797979d5;
+}
+.searchForm button[type="submit"] {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    border: none;
+    border-left: 1px solid #79797946;
+    background: none;
+    cursor: pointer;
+    height: 70%;
+}
+
+.areaIconCar {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.areaIconCar p {
+    margin-bottom: 0;
+    color: #fff;
+    font-size: 1.1em;
+}
+
+/* Drop minhaa conta */
+
+.dropdownToggle {
+    cursor: pointer;
+}
+.dropdownItem {
+    padding: 0.3em 0.5em !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.4em !important;
+    margin-bottom: 0.1em !important;
+    font-weight: 500 !important;
+    margin-right: 0 !important;
+    color: var(--cinza-secundario) !important;
+    background-color: transparent !important;
+}
+.dropdownToggle::after {
+    content: none !important;
+}
+.dropdownItem:hover {
+    color: #505050 !important;
+}
+
+@media (max-width: 1200px) {
+    .searchForm input[type="text"] {
+        width: 500px;
+    }
+}

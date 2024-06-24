@@ -24,6 +24,14 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
+    const statusPage = localStorage.getItem('statusPage')
+
+    if (statusPage != undefined) {
+      localStorage.removeItem('statusPage')
+    }
+  }, [])
+
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -96,14 +104,10 @@ export default function Home() {
           ids: listaIds
         })
         .then((response) => {
-          console.log('====================================');
-          console.log(listaIds);
-          console.log(response);
-          console.log('====================================');
           setHistoricoProdutos(response.data);
         })
         .catch((error) => {
-          toast.error(error.message);
+          console.log(error.message);
         });
     }
     getHistoricoProdutos();
