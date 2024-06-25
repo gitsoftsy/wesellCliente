@@ -1,0 +1,135 @@
+.cardPedido {
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    min-height: 280px;
+}
+
+.cardPedido .titleCardPedido {
+    text-align: center;
+    padding: 0.3em 0;
+}
+
+.titleCardPedido h5 {
+    margin: 0;
+}
+
+.cardPedido .bodyCardPedido {
+    padding: 1.5em 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 250px;
+}
+
+.bodyCardPedido .numberPedido {
+    margin-bottom: 1em;
+    color: #3b3b3b;
+}
+.bodyCardPedido .totalCardPedido {
+    color: #393939 !important;
+    margin-bottom: 0;
+}
+.footerCardPedido {
+    display: flex;
+    justify-content: space-between;
+    color: #393939 !important;
+}
+.footerCardPedido h6 {
+    margin-bottom: 0;
+    padding: 0.1em 0;
+}
+
+.headerCardPedido {
+    display: flex;
+    justify-content: space-between;
+    color: #393939 !important;
+}
+.headerCardPedido h6,
+.headerCardPedido h5 {
+    margin-bottom: 0;
+}
+.headerCardPedido .showDetailsHeader {
+    display: none;
+}
+.footerCardPedido .showDetails {
+    cursor: pointer;
+    padding: 0.1em 0.5em;
+    font-weight: 600 !important;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+.footerCardPedido .showDetails:hover {
+    background-color: #d3d3d3;
+    font-weight: 600 !important;
+}
+.body-detalhes-pedido p {
+    margin: 0;
+}
+.bodyCardPedido p {
+    font-weight: 500;
+    color: #3b3b3b;
+}
+
+.p-title-details {
+    font-size: 20px;
+}
+@media screen and (max-width: 767px) {
+    .footerCardPedido .showDetails {
+        display: none;
+    }
+    .headerCardPedido h5,
+    .headerCardPedido h6 {
+        font-size: 16px;
+    }
+    .headerCardPedido .showDetailsHeader {
+        display: block;
+    }
+    .titleCardPedido h5 {
+        font-size: 16px;
+    }
+    .cardPedido .bodyCardPedido {
+        padding: 1em;
+    }
+    .bodyCardPedido .numberPedido {
+        font-size: 16px;
+    }
+    .bodyCardPedido .totalCardPedido {
+        font-size: 16px;
+    }
+    .bodyCardPedido p {
+        font-size: 12px;
+    }
+    .p-title-details {
+        font-size: 14px;
+    }
+    .table-details-pedido thead {
+        border: none;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .table-details-pedido tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: 0.6em;
+    }
+
+    .table-details-pedido td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: 0.8em;
+        text-align: right;
+    }
+
+    .table-details-pedido td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}

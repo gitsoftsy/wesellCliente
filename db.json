@@ -1,4 +1,132 @@
 {
+  "pedidos": [
+    {
+      "idPedido": 1,
+      "idCliente": 1,
+      "numeroPedido": "1673",
+      "formaPagamento": "RECORRENCIA",
+      "numParcelas": 2,
+      "valorParcela": 207.00,
+      "valorTotal": 415.00,
+      "idVoucher": 0,
+      "valorDesconto": 0.00,
+      "status": "P",
+      "produtos": [
+        {
+          "idProduto": 1,
+          "codProduto": "BN01",
+          "nome": "Bola Nike Pitch Futebol",
+          "qtd": 1,
+          "precoUnitario": 95.0
+        },
+        {
+          "idProduto": 2,
+          "codProduto": "BQ03",
+          "nome": "Bola de basquete",
+          "qtd": 1,
+          "precoUnitario": 320.0
+        }
+      ]
+    },
+    {
+      "idPedido": 2,
+      "idCliente": 2,
+      "numeroPedido": "1674",
+      "formaPagamento": "BOLETO",
+      "numParcelas": 1,
+      "valorParcela": 1000.00,
+      "valorTotal": 1000.00,
+      "idVoucher": 0,
+      "valorDesconto": 0.00,
+      "status": "P",
+      "produtos": [
+        {
+          "idProduto": 3,
+          "codProduto": "RA01",
+          "nome": "Raquete de Tênis Wilson",
+          "qtd": 2,
+          "precoUnitario": 500.0
+        }
+      ]
+    },
+    {
+      "idPedido": 3,
+      "idCliente": 3,
+      "numeroPedido": "1675",
+      "formaPagamento": "PIX",
+      "numParcelas": 1,
+      "valorParcela": 890.00,
+      "valorTotal": 890.00,
+      "idVoucher": 0,
+      "valorDesconto": 0.00,
+      "status": "P",
+      "produtos": [
+        {
+          "idProduto": 4,
+          "codProduto": "CH01",
+          "nome": "Chuteira Adidas Predator",
+          "qtd": 1,
+          "precoUnitario": 800.0
+        },
+        {
+          "idProduto": 5,
+          "codProduto": "ME01",
+          "nome": "Meia Esportiva",
+          "qtd": 3,
+          "precoUnitario": 30.0
+        }
+      ]
+    },
+    {
+      "idPedido": 4,
+      "idCliente": 4,
+      "numeroPedido": "1676",
+      "formaPagamento": "CARTÃO DE CRÉDITO",
+      "numParcelas": 3,
+      "valorParcela": 116.66,
+      "valorTotal": 350.00,
+      "idVoucher": 0,
+      "valorDesconto": 0.00,
+      "status": "P",
+      "produtos": [
+        {
+          "idProduto": 6,
+          "codProduto": "LU01",
+          "nome": "Luva de Goleiro",
+          "qtd": 1,
+          "precoUnitario": 150.0
+        },
+        {
+          "idProduto": 7,
+          "codProduto": "BQ02",
+          "nome": "Bola de Volei",
+          "qtd": 1,
+          "precoUnitario": 200.0
+        }
+      ]
+    },
+    {
+      "idPedido": 5,
+      "idCliente": 5,
+      "numeroPedido": "1677",
+      "formaPagamento": "CARTÃO DE DÉBITO",
+      "numParcelas": 1,
+      "valorParcela": 2000.00,
+      "valorTotal": 2000.00,
+      "idVoucher": 0,
+      "valorDesconto": 0.00,
+      "status": "P",
+      "produtos": [
+        {
+          "idProduto": 8,
+          "codProduto": "BI01",
+          "nome": "Bicicleta Aro 29",
+          "qtd": 1,
+          "precoUnitario": 2000.0
+        }
+      ]
+    }
+  ],
   "produtosDestaque": [
     {
       "idProduto": 1,

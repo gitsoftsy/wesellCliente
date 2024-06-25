@@ -14,6 +14,7 @@ export default function CardProduto({ produto }) {
 
 
   useEffect(() => {
+    console.log(produto)
 
     async function getImagensProduto() {
       await axios
@@ -57,7 +58,7 @@ export default function CardProduto({ produto }) {
           to={`/produto/${204}/${produto.nomeProduto}`}
           className={styles.areaDescricao}
         >
-          <h6 className={styles.descricao}>{produto.descricao}</h6>
+          <h6 className={styles.descricao}>{produto.nomeProduto ? produto.nomeProduto : produto.descricao}</h6>
         </Link>
         <div>
           <p className={styles.valor}>{produto.preco ? formatCurrencyBR(produto.preco) : formatCurrencyBR(produto.valor)}</p>

@@ -86,7 +86,7 @@ export default function Home() {
 
     async function getProdutosAdicionadosRecentemente() {
       await axios
-        .get(url_base2 + "/produtosMaisBuscados")
+        .get(url_base + "/produtos/ultimos10")
         .then((response) => {
           setProdutosRecentes(response.data);
         })
@@ -139,7 +139,7 @@ export default function Home() {
         <GridProdutos
           titleVisivel={true}
           qtdVisivel={4}
-          nomeSecao="SEU HISTÓRICO"
+          nomeSecao="VISTO RECENTEMENTE"
           produtos={historicoProdutos}
         />
       </section>

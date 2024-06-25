@@ -14,7 +14,7 @@ import formatCurrencyBR from "../../hooks/formatCurrency";
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
   const [selectedImage, setSelectedImage] = useState("");
-  const [produtosMaisBuscados, setProdutosMaisBuscados] = useState([]);
+  const [produtosSimilares, setProdutosSimilares] = useState([]);
   const [isFavoritado, setIsFavoritado] = useState(false);
   const [listImages, setListImages] = useState([])
   const path = useLocation()
@@ -71,17 +71,20 @@ export default function DetalhesProduto() {
     let favoritado = favoritos.some(item => item.id === id);
     setIsFavoritado(favoritado);
     getProduto();
-    async function getProdutosMaisBuscados() {
+
+    console.log(produto.categorias.idCategoria)
+    async function getProdutosSimilares() {
       await axios
-        .get(url_base2 + "/produtosMaisBuscados")
+        .get(url_base + `/produtos/categoria/${produto.categorias.idCategoria}/subCategoria/${produto.subcategorias.id}`)
         .then((response) => {
-          setProdutosMaisBuscados(response.data);
+          setProdutosSimilares(response.data);
         })
         .catch((error) => {
+          console.log(error);
           toast.error(error.message);
         });
     }
-    getProdutosMaisBuscados();
+    getProdutosSimilares();
 
 
   }, []);
@@ -237,7 +240,7 @@ export default function DetalhesProduto() {
           <GridProdutos
             nomeSecao="PRODUTOS SIMILARES"
             titleVisivel={true}
-            produtos={produtosMaisBuscados}
+            produtos={produtosSimilares}
             qtdVisivel={4}
           />
         </section>
