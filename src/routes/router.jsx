@@ -9,6 +9,7 @@ import DadosPessoais from "../pages/DadosPessoais";
 import CreateAccount from "../pages/CreateAccount";
 import StaticLayout from "../pages/StaticLayout";
 import Validation from "../pages/Validation";
+import Endereco from "../pages/Endereco";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
       { path: "produtos", element: <Produtos /> },
       { path: "minha-conta", element: <DadosPessoais /> },
       { path: "carrinho", element: <Carrinho /> },
-      { path: "registro", element: <CreateAccount /> }
+      { path: "registro", element: <CreateAccount /> },
+      { path: "carrinho/endereco", element: <Endereco /> },
     ],
   },
   {
@@ -32,7 +34,8 @@ const router = createBrowserRouter([
       { path: "produto/:vendedor/:id/:nomeProduto/:idVendedor", element: <DetalhesProduto /> },
       { path: "minha-conta", element: <DadosPessoais /> },
       { path: "carrinho", element: <Carrinho /> },
-      { path: "registro", element: <CreateAccount /> }
+      { path: "registro", element: <CreateAccount /> },
+      { path: "carrinho/endereco", element: <Endereco /> },
     ],
   },
   { path: "/login", element: <Login /> },

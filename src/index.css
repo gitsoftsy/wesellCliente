@@ -74,13 +74,13 @@ button {
 
 .btn-primary {
   height: fit-content;
-  background-color: var(--laranja);
-  border-color: var(--laranja);
+  background-color: var(--laranja) !important;
+  border-color: var(--laranja) !important;
 }
 
 .btn-primary:hover {
-  background-color: #e69020;
-  border-color: var(--laranja);
+  background-color: #e69020 !important;
+  border-color: var(--laranja) !important;
 }
 
 .btn-primary:active {
@@ -118,7 +118,7 @@ ul.pagination {
   border-color: var(--laranja) !important;
 }
 
-.btn-check:checked + .btn,
+/* .btn-check:checked + .btn,
 .btn.active,
 .btn.show,
 .btn:first-child:active,
@@ -126,4 +126,12 @@ ul.pagination {
   color: #fff !important;
   background-color: var(--laranja);
   border-color: var(--laranja);
+} */
+
+.btn-outline-light {
+  border-color: #dedede;
+  background-color: #F3F3F3 !important;
+}
+.btn-outline-light:hover {
+  background-color: #ebebeb !important;
 }

@@ -1,0 +1,109 @@
+.containerCart {
+  background-color: var(--cinza);
+  min-height: 100vh;
+}
+
+.contentCart {
+  padding-top: 3em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cardItensCarrinho {
+  display: flex;
+  flex-direction: column;
+  padding: 2em 1.5em;
+  height: fit-content !important;
+  width: 100%;
+  gap: 1em;
+}
+
+.sectionItensCarrinho {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  width: 70%;
+}
+
+.titleCarrinho {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--cinza);
+}
+
+.titleCarrinho p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cinza-secundario);
+}
+
+.cardItensCarrinho .cardEndereco:hover {
+    background-color: #f3f3f3;
+}
+.cardEndereco label {
+    cursor: pointer;
+}
+
+.radioSelected {
+    background-color: #f3f3f3 !important;
+}
+/* resumo pedido */
+.cardResumo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2em;
+  padding: 2em 1.5em;
+  height: fit-content !important;
+  width: 28%;
+}
+
+.titleResumo,
+.infoResumo {
+  border-bottom: 2px solid var(--cinza);
+}
+.infoResumo span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+}
+
+.spanTotal p {
+  color: var(--preto);
+  font-weight: 600;
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+
+.cardResumo2 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  padding-bottom: 2em;
+  height: fit-content !important;
+  width: 28%;
+}
+.titleResumo2 {
+  padding: 2em 1.5em;
+  color: #d6d6d6;
+  border-bottom: 2px solid var(--cinza);
+}
+.titleResumo2 h5 {
+  margin: 0;
+}
+#textoSemProduto {
+  padding: 0 1.5em;
+  font-size: 13px;
+  margin: 0;
+  color: #d6d6d6;
+}
+
+#editar {
+  cursor: pointer;
+}
+
+#editar:hover {
+  color: #0051ca !important;
+}

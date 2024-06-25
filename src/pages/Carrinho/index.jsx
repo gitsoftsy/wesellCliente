@@ -4,17 +4,25 @@ import formatCurrencyBR from "../../hooks/formatCurrency.js";
 import styles from "./carrinho.module.css";
 import { toast } from "react-toastify";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function Carrinho() {
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
   const [produtosSalvos, setProdutosSalvos] = useState([]);
+  const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const productsInCart = localStorage.getItem("wesell-items-in-cart");
     const products = JSON.parse(productsInCart) || [];
     const savedProducts = localStorage.getItem("wesell-saved-items");
     const productsInListSave = JSON.parse(savedProducts) || [];
+    const quantidadeTotal = products.reduce(
+      (acc, produto) => acc + produto.qtd,
+      0
+    );
+    setQuantidadeTotalProdutos(quantidadeTotal);
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.valor * produto.qtd,
@@ -57,6 +65,12 @@ export default function Carrinho() {
 
       setTotal(subtotalCalculado);
 
+      const quantidadeTotal = produtosFiltrados.reduce(
+        (acc, produto) => acc + produto.qtd,
+        0
+      );
+      setQuantidadeTotalProdutos(quantidadeTotal);
+
       return produtosFiltrados;
     });
   }
@@ -74,27 +88,39 @@ export default function Carrinho() {
 
       setTotal(subtotalCalculado);
 
+      const quantidadeTotal = novoCarrinho.reduce(
+        (acc, produto) => acc + produto.qtd,
+        0
+      );
+      setQuantidadeTotalProdutos(quantidadeTotal);
+
       return novoCarrinho;
     });
   }
   function addToCart(product) {
     const carrinho = localStorage.getItem("wesell-items-in-cart");
-  
+
     let productsInCart = JSON.parse(carrinho) || [];
-  
+
     productsInCart.push(product);
     localStorage.setItem(
       "wesell-items-in-cart",
       JSON.stringify(productsInCart)
     );
-  
+
     setProdutosCarrinho((produtosAntigos) => [...produtosAntigos, product]);
-  
+
     const subtotalCalculado = productsInCart.reduce(
       (acc, produto) => acc + produto.valor * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
+
+    const quantidadeTotal = productsInCart.reduce(
+      (acc, produto) => acc + produto.qtd,
+      0
+    );
+    setQuantidadeTotalProdutos(quantidadeTotal);
   }
 
   function saveItem(produto) {
@@ -126,8 +152,22 @@ export default function Carrinho() {
         produto,
       ]);
 
+      const quantidadeTotal = produtosFiltrados.reduce(
+        (acc, produto) => acc + produto.qtd,
+        0
+      );
+      setQuantidadeTotalProdutos(quantidadeTotal);
+
       return produtosFiltrados;
     });
+  }
+
+  function continuarCompra() {
+    localStorage.setItem(
+      "wesell-items-in-cart",
+      JSON.stringify(produtosCarrinho)
+    );
+    navigate("endereco");
   }
 
   return (
@@ -156,8 +196,8 @@ export default function Carrinho() {
           ) : (
             <section className={`${styles.cardItensCarrinho} card`}>
               <div className="col-4 text-center mx-auto my-5">
-                <MdOutlineRemoveShoppingCart size={30} color="#FF5E93"/>
-                <h5 style={{color: '#FF5E93'}}>Seu carrinho está vazio!</h5>
+                <MdOutlineRemoveShoppingCart size={30} color="#FF5E93" />
+                <h5 style={{ color: "#FF5E93" }}>Seu carrinho está vazio!</h5>
                 <p>Você ainda não possui itens no seu carrinho.</p>
                 <button className="btn btn-primary">Ver produtos</button>
               </div>
@@ -194,13 +234,19 @@ export default function Carrinho() {
             </div>
             <div className={styles.infoResumo}>
               <span>
-                <p>Produtos (2)</p> <p>{formatCurrencyBR(total)}</p>
+                <p>Produtos ({quantidadeTotalProdutos})</p> <p>{formatCurrencyBR(total)}</p>
               </span>
               <span className={styles.spanTotal}>
                 <p>Total</p> <p>{formatCurrencyBR(total)}</p>
               </span>
             </div>
-            <button className="btn btn-primary">Continuar a compra</button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={continuarCompra}
+            >
+              Continuar a compra
+            </button>
           </div>
         ) : (
           <div className={`${styles.cardResumo2} card`}>
