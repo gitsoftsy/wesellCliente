@@ -31,7 +31,7 @@ export default function CardProduto({ produto }) {
         });
     }
     getImagensProduto();
-  })
+  }, [srcImage])
 
   // const removerAcentos = (str) => {
   //   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -45,7 +45,7 @@ export default function CardProduto({ produto }) {
   return (
     <div className={`${styles.cardProduto}`}>
       <Link
-        to={`/produto/${204}/${produto.descricao}`}
+        to={`/produto/${produto.idProduto}/${produto.nomeProduto ? produto.nomeProduto.toLowerCase().replace(/ /g, '-') : produto.descricao}`}
         className={styles.areaImg}
       >
         <img
@@ -55,7 +55,7 @@ export default function CardProduto({ produto }) {
       </Link>
       <section className={styles.infoProduto}>
         <Link
-          to={`/produto/${204}/${produto.nomeProduto}`}
+          to={`/produto/${produto.idProduto}/${produto.nomeProduto ? produto.nomeProduto.toLowerCase().replace(/ /g, '-') : produto.descricao}`}
           className={styles.areaDescricao}
         >
           <h6 className={styles.descricao}>{produto.nomeProduto ? produto.nomeProduto : produto.descricao}</h6>

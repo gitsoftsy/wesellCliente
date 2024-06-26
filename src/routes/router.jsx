@@ -33,7 +33,7 @@ const router = createBrowserRouter([
     element: <StaticLayout />,
     children: [
       { index: true, element: <Home /> },
-      { path: "produto/:vendedor/:id/:nomeProduto/:idVendedor", element: <DetalhesProduto /> },
+      { path: "produto/:vendedor/:id/:nomeProduto/:idVendedor/:idLojista", element: <DetalhesProduto /> },
       { path: "minha-conta", element: <DadosPessoais /> },
       { path: "minha-conta/pedidos", element: <Pedidos /> },
       { path: "carrinho", element: <Carrinho /> },

@@ -47,7 +47,6 @@ export default function DetalhesProduto() {
       .get(url_base + `/produtos/${id}`)
       .then((response) => {
         setProduto(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error.message);
@@ -63,17 +62,11 @@ export default function DetalhesProduto() {
       .catch((error) => {
         console.log(error.message);
       });
+
   }
 
-  useEffect(() => {
-    let favoritos =
-      JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
-    let favoritado = favoritos.some(item => item.id === id);
-    setIsFavoritado(favoritado);
-    getProduto();
-
-    console.log(produto.categorias.idCategoria)
-    async function getProdutosSimilares() {
+  async function getProdutosSimilares() {
+    if (produto.categorias != undefined) {
       await axios
         .get(url_base + `/produtos/categoria/${produto.categorias.idCategoria}/subCategoria/${produto.subcategorias.id}`)
         .then((response) => {
@@ -84,20 +77,30 @@ export default function DetalhesProduto() {
           toast.error(error.message);
         });
     }
-    getProdutosSimilares();
+  }
 
 
-  }, []);
+  useEffect(() => {
+    let favoritos =
+      JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
+    let favoritado = favoritos.some(item => item.id === id);
+    setIsFavoritado(favoritado);
+    getProduto();
+  }, [produto]);
+
+  useEffect(() => {
+    getProdutosSimilares()
+  })
 
   useEffect(() => {
     const listIds = JSON.parse(localStorage.getItem('historicoProdutosComprador'))
 
     if (listIds == undefined) {
-      const newList = [id]
-      localStorage.setItem('historicoProdutosComprador', JSON.stringify(newList))
+      listIds = [id]
     } else {
       listIds.unshift(id)
     }
+    localStorage.setItem('historicoProdutosComprador', JSON.stringify(listIds))
 
     window.scrollTo(0, 0);
     getProduto();
