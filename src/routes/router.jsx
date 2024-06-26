@@ -11,6 +11,7 @@ import StaticLayout from "../pages/StaticLayout";
 import Validation from "../pages/Validation";
 import Endereco from "../pages/Endereco";
 import Pedidos from "../pages/Pedidos";
+import FormasPagamento from "../pages/FormasPagamento";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
       { path: "carrinho", element: <Carrinho /> },
       { path: "registro", element: <CreateAccount /> },
       { path: "carrinho/endereco", element: <Endereco /> },
+      { path: "carrinho/endereco/pagamentos", element: <FormasPagamento /> },
     ],
   },
   {
@@ -39,6 +41,7 @@ const router = createBrowserRouter([
       { path: "carrinho", element: <Carrinho /> },
       { path: "registro", element: <CreateAccount /> },
       { path: "carrinho/endereco", element: <Endereco /> },
+      { path: "carrinho/endereco/pagamentos", element: <FormasPagamento /> },
     ],
   },
   { path: "/login", element: <Login /> },

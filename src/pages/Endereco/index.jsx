@@ -11,6 +11,7 @@ import {
 } from "react-icons/md";
 import { FiArrowLeft } from "react-icons/fi";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -32,6 +33,7 @@ export default function Endereco() {
     cidade: "",
     celular: "",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const productsInCart = localStorage.getItem("wesell-items-in-cart");
@@ -125,7 +127,7 @@ export default function Endereco() {
       cidade: "",
       celular: "",
     });
-  };
+  }
 
   const toggleFormulario = () => {
     setExibirFormulario(!exibirFormulario);
@@ -142,6 +144,7 @@ export default function Endereco() {
       cidade: "",
       celular: "",
     });
+
   };
 
   const handleEditarEndereco = (endereco) => {
@@ -193,6 +196,10 @@ export default function Endereco() {
       }
     }
   };
+
+  function irParaPagamento() {
+    navigate("pagamentos");
+  }
 
   return (
     <div className={styles.containerCart}>
@@ -476,7 +483,7 @@ export default function Endereco() {
                       </button>
                     </div>
                   ) : (
-                    <div className="text-end">
+                    <div className="d-flex justify-content-end">
                       <button
                         type="submit"
                         className="btn btn-primary btn-sm d-flex align-items-center gap-1"
@@ -542,6 +549,7 @@ export default function Endereco() {
             type="button"
             className="btn btn-primary"
             disabled={exibirFormulario}
+            onClick={irParaPagamento}
           >
             Continuar
           </button>
