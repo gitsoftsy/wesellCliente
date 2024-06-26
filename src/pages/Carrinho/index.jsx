@@ -4,7 +4,7 @@ import formatCurrencyBR from "../../hooks/formatCurrency.js";
 import styles from "./carrinho.module.css";
 import { toast } from "react-toastify";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Carrinho() {
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
@@ -50,7 +50,7 @@ export default function Carrinho() {
   function removeProduct(id) {
     setProdutosCarrinho((produtosAntigos) => {
       const produtosFiltrados = produtosAntigos.filter(
-        (item) => item.id !== id
+        (item) => item.idProduto !== id
       );
 
       localStorage.setItem(
@@ -199,7 +199,7 @@ export default function Carrinho() {
                 <MdOutlineRemoveShoppingCart size={30} color="#FF5E93" />
                 <h5 style={{ color: "#FF5E93" }}>Seu carrinho está vazio!</h5>
                 <p>Você ainda não possui itens no seu carrinho.</p>
-                <button className="btn btn-primary">Ver produtos</button>
+                <Link to={'/home'} className="btn btn-primary">Ver produtos</Link>
               </div>
             </section>
           )}
