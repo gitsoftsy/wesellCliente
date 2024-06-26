@@ -93,7 +93,7 @@ export default function DetalhesProduto() {
   })
 
   useEffect(() => {
-    const listIds = JSON.parse(localStorage.getItem('historicoProdutosComprador'))
+    let listIds = JSON.parse(localStorage.getItem('historicoProdutosComprador'))
 
     if (listIds == undefined) {
       listIds = [id]
