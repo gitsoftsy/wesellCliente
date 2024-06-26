@@ -40,7 +40,7 @@ export default function ClienteProvider({ children }) {
     let productsInCart = JSON.parse(carrinho) || [];
 
     const hasCurso = productsInCart.some(
-      (productInCart) => productInCart.id === product.id
+      (productInCart) => productInCart.idProduto === product.idProduto
     );
 
     if (hasCurso) {

@@ -17,7 +17,7 @@ export default function CardProdutoCarrinho({
   //   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   // };
 
-  const nomeAtualizado = item.descricao
+  const nomeAtualizado = item.nomeProduto
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/\//g, "");
@@ -27,7 +27,7 @@ export default function CardProdutoCarrinho({
       <div className={styles.areaImg}>
         <img
           src={item.imagem ? item.imagem : item.imagens[0]}
-          alt={item.descricao}
+          alt={item.nomeProduto}
         />
       </div>
       <div className={styles.areaDescricao}>
@@ -35,18 +35,18 @@ export default function CardProdutoCarrinho({
           to={`/produto/${item.id}/${nomeAtualizado}`}
           id={styles.nomeProduto}
         >
-          {item.descricao}
+          {item.nomeProduto}
         </Link>
         <p className={styles.estoque}>Em estoque</p>
         <div className={styles.spans}>
           {savedItemsArea ? (
             <>
-              <span onClick={() => removeProductSave(item.id)}>Remover</span>
-              <span onClick={() => { addToCart(item), removeProductSave(item.id) }}>Adicionar ao carrinho</span>
+              <span onClick={() => removeProductSave(item.idProduto)}>Remover</span>
+              <span onClick={() => { addToCart(item), removeProductSave(item.idProduto) }}>Adicionar ao carrinho</span>
             </>
           ) : (
             <>
-              <span onClick={() => removeProduct(item.id)}>Remover</span>
+              <span onClick={() => removeProduct(item.idProduto)}>Remover</span>
               <span onClick={() => saveItem(item)}>Salvar para mais tarde</span>
             </>
           )}
@@ -66,7 +66,7 @@ export default function CardProdutoCarrinho({
         />
       </div>
       <div className={styles.areaValor}>
-        <p>{formatCurrencyBR(item.valor)}</p>
+        <p>{formatCurrencyBR(item.preco)}</p>
       </div>
     </div>
   );

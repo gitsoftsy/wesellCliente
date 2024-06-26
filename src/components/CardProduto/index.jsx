@@ -70,7 +70,7 @@ export default function CardProduto({ produto }) {
           <button
             className={styles.btnBuy}
             type="button"
-            onClick={() => { addToCart({ ...produto, qtd: 1 }), navigate('/carrinho') }}
+            onClick={() => { addToCart({ ...produto, qtd: 1, imagem: srcImage }), navigate('/carrinho') }}
           >
             Adicionar ao carrinho
           </button>

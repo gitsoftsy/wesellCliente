@@ -25,7 +25,7 @@ export default function Carrinho() {
     setQuantidadeTotalProdutos(quantidadeTotal);
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.valor * produto.qtd,
+      (acc, produto) => acc + produto.preco * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
@@ -36,7 +36,7 @@ export default function Carrinho() {
   function removeProductSave(id) {
     setProdutosSalvos((produtosAntigos) => {
       const produtosFiltrados = produtosAntigos.filter(
-        (item) => item.id !== id
+        (item) => item.idProduto !== id
       );
 
       localStorage.setItem(
@@ -59,7 +59,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = produtosFiltrados.reduce(
-        (acc, produto) => acc + produto.valor * produto.qtd,
+        (acc, produto) => acc + produto.preco * produto.qtd,
         0
       );
 
@@ -78,11 +78,11 @@ export default function Carrinho() {
   function handleQuantidadeChange(idProduto, novaQuantidade) {
     setProdutosCarrinho((produtosAntigos) => {
       const novoCarrinho = produtosAntigos.map((produto) =>
-        produto.id === idProduto ? { ...produto, qtd: novaQuantidade } : produto
+        produto.idProduto === idProduto ? { ...produto, qtd: novaQuantidade } : produto
       );
 
       const subtotalCalculado = novoCarrinho.reduce(
-        (acc, produto) => acc + produto.valor * produto.qtd,
+        (acc, produto) => acc + produto.preco * produto.qtd,
         0
       );
 
@@ -111,7 +111,7 @@ export default function Carrinho() {
     setProdutosCarrinho((produtosAntigos) => [...produtosAntigos, product]);
 
     const subtotalCalculado = productsInCart.reduce(
-      (acc, produto) => acc + produto.valor * produto.qtd,
+      (acc, produto) => acc + produto.preco * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
@@ -125,14 +125,14 @@ export default function Carrinho() {
 
   function saveItem(produto) {
     let salvos = JSON.parse(localStorage.getItem("wesell-saved-items")) || [];
-    if (!salvos.some((item) => item.id === produto.id)) {
+    if (!salvos.some((item) => item.idProduto === produto.idProduto)) {
       salvos.push(produto);
       localStorage.setItem("wesell-saved-items", JSON.stringify(salvos));
     }
 
     setProdutosCarrinho((produtosAntigos) => {
       const produtosFiltrados = produtosAntigos.filter(
-        (item) => item.id !== produto.id
+        (item) => item.idProduto !== produto.idProduto
       );
 
       localStorage.setItem(
@@ -141,7 +141,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = produtosFiltrados.reduce(
-        (acc, produtoList) => acc + produtoList.valor * produtoList.qtd,
+        (acc, produtoList) => acc + produtoList.preco * produtoList.qtd,
         0
       );
 
@@ -187,9 +187,9 @@ export default function Carrinho() {
                   removeProduct={removeProduct}
                   saveItem={saveItem}
                   onQuantidadeChange={(novaQuantidade) =>
-                    handleQuantidadeChange(item.id, novaQuantidade)
+                    handleQuantidadeChange(item.idProduto, novaQuantidade)
                   }
-                  key={item.id}
+                  key={item.idProduto}
                 />
               ))}
             </section>
@@ -254,7 +254,7 @@ export default function Carrinho() {
               <h5>Resumo da compra</h5>
             </div>
             <p id={styles.textoSemProduto}>
-              Aqui você encontrará os valores da sua compra assim que adicionar
+              Aqui você encontrará os precoes da sua compra assim que adicionar
               produtos.
             </p>
           </div>

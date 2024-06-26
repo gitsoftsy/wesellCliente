@@ -119,7 +119,7 @@ export default function Home() {
         <BannersPrincipais banners={isMobile ? bannersPrinMobile : bannersPrinDesktop} />
       </section>
       <section className={styles.areaProdutosDestaque}>
-        <CarrosselProdutos produtos={produtosDestaque} />
+        <CarrosselProdutos produtos={produtosRecentes} />
       </section>
       <section className={`${styles.areaCategorias} shadow-sm`}>
         <CarrosselCategorias dadosApi={categorias} />
