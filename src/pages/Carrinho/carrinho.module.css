@@ -43,32 +43,6 @@
 }
 
 /* resumo pedido */
-.cardResumo {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2em;
-  padding: 2em 1.5em;
-  height: fit-content !important;
-  width: 28%;
-}
-
-.titleResumo,
-.infoResumo {
-  border-bottom: 2px solid var(--cinza);
-}
-.infoResumo span {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.1em;
-}
-
-.spanTotal p {
-  color: var(--preto);
-  font-weight: 600;
-  font-size: 1.2em;
-  margin-bottom: 8px;
-}
 
 .cardResumo2 {
   display: flex;

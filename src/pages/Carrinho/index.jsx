@@ -1,10 +1,11 @@
 import CardProdutoCarrinho from "../../components/CardProdutoCarrinho";
 import { useEffect, useState } from "react";
-import formatCurrencyBR from "../../hooks/formatCurrency.js";
+
 import styles from "./carrinho.module.css";
 import { toast } from "react-toastify";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import ResumoPedido from "../../components/ResumoPedido/index.jsx";
 
 export default function Carrinho() {
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
@@ -78,7 +79,9 @@ export default function Carrinho() {
   function handleQuantidadeChange(idProduto, novaQuantidade) {
     setProdutosCarrinho((produtosAntigos) => {
       const novoCarrinho = produtosAntigos.map((produto) =>
-        produto.idProduto === idProduto ? { ...produto, qtd: novaQuantidade } : produto
+        produto.idProduto === idProduto
+          ? { ...produto, qtd: novaQuantidade }
+          : produto
       );
 
       const subtotalCalculado = novoCarrinho.reduce(
@@ -199,7 +202,9 @@ export default function Carrinho() {
                 <MdOutlineRemoveShoppingCart size={30} color="#FF5E93" />
                 <h5 style={{ color: "#FF5E93" }}>Seu carrinho está vazio!</h5>
                 <p>Você ainda não possui itens no seu carrinho.</p>
-                <Link to={'/home'} className="btn btn-primary">Ver produtos</Link>
+                <Link to={"/home"} className="btn btn-primary">
+                  Ver produtos
+                </Link>
               </div>
             </section>
           )}
@@ -228,26 +233,11 @@ export default function Carrinho() {
           )}
         </div>
         {produtosCarrinho.length > 0 ? (
-          <div className={`${styles.cardResumo} card`}>
-            <div className={styles.titleResumo}>
-              <h5>Resumo da compra</h5>
-            </div>
-            <div className={styles.infoResumo}>
-              <span>
-                <p>Produtos ({quantidadeTotalProdutos})</p> <p>{formatCurrencyBR(total)}</p>
-              </span>
-              <span className={styles.spanTotal}>
-                <p>Total</p> <p>{formatCurrencyBR(total)}</p>
-              </span>
-            </div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={continuarCompra}
-            >
-              Continuar a compra
-            </button>
-          </div>
+          <ResumoPedido
+            continuarCompra={continuarCompra}
+            total={total}
+            totalProdutos={quantidadeTotalProdutos}
+          />
         ) : (
           <div className={`${styles.cardResumo2} card`}>
             <div className={styles.titleResumo2}>

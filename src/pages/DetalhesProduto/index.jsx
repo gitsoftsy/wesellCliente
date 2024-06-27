@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import parse from "html-react-parser";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./produto.module.css";
 import FavoriteIcon from "../../components/Heart";
 import AvaliacaoEstrelas from "../../components/Stars";
@@ -18,6 +19,8 @@ export default function DetalhesProduto() {
   const [isFavoritado, setIsFavoritado] = useState(false);
   const [listImages, setListImages] = useState([])
   const path = useLocation()
+
+  const navigate = useNavigate();
 
   const { addToCart } = useContexts();
 
@@ -210,7 +213,7 @@ export default function DetalhesProduto() {
                 </div>
                 <div className={styles.purchase_addCart}>
                   <button className={styles.purchase}>Comprar</button>
-                  <button type="button" className={styles.addCart} onClick={() => addToCart({ ...produto, qtd: 1 })}>
+                  <button type="button" className={styles.addCart} onClick={() => { addToCart({ ...produto, qtd: 1, imagem: selectedImage }), navigate('/carrinho') }}>
                     Adicionar ao carrinho
                   </button>
                 </div>
@@ -219,9 +222,7 @@ export default function DetalhesProduto() {
           </section>
           <section className={styles.descriptionProduct}>
             <h2 className={styles.descriptionDetailed}>Descrição do Produto</h2>
-            {/* Tranforma descrição do produto que vem em Html - obs: esta off pois a tela ainda n esta consumindo os dados das apis*/}
-            {/* {parse(produto.descricaoDetalhada)} */}
-            {produto.descrProduto}
+            {parse(produto.descrProduto ? produto.descrProduto : '')}
           </section>
         </div>
       </section>

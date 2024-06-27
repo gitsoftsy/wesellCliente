@@ -22,6 +22,7 @@ export default function Endereco() {
 
   const [editandoEndereco, setEditandoEndereco] = useState(false);
   const [valoresFormulario, setValoresFormulario] = useState({
+    id: '',
     nome: "",
     sobrenome: "",
     cep: "",
@@ -44,11 +45,11 @@ export default function Endereco() {
 
     setExibirFormulario(trueOrFalse);
     if (addresses.length > 0) {
-      setEnderecoSelecionado(addresses[0].cep);
+      setEnderecoSelecionado(addresses[0].id);
     }
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.valor * produto.qtd,
+      (acc, produto) => acc + produto.preco * produto.qtd,
       0
     );
     const quantidadeTotal = products.reduce(
@@ -68,6 +69,7 @@ export default function Endereco() {
     e.preventDefault();
 
     const {
+      id,
       nome,
       sobrenome,
       cep,
@@ -81,6 +83,7 @@ export default function Endereco() {
     } = valoresFormulario;
 
     const novoEndereco = {
+      id: id || new Date().getTime(),
       nome,
       sobrenome,
       cep,
@@ -93,18 +96,17 @@ export default function Endereco() {
       celular,
     };
 
-    const addresses =
+    let addresses =
       JSON.parse(localStorage.getItem("wesell-customer-addresses")) || [];
 
-    const enderecoExistente = addresses.find((addr) => addr.cep === cep);
+    const enderecoExistente = addresses.find((addr) => addr.id == id);
     if (enderecoExistente && editandoEndereco) {
-      addresses.forEach((addr, index) => {
-        if (addr.cep === cep) {
-          addresses[index] = novoEndereco;
-        }
-      });
+      addresses = addresses.map((addr) =>
+        addr.id == id ? novoEndereco : addr
+      );
     } else {
       addresses.push(novoEndereco);
+      setEnderecoSelecionado(novoEndereco.id);
     }
 
     localStorage.setItem(
@@ -116,6 +118,7 @@ export default function Endereco() {
     setExibirFormulario(false);
     setEditandoEndereco(false);
     setValoresFormulario({
+      id: '',
       nome: "",
       sobrenome: "",
       cep: "",
@@ -127,12 +130,13 @@ export default function Endereco() {
       cidade: "",
       celular: "",
     });
-  }
+  };
 
   const toggleFormulario = () => {
     setExibirFormulario(!exibirFormulario);
     setEditandoEndereco(false);
     setValoresFormulario({
+      id: '',
       nome: "",
       sobrenome: "",
       cep: "",
@@ -144,7 +148,6 @@ export default function Endereco() {
       cidade: "",
       celular: "",
     });
-
   };
 
   const handleEditarEndereco = (endereco) => {
@@ -152,6 +155,7 @@ export default function Endereco() {
     setExibirFormulario(true);
 
     setValoresFormulario({
+      id: endereco.id,
       nome: endereco.nome,
       sobrenome: endereco.sobrenome,
       cep: endereco.cep,
@@ -164,7 +168,7 @@ export default function Endereco() {
       celular: endereco.celular,
     });
 
-    setEnderecoSelecionado(endereco.cep);
+    setEnderecoSelecionado(endereco.id);
   };
 
   const fetchAddressFromCEP = async (cep) => {
@@ -180,7 +184,7 @@ export default function Endereco() {
   const handleCEPChange = async (e) => {
     const cep = e.target.value.replace(/\D/g, "");
 
-    if (cep.length === 8) {
+    if (cep.length == 8) {
       const addressData = await fetchAddressFromCEP(cep);
 
       if (addressData) {
@@ -215,11 +219,11 @@ export default function Endereco() {
                 </div>
                 {addresses.map((item) => (
                   <div
-                    key={item.cep}
+                    key={item.id}
                     className={`${
                       styles.cardEndereco
                     } card rounded-1 px-3 py-2 ${
-                      enderecoSelecionado === item.cep
+                      enderecoSelecionado == item.id
                         ? styles.radioSelected
                         : ""
                     }`}
@@ -229,13 +233,13 @@ export default function Endereco() {
                         className="form-check-input"
                         type="radio"
                         name="endereco"
-                        id={item.cep}
-                        checked={enderecoSelecionado === item.cep}
+                        id={item.id}
+                        checked={enderecoSelecionado == item.id}
                         onChange={handleEnderecoChange}
                       />
                       <label
                         className={`ms-3 form-check-label`}
-                        htmlFor={item.cep}
+                        htmlFor={item.id}
                       >
                         <span className="fw-semibold">
                           {`${item.nome} ${item.sobrenome}`}

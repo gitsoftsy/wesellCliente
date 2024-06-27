@@ -1,0 +1,43 @@
+.cardResumo {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1.5em;
+  height: fit-content !important;
+  width: 28%;
+}
+
+.titleResumo {
+    text-align: center;
+  padding: 0 1.5em;
+  padding-top: 2em;
+  border-bottom: 1px solid var(--cinza);
+}
+
+.infoResumo span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1em;
+  padding:  0.8em 1.5em;
+  border-bottom: 1px solid var(--cinza);
+}
+
+.infoResumo span p {
+    margin: 0;
+}
+
+.spanTotal p {
+  color: var(--preto);
+  font-weight: 500;
+  font-size: 1.3em;
+}
+
+
+
+#areaBtn {
+    margin-top: 1.5em;
+    padding: 0 1.5em;
+}
+
+#areaBtn button {
+    width: 100%;
+}

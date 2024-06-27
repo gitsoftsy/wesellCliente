@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 
 export default function FormasPagamento() {
-  const [formaPagamento, setFormaPagamento] = useState("");
+  const [formaPagamento, setFormaPagamento] = useState("cartao");
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -17,7 +17,7 @@ export default function FormasPagamento() {
     const products = JSON.parse(productsInCart) || [];
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.valor * produto.qtd,
+      (acc, produto) => acc + produto.preco * produto.qtd,
       0
     );
     const quantidadeTotal = products.reduce(
@@ -44,53 +44,6 @@ export default function FormasPagamento() {
             </div>
             <div
               className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "pix" ? styles.radioSelected : ""
-              }`}
-            >
-              <div className="form-check d-flex align-items-center">
-                <input
-                  className="form-check-input mt-0"
-                  type="radio"
-                  name="formaPagamento"
-                  id="pix"
-                  checked={formaPagamento === "pix"}
-                  onChange={handleEnderecoChange}
-                />
-                <label
-                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                  htmlFor="pix"
-                >
-                  <span>PAGAMENTO VIA PIX <br /><span className="fw-normal" style={{color: '#f49516'}}>Aprovação imediata</span></span>
-                  <MdPix size={22} />
-                </label>
-              </div>
-            </div>
-            <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "boleto" ? styles.radioSelected : ""
-              }`}
-            >
-              <div className="form-check d-flex align-items-center">
-                <input
-                  className="form-check-input mt-0"
-                  type="radio"
-                  name="formaPagamento"
-                  id="boleto"
-                  checked={formaPagamento === "boleto"}
-                  onChange={handleEnderecoChange}
-                />
-                <label
-                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                  htmlFor="boleto"
-                >
-                  <span>BOLETO<br /><span className="fw-normal" style={{color: '#f49516'}}>Será aprovado em 1 ou 2 dias úteis.</span></span>
-                  <FaBarcode size={22} />
-                </label>
-              </div>
-            </div>
-
-            <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
                 formaPagamento === "cartao" ? styles.radioSelected : ""
               }`}
             >
@@ -107,7 +60,7 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="cartao"
                 >
-                  <span>CARTÃO DE CRÉDITO</span>
+                  <span>CARTÃO DE CRÉDITO<br /><span className="fw-normal" style={{color: '#f49516'}}>Parcele em até 12x sem juros</span></span>
                   <FaCreditCard size={22} />
                 </label>
               </div>
@@ -175,6 +128,54 @@ export default function FormasPagamento() {
                 </form>
               )}
             </div>
+            <div
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                formaPagamento === "pix" ? styles.radioSelected : ""
+              }`}
+            >
+              <div className="form-check d-flex align-items-center">
+                <input
+                  className="form-check-input mt-0"
+                  type="radio"
+                  name="formaPagamento"
+                  id="pix"
+                  checked={formaPagamento === "pix"}
+                  onChange={handleEnderecoChange}
+                />
+                <label
+                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                  htmlFor="pix"
+                >
+                  <span>PAGAMENTO VIA PIX <br /><span className="fw-normal" style={{color: '#f49516'}}>Aprovação imediata</span></span>
+                  <MdPix size={22} />
+                </label>
+              </div>
+            </div>
+            <div
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                formaPagamento === "boleto" ? styles.radioSelected : ""
+              }`}
+            >
+              <div className="form-check d-flex align-items-center">
+                <input
+                  className="form-check-input mt-0"
+                  type="radio"
+                  name="formaPagamento"
+                  id="boleto"
+                  checked={formaPagamento === "boleto"}
+                  onChange={handleEnderecoChange}
+                />
+                <label
+                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                  htmlFor="boleto"
+                >
+                  <span>BOLETO<br /><span className="fw-normal" style={{color: '#f49516'}}>Será aprovado em 1 ou 2 dias úteis.</span></span>
+                  <FaBarcode size={22} />
+                </label>
+              </div>
+            </div>
+
+           
           </section>
           <Link to='/carrinho/endereco'><FiArrowLeft size={18}/> Voltar para endereço</Link>
         </div>

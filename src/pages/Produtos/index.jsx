@@ -95,7 +95,7 @@ export default function Produtos() {
             {showAllMarcas ? <>Ver menos</> : <>Ver todos</>}
           </span>
         </ul>
-        <h6 className="mb-2">Comissão</h6>
+        <h6 className="mb-2">Preço</h6>
         <DoubleRangeSlider />
         <h6>Vendido por</h6>
         <ul>
