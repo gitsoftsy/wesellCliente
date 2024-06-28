@@ -244,7 +244,7 @@ export default function Carrinho() {
               <h5>Resumo da compra</h5>
             </div>
             <p id={styles.textoSemProduto}>
-              Aqui você encontrará os precoes da sua compra assim que adicionar
+              Aqui você encontrará os preços da sua compra assim que adicionar
               produtos.
             </p>
           </div>

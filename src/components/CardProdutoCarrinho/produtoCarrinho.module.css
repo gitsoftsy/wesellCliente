@@ -1,67 +1,70 @@
 .cardItemCarrinho {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 2em 0;
-    border-top: 2px solid var(--cinza);
-    height: 140px;
-  }
-  .areaImg {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 15%;
-    height: 100%;
-  }
-  .areaImg img {
-    max-width: 100%;
-    max-height: 100%;
-  }
-  .areaQtd {
-    width: 13%;
-    border: 1px solid var(--cinza);
-    border-radius: 5px;
-    font-size: 1.2em;
-    padding: 2px 0.3em;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  #nomeProduto {
-    color: var(--preto);
-    width: 95%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .areaValor {
-    text-align: end;
-    width: 18%;
-    font-size: 1.5em;
-  }
-  .areaValor p {
-    margin: 0;
-  }
-  .areaDescricao {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2em 0;
+  border-top: 2px solid var(--cinza);
+  height: 140px;
+}
+.areaImg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: 100%;
+}
+.areaImg img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.areaQtd {
+  width: 13%;
+  border: 1px solid var(--cinza);
+  border-radius: 5px;
+  font-size: 1.2em;
+  padding: 2px 0.3em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#nomeProduto {
+  color: var(--preto);
+  width: 95%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.areaValor {
+  text-align: end;
+  width: 18%;
+  font-size: 1.5em;
+}
+.areaValor p {
+  margin: 0;
+}
+.areaDescricao {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.areaDescricao p {
+  margin: 0;
+}
+.estoque {
+  color: green;
+  margin-bottom: auto !important;
+}
+.spans {
+  display: flex;
+  gap: 1em;
+  color: #e69020;
+}
+.spans span {
+  cursor: pointer;
+}
 
-  }
-  .areaDescricao p {
-    margin: 0;
-  }
-  .estoque {
-    color: green;
-    margin-bottom: auto !important;
-  }
-  .spans {
-    display: flex;
-    gap: 1em;
-    color: #E69020;
-  }
-  .spans span {
-    cursor: pointer;
-  }
+@media (width <= 768px) {
+
+}

@@ -7,7 +7,7 @@
 }
 
 .titleResumo {
-    text-align: center;
+  text-align: center;
   padding: 0 1.5em;
   padding-top: 2em;
   border-bottom: 1px solid var(--cinza);
@@ -17,12 +17,12 @@
   display: flex;
   justify-content: space-between;
   font-size: 1.1em;
-  padding:  0.8em 1.5em;
+  padding: 0.8em 1.5em;
   border-bottom: 1px solid var(--cinza);
 }
 
 .infoResumo span p {
-    margin: 0;
+  margin: 0;
 }
 
 .spanTotal p {
@@ -31,13 +31,24 @@
   font-size: 1.3em;
 }
 
-
-
 #areaBtn {
-    margin-top: 1.5em;
-    padding: 0 1.5em;
+  margin-top: 1.5em;
+  padding: 0 1.5em;
 }
 
 #areaBtn button {
+  width: 100%;
+}
+
+@media (width <= 768px) {
+  .cardResumo {
     width: 100%;
+    order: 1;
+  }
+  .infoResumo span {
+    padding: 0.8em 7em;
+  }
+  #areaBtn {
+    padding: 0 7em;
+  }
 }
