@@ -236,6 +236,7 @@ export default function Carrinho() {
           <ResumoPedido
             continuarCompra={continuarCompra}
             total={total}
+            disabled={false}
             totalProdutos={quantidadeTotalProdutos}
           />
         ) : (

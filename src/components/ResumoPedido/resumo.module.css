@@ -40,7 +40,7 @@
   width: 100%;
 }
 
-@media (width <= 768px) {
+@media (width <= 992px) {
   .cardResumo {
     width: 100%;
     order: 1;
@@ -50,5 +50,13 @@
   }
   #areaBtn {
     padding: 0 7em;
+  }
+}
+@media (width < 768px) {
+  .infoResumo span {
+    padding: 0.8em 1.5em;
+  }
+  #areaBtn {
+    padding: 0 1.5em;
   }
 }

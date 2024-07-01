@@ -65,7 +65,7 @@ export default function CardProdutoCarrinho({
           style={{ cursor: "pointer" }}
         />
       </div>
-      <div className={styles.areaValor}>
+      <div className={`${styles.areaValor} ${savedItemsArea ? styles.valor : ''}`}>
         <p>{formatCurrencyBR(item.preco)}</p>
       </div>
     </div>

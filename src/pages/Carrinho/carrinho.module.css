@@ -58,7 +58,7 @@
   color: #d6d6d6;
 }
 
-@media (width <= 768px) {
+@media (width <= 992px) {
   .contentCart {
     flex-direction: column;
     justify-content: start;

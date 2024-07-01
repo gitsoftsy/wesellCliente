@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styles from "./endereco.module.css";
-import formatCurrencyBR from "../../hooks/formatCurrency";
 import ReactInputMask from "react-input-mask";
 import {
   MdOutlineAddLocation,
@@ -12,6 +11,7 @@ import {
 import { FiArrowLeft } from "react-icons/fi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ResumoPedido from "../../components/ResumoPedido";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -22,7 +22,7 @@ export default function Endereco() {
 
   const [editandoEndereco, setEditandoEndereco] = useState(false);
   const [valoresFormulario, setValoresFormulario] = useState({
-    id: '',
+    id: "",
     nome: "",
     sobrenome: "",
     cep: "",
@@ -118,7 +118,7 @@ export default function Endereco() {
     setExibirFormulario(false);
     setEditandoEndereco(false);
     setValoresFormulario({
-      id: '',
+      id: "",
       nome: "",
       sobrenome: "",
       cep: "",
@@ -136,7 +136,7 @@ export default function Endereco() {
     setExibirFormulario(!exibirFormulario);
     setEditandoEndereco(false);
     setValoresFormulario({
-      id: '',
+      id: "",
       nome: "",
       sobrenome: "",
       cep: "",
@@ -223,9 +223,7 @@ export default function Endereco() {
                     className={`${
                       styles.cardEndereco
                     } card rounded-1 px-3 py-2 ${
-                      enderecoSelecionado == item.id
-                        ? styles.radioSelected
-                        : ""
+                      enderecoSelecionado == item.id ? styles.radioSelected : ""
                     }`}
                   >
                     <div className="form-check d-flex align-items-center">
@@ -530,34 +528,12 @@ export default function Endereco() {
             </section>
           )}
         </div>
-
-        <div className={`${styles.cardResumo} card`}>
-          <div className={styles.titleResumo}>
-            <h5>Resumo da compra</h5>
-          </div>
-          <div className={styles.infoResumo}>
-            <span>
-              <p>Produtos ({quantidadeTotalProdutos})</p>{" "}
-              <p>{formatCurrencyBR(total)}</p>
-            </span>
-            <span>
-              <p>Frete</p>
-              <p>R$ 25,37</p>
-            </span>
-            <span className={styles.spanTotal}>
-              <p>Total</p> <p>{formatCurrencyBR(total + 25.37)}</p>
-            </span>
-          </div>
-
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={exibirFormulario}
-            onClick={irParaPagamento}
-          >
-            Continuar
-          </button>
-        </div>
+        <ResumoPedido
+          disabled={exibirFormulario}
+          continuarCompra={irParaPagamento}
+          total={total}
+          totalProdutos={quantidadeTotalProdutos}
+        />
       </section>
     </div>
   );

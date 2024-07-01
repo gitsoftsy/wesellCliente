@@ -65,6 +65,31 @@
   cursor: pointer;
 }
 
-@media (width <= 768px) {
-
+@media (width < 768px) {
+  .cardItemCarrinho {
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  .areaImg {
+    width: 20%;
+    height: auto;
+  }
+  .spans {
+    margin-top: 0.7em;
+  }
+  .areaDescricao {
+    width: 75%;
+    height: auto;
+  }
+  .areaValor {
+    margin-top: 10px;
+    width: 50%;
+  }
+  .areaQtd {
+    margin-top: 10px;
+    width: 30%;
+  }
+  .valor {
+    width: 100%;
+  }
 }

@@ -4,6 +4,7 @@ import styles from "./resumo.module.css";
 
 export default function ResumoPedido({
   totalProdutos,
+  disabled,
   total,
   continuarCompra,
 }) {
@@ -27,6 +28,7 @@ export default function ResumoPedido({
         <button
           type="button"
           className="btn btn-primary"
+          disabled={disabled}
           onClick={continuarCompra}
         >
           Continuar a compra
