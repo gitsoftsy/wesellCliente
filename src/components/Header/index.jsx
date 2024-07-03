@@ -1,17 +1,13 @@
 import styles from "./header.module.css";
-import Logo from "../../assets/logoHeader.png";
-import { MdInsertChartOutlined } from "react-icons/md";
+import Logo from "../../assets/logoWesell.svg";
 import { IoCaretDown } from "react-icons/io5";
 import { PiShoppingCartLight } from "react-icons/pi";
 import NavBar from "../NavBar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FiLogIn, FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
-import { BsClipboardData } from "react-icons/bs";
-import { AiOutlineBank } from "react-icons/ai";
 import { useEffect, useState } from "react";
 
 export default function Header() {
-  const navigate = useNavigate()
   const [user, setUser] = useState({})
 
   const logout = () => {

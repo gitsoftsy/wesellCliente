@@ -1,14 +1,12 @@
 import styles from './staticHeader.module.css'
-import Logo from "../../assets/logoHeader.png";
+import Logo from "../../assets/logoWesell.svg";
 import { IoCaretDown } from "react-icons/io5";
 import { PiShoppingCartLight } from "react-icons/pi";
-import NavBar from "../NavBar";
-import { Link, useNavigate } from "react-router-dom";
-import { FiLogIn, FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { FiLogIn, FiLogOut, FiPackage, FiUser } from "react-icons/fi";
 import { useEffect, useState } from "react";
 
 const StaticHeader = () => {
-    const navigate = useNavigate()
     const [user, setUser] = useState({})
 
     const logout = () => {

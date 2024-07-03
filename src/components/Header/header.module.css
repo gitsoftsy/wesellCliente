@@ -15,7 +15,10 @@
   width: 100%;
 }
 .headerTop img {
-  height: 55px;
+  background-color: #f8f8f8;
+  padding: 0.8em;
+  border-radius: 6px;
+  width: 200px;
 }
 
 .headerContainer {
@@ -37,7 +40,7 @@
   font-weight: 500;
   color: #797979d5;
   border: 1px solid #5c5c5c;
-  border-radius: 2px;
+  border-radius: 6px;
   outline: none;
 }
 .searchForm input[type="text"]::placeholder {

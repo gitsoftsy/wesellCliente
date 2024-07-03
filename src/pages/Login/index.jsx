@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import axios from "axios";
 import styles from "./login.module.css";
-import logo from "../../assets/wesell_vertical_azul.png";
+import logo from "../../assets/logoWesell.svg";
 import { useNavigate } from 'react-router-dom';
 import { url_base } from '../../services/apis';
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -86,7 +87,7 @@ export default function Login() {
                             />
 
                             <button type="submit">
-                                {loading ? <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> : 'Entrar'}
+                                {loading ? <span className="spinner-border spinner-border-sm" aria-hidden="true"></span> : 'Entrar'}
                             </button>
                         </form>
                         <p>Caso ainda não tenha cadastro, clique <a href="/signup">Aqui!</a></p>

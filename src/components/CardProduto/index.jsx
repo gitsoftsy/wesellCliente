@@ -44,7 +44,7 @@ export default function CardProduto({ produto }) {
   return (
     <div className={`${styles.cardProduto}`}>
       <Link
-        to={`/produto/${produto.idProduto}/${produto.nomeProduto ? produto.nomeProduto.toLowerCase().replace(/ /g, '-') : produto.descricao}`}
+        to={`/produto/${produto.idProduto}/${produto.nomeProduto.toLowerCase().replace(/ /g, '-')}`}
         className={styles.areaImg}
       >
         <img
@@ -57,10 +57,10 @@ export default function CardProduto({ produto }) {
           to={`/produto/${produto.idProduto}/${produto.nomeProduto ? produto.nomeProduto.toLowerCase().replace(/ /g, '-') : produto.descricao}`}
           className={styles.areaDescricao}
         >
-          <h6 className={styles.descricao}>{produto.nomeProduto ? produto.nomeProduto : produto.descricao}</h6>
+          <h6 className={styles.descricao}>{produto.nomeProduto}</h6>
         </Link>
         <div>
-          <p className={styles.valor}>{produto.preco ? formatCurrencyBR(produto.preco) : formatCurrencyBR(produto.valor)}</p>
+          <p className={styles.valor}>{produto.precoVenda && formatCurrencyBR(produto.precoVenda)}</p>
           <p className={styles.infoParcelas}>
             em até 12x de R$ 139,90 sem juros
           </p>
