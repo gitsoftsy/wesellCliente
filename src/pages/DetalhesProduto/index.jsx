@@ -8,7 +8,7 @@ import AvaliacaoEstrelas from "../../components/Stars";
 import GridProdutos from "../../components/GridProdutos";
 import SectionAvaliation from "../../components/SectionAvaliation";
 import { toast } from "react-toastify";
-import { url_base, url_base2, url_img } from "../../services/apis";
+import { url_base, url_img } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import formatCurrencyBR from "../../hooks/formatCurrency";
 

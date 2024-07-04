@@ -1,5 +1,5 @@
 import styles from './staticHeader.module.css'
-import Logo from "../../assets/logoWesell.svg";
+import Logo from "../../assets/logoHeader.png";
 import { IoCaretDown } from "react-icons/io5";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
