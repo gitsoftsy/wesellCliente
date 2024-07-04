@@ -12,6 +12,7 @@ import useContexts from "../../hooks/useContext.js";
 
 export default function Home() {
   const [produtosRecentes, setProdutosRecentes] = useState([]);
+  const [produtosDestaque, setProdutosDestaques] = useState([]);
   const [historicoProdutos, setHistoricoProdutos] = useState([]);
   const [bannersPrinDesktop, setBannersPrinDesktop] = useState([]);
   const [bannersSecDesktop, setBannersSecDesktop] = useState([]);
@@ -81,6 +82,18 @@ export default function Home() {
         });
     }
     getProdutosAdicionadosRecentemente();
+    async function getDestaques() {
+      await axios
+        .get(url_base + "/produtos/destaques")
+        .then((response) => {
+          setProdutosDestaques(response.data);
+          console.log(response.data)
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    }
+    getDestaques();
 
     async function getHistoricoProdutos() {
       const listaIds = JSON.parse(
@@ -109,7 +122,7 @@ export default function Home() {
         />
       </section>
       <section className={styles.areaProdutosDestaque}>
-        <CarrosselProdutos produtos={produtosRecentes} />
+        <CarrosselProdutos produtos={produtosDestaque} />
       </section>
       <section className={`${styles.areaCategorias} shadow-sm`}>
         <CarrosselCategorias dadosApi={categorias} />
