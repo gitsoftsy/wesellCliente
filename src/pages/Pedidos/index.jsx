@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import useContexts from '../../hooks/useContext'
-import { url_base, url_base2 } from '../../services/apis';
+import { url_base } from '../../services/apis';
 import styles from './pedidos.module.css'
 import axios from 'axios';
 import CardPedido from '../../components/CardPedido';
@@ -17,7 +17,7 @@ export default function Pedidos() {
             setLoading(true)
             await axios
                 .get(
-                    url_base2 + `/pedidos`
+                    url_base + `/pedidos`
                 )
                 .then((response) => {
                     setLoading(false)
