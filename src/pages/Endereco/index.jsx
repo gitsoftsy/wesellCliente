@@ -49,7 +49,7 @@ export default function Endereco() {
     }
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.preco * produto.qtd,
+      (acc, produto) => acc + produto.precoVenda * produto.qtd,
       0
     );
     const quantidadeTotal = products.reduce(

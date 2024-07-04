@@ -174,10 +174,10 @@ export default function DetalhesProduto() {
                     <hr />
                     <h4>Valor produto:</h4>
                     <span className={styles.values_liquid}>
-                      <s>{`${formatCurrencyBR(produto.preco + (produto.preco / 10))}`}</s>
+                      <s>{`${formatCurrencyBR(produto.precoVenda + (produto.precoVenda / 10))}`}</s>
                     </span>
                     <h5 className={styles.values_deduction}>
-                      {formatCurrencyBR(produto.preco)}
+                      {formatCurrencyBR(produto.precoVenda)}
                     </h5>
                   </div>
                   {produto.quantidadeParcela ?
@@ -185,7 +185,7 @@ export default function DetalhesProduto() {
 
                       <span>em </span>
                       <span className={styles.interestFree}>
-                        {`${produto.quantidadeParcela}x de ${produto.preco / produto.quantidadeParcela} sem juros`}
+                        {`${produto.quantidadeParcela}x de ${produto.precoVenda / produto.quantidadeParcela} sem juros`}
                       </span>
                     </div> :
                     <div className={styles}>

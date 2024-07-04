@@ -26,7 +26,7 @@ export default function Carrinho() {
     setQuantidadeTotalProdutos(quantidadeTotal);
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.preco * produto.qtd,
+      (acc, produto) => acc + produto.precoVenda * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
@@ -60,7 +60,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = produtosFiltrados.reduce(
-        (acc, produto) => acc + produto.preco * produto.qtd,
+        (acc, produto) => acc + produto.precoVenda * produto.qtd,
         0
       );
 
@@ -85,7 +85,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = novoCarrinho.reduce(
-        (acc, produto) => acc + produto.preco * produto.qtd,
+        (acc, produto) => acc + produto.precoVenda * produto.qtd,
         0
       );
 
@@ -114,7 +114,7 @@ export default function Carrinho() {
     setProdutosCarrinho((produtosAntigos) => [...produtosAntigos, product]);
 
     const subtotalCalculado = productsInCart.reduce(
-      (acc, produto) => acc + produto.preco * produto.qtd,
+      (acc, produto) => acc + produto.precoVenda * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
@@ -144,7 +144,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = produtosFiltrados.reduce(
-        (acc, produtoList) => acc + produtoList.preco * produtoList.qtd,
+        (acc, produtoList) => acc + produtoList.precoVenda * produtoList.qtd,
         0
       );
 
