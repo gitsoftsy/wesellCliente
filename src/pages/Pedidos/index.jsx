@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import useContexts from '../../hooks/useContext'
-import { url_base } from '../../services/apis';
+import { url_base, url_base2 } from '../../services/apis';
 import styles from './pedidos.module.css'
 import axios from 'axios';
 import CardPedido from '../../components/CardPedido';
+import CardCompra from '../../components/CardCompra';
 
 export default function Pedidos() {
     const { client } = useContexts()
@@ -17,7 +18,7 @@ export default function Pedidos() {
             setLoading(true)
             await axios
                 .get(
-                    url_base + `/pedidos`
+                    url_base2 + `/pedidos`
                 )
                 .then((response) => {
                     setLoading(false)
@@ -35,7 +36,7 @@ export default function Pedidos() {
                     <h2>Pedidos</h2>
                 </div>
                 <div className={styles.cardsPedidos}>
-                    {pedidos.slice().reverse().map((item) => {
+                    {/* {pedidos.slice().reverse().map((item) => {
                         return (
                             <CardPedido
                                 key={item.idPedido}
@@ -47,7 +48,8 @@ export default function Pedidos() {
                                 getDetails={() => { }}
                             />
                         );
-                    })}
+                    })} */}
+                    <CardCompra compra={''} />
                     {loading && (
                         <>
                             <div

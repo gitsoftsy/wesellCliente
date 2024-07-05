@@ -1,0 +1,183 @@
+.containerCompra {
+    width: 100%;
+    background-color: #fff;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.12));
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 10% 75% 15%;
+    grid-template-rows: auto 1fr;
+}
+
+.boxData,
+.boxCompra {
+    grid-column: 1/4;
+}
+
+.boxCompra {
+    display: grid;
+    grid-template-columns: 10% 75% 15%;
+}
+
+.boxData {
+    display: grid;
+    grid-column: 1/4;
+    grid-template-columns: 10% 75% 15%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 8px 0px;
+}
+
+.dataCompra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    grid-column: 1;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.boxDados {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    padding: 1rem;
+    grid-column: 2;
+}
+
+.boxDescricao span {
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.boxImg {
+    display: flex;
+    justify-content: center;
+    grid-column: 1;
+    padding: 18px 0px;
+}
+
+.boxImg span {
+    height: 80px;
+    width: 80px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+}
+
+.boxImg img {
+    height: 100%;
+    width: 100%;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+.boxBtn {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px;
+    gap: 12px;
+    grid-column: 3;
+}
+
+.boxDescricao {
+    display: flex;
+    flex-direction: column;
+}
+
+.statusCompra {
+    font-weight: 600;
+}
+
+.boxDescricao h2 {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.btnCompra {
+    transition:
+        box-shadow 0.25s ease-out,
+        background-color 0.2s ease-out;
+    box-shadow: 0 0 0 0 #fff;
+    cursor: pointer;
+    border: 0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 12px;
+    text-align: center;
+    width: auto;
+    -webkit-font-smoothing: antialiased;
+    background-color: rgba(244, 149, 22, 1);
+    border-color: transparent;
+    color: #fff;
+}
+
+.btnCompra:focus,
+.btnCompra:visited {
+    background-color: rgba(244, 149, 22, 1);
+    border-color: transparent;
+    color: #fff;
+}
+
+.btnCompra:after,
+.btnCompra:hover {
+    background-color: rgba(244, 132, 22);
+    color: #fff;
+}
+
+.comprarMais {
+    transition:
+        box-shadow 0.25s ease-out,
+        background-color 0.2s ease-out;
+    box-shadow: 0 0 0 0 #fff;
+    cursor: pointer;
+    border: 0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 12px;
+    text-align: center;
+    width: auto;
+    -webkit-font-smoothing: antialiased;
+    background-color: rgba(244, 149, 22, 0.15);
+    border-color: transparent;
+    color: rgba(244, 149, 22, 1);
+}
+
+.comprarMais:focus,
+.comprarMais:visited {
+    background-color: rgba(244, 149, 22, 0.15);
+    border-color: transparent;
+}
+
+.comprarMais:after,
+.comprarMais:hover {
+    background-color: rgba(244, 149, 22, 0.2);
+}
+
+.nomeProduto {
+    margin-top: 1rem;
+}
+
+.boxVendedor {
+    display: flex;
+    flex-direction: column;
+}
+
+.boxVendedor h3 {
+    font-size: 1rem;
+}
+
+.boxVendedor p {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+#valor {
+    font-weight: 500;
+    margin-bottom: 40px;
+}

@@ -1,11 +1,18 @@
+.boxConteudo {
+    width: 100%;
+    height: 100vh;
+}
+
 .containerAvaliacao {
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: #dedede;
     height: 100%;
+    width: 100%;
     padding: 24px;
     gap: 32px;
+    justify-content: center;
 }
 
 main {
@@ -73,4 +80,66 @@ main {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
     font-size: 16px;
     min-height: 180px;
+}
+
+.containerAvaliacao button {
+    transition:
+        box-shadow 0.25s ease-out,
+        background-color 0.2s ease-out;
+    box-shadow: 0 0 0 0 #fff;
+    cursor: pointer;
+    border: 0;
+
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    height: 48px;
+    line-height: 48px;
+    padding: 0 24px;
+    text-align: center;
+    width: auto;
+    -webkit-font-smoothing: antialiased;
+    background-color: #3483fa;
+    border-color: transparent;
+    color: #fff;
+}
+
+.containerAvaliacao button:focus,
+.containerAvaliacao button:link,
+.containerAvaliacao button:visited {
+    background-color: #3483fa;
+    border-color: transparent;
+    color: #fff;
+}
+
+.containerAvaliacao button:after,
+.containerAvaliacao button:hover {
+    background-color: #2968c8;
+    color: #fff;
+}
+
+.link {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    width: auto;
+    -webkit-font-smoothing: antialiased;
+    color: #3483fa;
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.box {
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    min-height: 340px !important;
+}
+
+.cardWave {
+    min-height: 340px !important;
 }

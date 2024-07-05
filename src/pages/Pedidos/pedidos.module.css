@@ -46,11 +46,9 @@
     margin-bottom: 20px;
 } */
 .cardsPedidos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 40px;
-    justify-content: center;
-    align-items: center;
 }
 /* 
   table, thead tr td, tbody tr td{

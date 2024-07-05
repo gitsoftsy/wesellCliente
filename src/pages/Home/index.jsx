@@ -122,7 +122,50 @@ export default function Home() {
         />
       </section>
       <section className={styles.areaProdutosDestaque}>
-        <CarrosselProdutos produtos={produtosDestaque} />
+        {produtosDestaque.length == 0 ?
+          <div className="container">
+            <div className={styles.boxCards}>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+          :
+          <CarrosselProdutos produtos={produtosDestaque} />
+        }
       </section>
       <section className={`${styles.areaCategorias} shadow-sm`}>
         <CarrosselCategorias dadosApi={categorias} />
@@ -133,20 +176,106 @@ export default function Home() {
         />
       </section>
       <section className={styles.areaProdutosBuscados}>
-        <GridProdutos
-          qtdVisivel={4}
-          titleVisivel={true}
-          nomeSecao="ADICIONADOS RECENTEMENTE"
-          produtos={produtosRecentes}
-        />
+        {produtosRecentes.length == 0 ?
+          <div className="container">
+            <div className={styles.boxCards}>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+          :
+          <GridProdutos
+            qtdVisivel={4}
+            titleVisivel={true}
+            nomeSecao="ADICIONADOS RECENTEMENTE"
+            produtos={produtosRecentes}
+          />
+        }
       </section>
       <section className={styles.areaProdutosHistorico}>
-        <GridProdutos
-          titleVisivel={true}
-          qtdVisivel={4}
-          nomeSecao="VISTO RECENTEMENTE"
-          produtos={historicoProdutos}
-        />
+        {produtosRecentes.length == 0 ?
+          <div className="container">
+            <div className={styles.boxCards}>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+              <div
+                className={`${styles.box} card`}
+                aria-hidden="true"
+              >
+                <span
+                  className={`${styles.cardWave} placeholder`}
+                >
+                </span>
+              </div>
+            </div>
+          </div>
+          :
+          <GridProdutos
+            titleVisivel={true}
+            qtdVisivel={4}
+            nomeSecao="VISTO RECENTEMENTE"
+            produtos={historicoProdutos}
+          />
+        }
       </section>
     </>
   );

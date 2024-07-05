@@ -42,3 +42,19 @@
 .areaBannerSecundario {
     background-color: var(--cinza);
 }
+
+.box {
+    width: 300px !important;
+    height: 430px !important;
+}
+
+.cardWave {
+    background-color: cyan;
+    min-height: 430px !important;
+}
+
+.boxCards {
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    gap: 16px;
+}
