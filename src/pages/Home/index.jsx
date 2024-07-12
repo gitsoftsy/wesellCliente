@@ -168,52 +168,139 @@ export default function Home() {
         }
       </section>
       <section className={`${styles.areaCategorias} shadow-sm`}>
-        <CarrosselCategorias dadosApi={categorias} />
+        {categorias.length == 0 ?
+          <div className={`container mt-4 ${styles.containerCategorias}`}>
+            <div className={styles.containerLoading}>
+              <span class="placeholder col-6"></span>
+              <div className={styles.boxCardsCategoria}>
+                <div
+                  className={`${styles.boxCategoria} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveCategoria} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.boxCategoria} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveCategoria} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.boxCategoria} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveCategoria} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.boxCategoria} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveCategoria} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.boxCategoria} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveCategoria} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.boxCategoria} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveCategoria} placeholder`}
+                  >
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          :
+          <CarrosselCategorias dadosApi={categorias} />
+        }
+
       </section>
       <section className={styles.areaBannerSecundario}>
-        <BannersSecundarios
-          banners={isMobile ? bannersSecMobile : bannersSecDesktop}
-        />
+        {bannersSecMobile.length == 0 && bannersSecDesktop.length == 0 ?
+          <div className="container mb-4">
+            <div className={styles.containerLoading}>
+              <span class="placeholder col-6"></span>
+              <div className={styles.boxCardsBanner}>
+                <div
+                  className={`${styles.boxBanner} card`}
+                  aria-hidden="true"
+                >
+                  <span
+                    className={`${styles.cardWaveBanner} placeholder`}
+                  >
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          :
+          <BannersSecundarios
+            banners={isMobile ? bannersSecMobile : bannersSecDesktop}
+          />
+        }
       </section>
       <section className={styles.areaProdutosBuscados}>
         {produtosRecentes.length == 0 ?
-          <div className="container">
-            <div className={styles.boxCards}>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+          <div className="container pb-4">
+            <div className={styles.containerLoading}>
+              <span class="placeholder col-6"></span>
+              <div className={styles.boxCards}>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
-              </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
-              </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
-              </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -228,43 +315,46 @@ export default function Home() {
       </section>
       <section className={styles.areaProdutosHistorico}>
         {produtosRecentes.length == 0 ?
-          <div className="container">
-            <div className={styles.boxCards}>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+          <div className={`container pt-4 pb-4`}>
+            <div className={styles.containerLoading}>
+              <span class="placeholder col-6"></span>
+              <div className={styles.boxCards}>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
-              </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
-              </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
-              </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
+                <div
+                  className={`${styles.box} card`}
+                  aria-hidden="true"
                 >
-                </span>
+                  <span
+                    className={`${styles.cardWave} placeholder`}
+                  >
+                  </span>
+                </div>
               </div>
             </div>
           </div>

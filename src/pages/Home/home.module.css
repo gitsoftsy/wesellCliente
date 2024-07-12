@@ -43,14 +43,53 @@
     background-color: var(--cinza);
 }
 
+.containerLoading {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.containerCategorias {
+    padding-top: 5rem !important;
+}
+
+.boxCardsCategoria {
+    display: flex;
+    gap: 5rem;
+}
+
+.boxCardsBanner {
+    width: 100%;
+}
+
+.boxBanner {
+    width: 100% !important;
+    height: 380px !important;
+}
+
+.cardWaveBanner {
+    min-height: 380px !important;
+}
+
 .box {
     width: 300px !important;
     height: 430px !important;
 }
 
 .cardWave {
-    background-color: cyan;
     min-height: 430px !important;
+}
+
+.boxCategoria {
+    width: 150px !important;
+    height: 150px !important;
+    border-radius: 100px !important;
+}
+
+.cardWaveCategoria {
+    background-color: cyan;
+    min-height: 150px !important;
+    border-radius: 100%;
 }
 
 .boxCards {
