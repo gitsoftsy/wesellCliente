@@ -11,14 +11,17 @@ import { toast } from "react-toastify";
 import { url_base, url_img } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import formatCurrencyBR from "../../hooks/formatCurrency";
+import formatPriceBR from "../../hooks/formatPrice";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
   const [selectedImage, setSelectedImage] = useState("");
   const [produtosSimilares, setProdutosSimilares] = useState([]);
   const [isFavoritado, setIsFavoritado] = useState(false);
-  const [listImages, setListImages] = useState([])
-  const path = useLocation()
+  const [listImages, setListImages] = useState([]);
+  const [maximoParcela, setMaximoParcela] = useState(0);
+
+  const path = useLocation();
 
   const navigate = useNavigate();
 
@@ -28,50 +31,28 @@ export default function DetalhesProduto() {
     setSelectedImage(imageUrl);
   };
 
-  const { id, vendedor, nomeProduto } = useParams();
-
+  const { id } = useParams();
 
   useEffect(() => {
-
-    if (path.pathname.includes('static')) {
+    if (path.pathname.includes("static")) {
       const jsonPage = {
         idProduto: 204,
         idVendedor: 2,
-        nomeVendedor: 'Luiz',
-        url: path.pathname
-      }
+        nomeVendedor: "Luiz",
+        url: path.pathname,
+      };
 
-      localStorage.setItem('statusPage', JSON.stringify(jsonPage))
+      localStorage.setItem("statusPage", JSON.stringify(jsonPage));
     }
-  }, [])
-
-  async function getProduto() {
-    await axios
-      .get(url_base + `/produtos/${id}`)
-      .then((response) => {
-        setProduto(response.data);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-
-    await axios
-      .get(url_base + `/imagens/produto/${id}`)
-      .then((response) => {
-        setListImages(response.data);
-        let caminho = response.data[0].imagem.split('ROOT')
-        setSelectedImage(`${url_img}${caminho[1]}`);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-
-  }
+  }, []);
 
   async function getProdutosSimilares() {
-    if (produto.categorias != undefined) {
+    if (produto.categorias) {
       await axios
-        .get(url_base + `/produtos/categoria/${produto.categorias.idCategoria}/subCategoria/${produto.subcategorias.id}`)
+        .get(
+          url_base +
+            `/produtos/categoria/${produto.categorias.idCategoria}/subCategoria/${produto.subcategorias.id}`
+        )
         .then((response) => {
           setProdutosSimilares(response.data);
         })
@@ -82,45 +63,66 @@ export default function DetalhesProduto() {
     }
   }
 
+  async function getProduto() {
+    await axios
+      .get(url_base + `/produtos/${id}`)
+      .then((response) => {
+        setProduto(response.data);
+        getProdutosSimilares(response.data);
+        setMaximoParcela(response.data.lojista.maximoParcelas);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+
+    await axios
+      .get(url_base + `/imagens/produto/${id}`)
+      .then((response) => {
+        setListImages(response.data);
+        let caminho = response.data[0].imagem.split("ROOT");
+        setSelectedImage(`${url_img}${caminho[1]}`);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
 
   useEffect(() => {
     let favoritos =
       JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
-    let favoritado = favoritos.some(item => item.id === id);
+    let favoritado = favoritos.some((item) => item.id === id);
     setIsFavoritado(favoritado);
     getProduto();
   }, [produto]);
 
   useEffect(() => {
-    getProdutosSimilares()
-  })
+    let listIds = JSON.parse(
+      localStorage.getItem("historicoProdutosComprador")
+    );
 
-  useEffect(() => {
-    let listIds = JSON.parse(localStorage.getItem('historicoProdutosComprador'))
-
-    if (listIds == undefined) {
-      listIds = [id]
+    if (!listIds) {
+      listIds = [id];
     } else {
-      listIds.unshift(id)
+      listIds.unshift(id);
     }
-    localStorage.setItem('historicoProdutosComprador', JSON.stringify(listIds))
+    localStorage.setItem("historicoProdutosComprador", JSON.stringify(listIds));
 
     window.scrollTo(0, 0);
     getProduto();
 
     const favoritos =
       JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
-    const favoritado = favoritos.some(item => item.id === id);
+    const favoritado = favoritos.some((item) => item.id === id);
     setIsFavoritado(favoritado);
   }, [id]);
 
-  let porcentagens = {
-    cinco: 85,
-    quatro: 5,
-    tres: 6,
-    dois: 4,
-    um: 0,
-  };
+  // let porcentagens = {
+  //   cinco: 85,
+  //   quatro: 5,
+  //   tres: 6,
+  //   dois: 4,
+  //   um: 0,
+  // };
 
   return (
     <>
@@ -133,10 +135,14 @@ export default function DetalhesProduto() {
                   {listImages?.map((image) => (
                     <img
                       key={image.idImagemProduto}
-                      src={`${url_img}${image.imagem.split('ROOT')[1]}`}
+                      src={`${url_img}${image.imagem.split("ROOT")[1]}`}
                       alt={`Thumbnail`}
                       className={styles.thumbnail}
-                      onMouseEnter={() => handleThumbnailClick(`${url_img}${image.imagem.split('ROOT')[1]}`)}
+                      onMouseEnter={() =>
+                        handleThumbnailClick(
+                          `${url_img}${image.imagem.split("ROOT")[1]}`
+                        )
+                      }
                     />
                   ))}
                 </div>
@@ -152,49 +158,63 @@ export default function DetalhesProduto() {
               <div className={styles.desc}>
                 <div className={styles.description_stars}>
                   <div className={styles.favoriteIcon}>
-                    <FavoriteIcon favoritado={isFavoritado} produto={produto} handleFavorite={setIsFavoritado} />
+                    <FavoriteIcon
+                      favoritado={isFavoritado}
+                      produto={produto}
+                      handleFavorite={setIsFavoritado}
+                    />
                   </div>
                   <h6>{produto.nomeProduto}</h6>
                   <div className={styles.stars}>
-                    <span className={styles.textStar}>{produto.avaliacao ? produto.avaliacao : '0.0'}</span>
+                    <span className={styles.textStar}>
+                      {produto.avaliacao ? produto.avaliacao : "0.0"}
+                    </span>
                     <AvaliacaoEstrelas
-                      numeroAvaliacao={produto.avaliacao ? produto.avaliacao : 0}
+                      numeroAvaliacao={
+                        produto.avaliacao ? produto.avaliacao : 0
+                      }
                       color="#5089D9"
                     />
                     <span className={styles.textStar}>
-                      {produto.avaliacao ? `(${produto.avaliacao})` : 'Sem avaliações'}
+                      {produto.avaliacao
+                        ? `(${produto.avaliacao})`
+                        : "Sem avaliações"}
                     </span>
                   </div>
                 </div>
                 <div className={styles.soldPlus_console}>
-                  <span className={styles.soldPlus}>{produto.categorias ? produto.categorias.categoria : ''}</span>
+                  <span className={styles.soldPlus}>
+                    {produto.categorias ? produto.categorias.categoria : ""}
+                  </span>
                 </div>
                 <div>
                   <div className={styles.values}>
                     <hr />
                     <h4>Valor produto:</h4>
                     <span className={styles.values_liquid}>
-                      <s>{`${formatCurrencyBR(produto.precoVenda + (produto.precoVenda / 10))}`}</s>
+                      <s>{formatCurrencyBR(produto.precoVenda)}</s>
                     </span>
                     <h5 className={styles.values_deduction}>
-                      {formatCurrencyBR(produto.precoVenda)}
+                      {formatCurrencyBR(produto.precoPromocional)}
                     </h5>
                   </div>
-                  {produto.quantidadeParcela ?
-                    <div className={styles}>
-
+                  {maximoParcela > 0 ? (
+                    <div>
                       <span>em </span>
                       <span className={styles.interestFree}>
-                        {`${produto.quantidadeParcela}x de ${produto.precoVenda / produto.quantidadeParcela} sem juros`}
+                        {`${maximoParcela}x de ${formatPriceBR(
+                          produto.precoVenda / maximoParcela
+                        )} sem juros`}
                       </span>
-                    </div> :
-                    <div className={styles}>
+                    </div>
+                  ) : (
+                    <div>
                       <span>em </span>
                       <span className={styles.interestFree}>
                         {`10x de 36,90 sem juros`}
                       </span>
                     </div>
-                  }
+                  )}
                 </div>
               </div>
               <div className={styles.frete}>
@@ -209,11 +229,20 @@ export default function DetalhesProduto() {
                 </div>
                 <div className={styles.stock_quantity_unit}>
                   <span className={styles.stock}>Estoque disponivel</span>
-                  <a href="#" className={styles.unit}>Consulte o regulamento</a>
+                  <a href="#" className={styles.unit}>
+                    Consulte o regulamento
+                  </a>
                 </div>
                 <div className={styles.purchase_addCart}>
                   <button className={styles.purchase}>Comprar</button>
-                  <button type="button" className={styles.addCart} onClick={() => { addToCart({ ...produto, qtd: 1, imagem: selectedImage }), navigate('/carrinho') }}>
+                  <button
+                    type="button"
+                    className={styles.addCart}
+                    onClick={() => {
+                      addToCart({ ...produto, qtd: 1, imagem: selectedImage }),
+                        navigate("/carrinho");
+                    }}
+                  >
                     Adicionar ao carrinho
                   </button>
                 </div>
@@ -222,7 +251,7 @@ export default function DetalhesProduto() {
           </section>
           <section className={styles.descriptionProduct}>
             <h2 className={styles.descriptionDetailed}>Descrição do Produto</h2>
-            {parse(produto.descrProduto ? produto.descrProduto : '')}
+            {parse(produto.descrProduto ? produto.descrProduto : "")}
           </section>
         </div>
       </section>
@@ -231,13 +260,17 @@ export default function DetalhesProduto() {
           <SectionAvaliation
             numeroAvaliacao={produto.avaliacao ? produto.avaliacao : 0}
             color="amarelo"
-            porcentagem={produto.porcentagens ? produto.porcentagens : {
-              cinco: 0,
-              quatro: 0,
-              tres: 0,
-              dois: 0,
-              um: 0
-            }}
+            porcentagem={
+              produto.porcentagens
+                ? produto.porcentagens
+                : {
+                    cinco: 0,
+                    quatro: 0,
+                    tres: 0,
+                    dois: 0,
+                    um: 0,
+                  }
+            }
           />
         </section>
         <section className={`${styles.areaProdutosSimilares} rounded-4`}>

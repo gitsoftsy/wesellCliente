@@ -62,7 +62,7 @@ export default function CardProduto({ produto }) {
         <div>
           <p className={styles.valor}>{produto.precoVenda && formatCurrencyBR(produto.precoVenda)}</p>
           <p className={styles.infoParcelas}>
-            em até 12x de R$ 139,90 sem juros
+            em até {produto.lojista.maximoParcelas}x de {(produto.precoVenda / produto.lojista.maximoParcelas).toFixed(2).replace(".", ",")} sem juros
           </p>
         </div>
         <section className={styles.areaBtn}>

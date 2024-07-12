@@ -27,18 +27,6 @@ export default function Home() {
     if (statusPage != undefined) {
       localStorage.removeItem("statusPage");
     }
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
     async function getBanners() {
       await axios
         .get(url_base + "/banners/ativos")
@@ -75,7 +63,7 @@ export default function Home() {
         .get(url_base + "/produtos/ultimos10")
         .then((response) => {
           setProdutosRecentes(response.data);
-          console.log(response.data)
+          console.log(response.data);
         })
         .catch((error) => {
           toast.error(error.message);
@@ -87,7 +75,7 @@ export default function Home() {
         .get(url_base + "/produtos/destaques")
         .then((response) => {
           setProdutosDestaques(response.data);
-          console.log(response.data)
+          console.log(response.data);
         })
         .catch((error) => {
           toast.error(error.message);
@@ -95,11 +83,11 @@ export default function Home() {
     }
     getDestaques();
 
-    async function getHistoricoProdutos() {
-      const listaIds = JSON.parse(
-        localStorage.getItem("historicoProdutosComprador")
-      );
+    const listaIds = JSON.parse(
+      localStorage.getItem("historicoProdutosComprador")
+    );
 
+    async function getHistoricoProdutos() {
       await axios
         .post(url_base + "/produtos/recentes", {
           ids: listaIds,
@@ -111,7 +99,17 @@ export default function Home() {
           console.log(error.message);
         });
     }
-    getHistoricoProdutos();
+
+    if (listaIds) {
+      getHistoricoProdutos();
+    }
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -122,56 +120,32 @@ export default function Home() {
         />
       </section>
       <section className={styles.areaProdutosDestaque}>
-        {produtosDestaque.length == 0 ?
+        {produtosDestaque.length == 0 ? (
           <div className="container">
             <div className={styles.boxCards}>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
-                >
-                </span>
+              <div className={`${styles.box} card`} aria-hidden="true">
+                <span className={`${styles.cardWave} placeholder`}></span>
               </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
-                >
-                </span>
+              <div className={`${styles.box} card`} aria-hidden="true">
+                <span className={`${styles.cardWave} placeholder`}></span>
               </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
-                >
-                </span>
+              <div className={`${styles.box} card`} aria-hidden="true">
+                <span className={`${styles.cardWave} placeholder`}></span>
               </div>
-              <div
-                className={`${styles.box} card`}
-                aria-hidden="true"
-              >
-                <span
-                  className={`${styles.cardWave} placeholder`}
-                >
-                </span>
+              <div className={`${styles.box} card`} aria-hidden="true">
+                <span className={`${styles.cardWave} placeholder`}></span>
               </div>
             </div>
           </div>
-          :
+        ) : (
           <CarrosselProdutos produtos={produtosDestaque} />
-        }
+        )}
       </section>
       <section className={`${styles.areaCategorias} shadow-sm`}>
-        {categorias.length == 0 ?
+        {categorias.length == 0 ? (
           <div className={`container mt-4 ${styles.containerCategorias}`}>
             <div className={styles.containerLoading}>
-              <span class="placeholder col-6"></span>
+              <span className="placeholder col-6"></span>
               <div className={styles.boxCardsCategoria}>
                 <div
                   className={`${styles.boxCategoria} card`}
@@ -179,8 +153,7 @@ export default function Home() {
                 >
                   <span
                     className={`${styles.cardWaveCategoria} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
                 <div
                   className={`${styles.boxCategoria} card`}
@@ -188,8 +161,7 @@ export default function Home() {
                 >
                   <span
                     className={`${styles.cardWaveCategoria} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
                 <div
                   className={`${styles.boxCategoria} card`}
@@ -197,8 +169,7 @@ export default function Home() {
                 >
                   <span
                     className={`${styles.cardWaveCategoria} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
                 <div
                   className={`${styles.boxCategoria} card`}
@@ -206,8 +177,7 @@ export default function Home() {
                 >
                   <span
                     className={`${styles.cardWaveCategoria} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
                 <div
                   className={`${styles.boxCategoria} card`}
@@ -215,8 +185,7 @@ export default function Home() {
                 >
                   <span
                     className={`${styles.cardWaveCategoria} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
                 <div
                   className={`${styles.boxCategoria} card`}
@@ -224,148 +193,74 @@ export default function Home() {
                 >
                   <span
                     className={`${styles.cardWaveCategoria} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
               </div>
             </div>
           </div>
-          :
+        ) : (
           <CarrosselCategorias dadosApi={categorias} />
-        }
-
+        )}
       </section>
       <section className={styles.areaBannerSecundario}>
-        {bannersSecMobile.length == 0 && bannersSecDesktop.length == 0 ?
+        {bannersSecMobile.length == 0 && bannersSecDesktop.length == 0 ? (
           <div className="container mb-4">
             <div className={styles.containerLoading}>
-              <span class="placeholder col-6"></span>
+              <span className="placeholder col-6"></span>
               <div className={styles.boxCardsBanner}>
-                <div
-                  className={`${styles.boxBanner} card`}
-                  aria-hidden="true"
-                >
+                <div className={`${styles.boxBanner} card`} aria-hidden="true">
                   <span
                     className={`${styles.cardWaveBanner} placeholder`}
-                  >
-                  </span>
+                  ></span>
                 </div>
               </div>
             </div>
           </div>
-          :
+        ) : (
           <BannersSecundarios
             banners={isMobile ? bannersSecMobile : bannersSecDesktop}
           />
-        }
+        )}
       </section>
       <section className={styles.areaProdutosBuscados}>
-        {produtosRecentes.length == 0 ?
+        {produtosRecentes.length == 0 ? (
           <div className="container pb-4">
             <div className={styles.containerLoading}>
-              <span class="placeholder col-6"></span>
+              <span className="placeholder col-6"></span>
               <div className={styles.boxCards}>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
+                <div className={`${styles.box} card`} aria-hidden="true">
+                  <span className={`${styles.cardWave} placeholder`}></span>
                 </div>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
+                <div className={`${styles.box} card`} aria-hidden="true">
+                  <span className={`${styles.cardWave} placeholder`}></span>
                 </div>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
+                <div className={`${styles.box} card`} aria-hidden="true">
+                  <span className={`${styles.cardWave} placeholder`}></span>
                 </div>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
+                <div className={`${styles.box} card`} aria-hidden="true">
+                  <span className={`${styles.cardWave} placeholder`}></span>
                 </div>
               </div>
             </div>
           </div>
-          :
+        ) : (
           <GridProdutos
             qtdVisivel={4}
             titleVisivel={true}
             nomeSecao="ADICIONADOS RECENTEMENTE"
             produtos={produtosRecentes}
           />
-        }
+        )}
       </section>
       <section className={styles.areaProdutosHistorico}>
-        {produtosRecentes.length == 0 ?
-          <div className={`container pt-4 pb-4`}>
-            <div className={styles.containerLoading}>
-              <span class="placeholder col-6"></span>
-              <div className={styles.boxCards}>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
-                </div>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
-                </div>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
-                </div>
-                <div
-                  className={`${styles.box} card`}
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`${styles.cardWave} placeholder`}
-                  >
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          :
+        {historicoProdutos.length > 0 && (
           <GridProdutos
             titleVisivel={true}
             qtdVisivel={4}
             nomeSecao="VISTO RECENTEMENTE"
             produtos={historicoProdutos}
           />
-        }
+        )}
       </section>
     </>
   );
