@@ -4,21 +4,12 @@ import CardRecommendation from "../CardRecommendation";
 import RatingnBar from "../RatingBar";
 import AvaliacaoEstrelas from "../Stars";
 import styles from "./sectionAvaliation.module.css";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 
 const SectionAvaliation = (props) => {
   const style = {
     color: "#D07119",
     fontSize: "2.5rem",
   };
-
-  let images = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpSPk20Kgo3Snyqf3PFV3iZQRy9KoI-ZITGCjQxR3xlw&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpSPk20Kgo3Snyqf3PFV3iZQRy9KoI-ZITGCjQxR3xlw&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpSPk20Kgo3Snyqf3PFV3iZQRy9KoI-ZITGCjQxR3xlw&s",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpSPk20Kgo3Snyqf3PFV3iZQRy9KoI-ZITGCjQxR3xlw&s",
-  ];
 
   return (
     <>
@@ -41,20 +32,27 @@ const SectionAvaliation = (props) => {
           <RatingnBar estrelas="2" porcentagem={props.porcentagem.dois} />
           <RatingnBar estrelas="1" porcentagem={props.porcentagem.um} />
         </div>
-        {props.avaliacaoCliente ?
+        {props.avaliacaoCliente ? (
           <div className={styles.avaliationClients}>
             <h1>Avaliações de clientes</h1>
             <div className={styles.boxCards}>
               <CardRecommendation status={true} value={100} />
               <CardRecommendation status={false} value={0} />
             </div>
-          </div> : ''
-        }
-
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <div className={styles.commentsAvaliation}>
-        <h1>Avaliações de clientes</h1>
-        {/* <Avaliation numeroAvaliacao="4" /> */}
+        {props.avaliacaoCliente ? (
+          <>
+            <h1>Avaliações de clientes</h1>
+            <Avaliation numeroAvaliacao="4" />
+          </>
+        ) : (
+          <h6>Nenhuma avaliação de cliente</h6>
+        )}
       </div>
     </>
   );

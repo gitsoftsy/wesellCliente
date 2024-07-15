@@ -46,7 +46,7 @@ export default function DetalhesProduto() {
     }
   }, []);
 
-  async function getProdutosSimilares() {
+  async function getProdutosSimilares(produto) {
     if (produto.categorias) {
       await axios
         .get(
@@ -88,14 +88,11 @@ export default function DetalhesProduto() {
   }
 
   useEffect(() => {
-    let favoritos =
+    const favoritos =
       JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
-    let favoritado = favoritos.some((item) => item.id === id);
+    const favoritado = favoritos.some((item) => item.idProduto == id);
     setIsFavoritado(favoritado);
-    getProduto();
-  }, [produto]);
 
-  useEffect(() => {
     let listIds = JSON.parse(
       localStorage.getItem("historicoProdutosComprador")
     );
@@ -109,11 +106,6 @@ export default function DetalhesProduto() {
 
     window.scrollTo(0, 0);
     getProduto();
-
-    const favoritos =
-      JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
-    const favoritado = favoritos.some((item) => item.id === id);
-    setIsFavoritado(favoritado);
   }, [id]);
 
   // let porcentagens = {
