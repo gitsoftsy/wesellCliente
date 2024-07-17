@@ -15,6 +15,7 @@ export default function ClienteProvider({ children }) {
   const [client, setClient] = useState(
     JSON.parse(localStorage.getItem("wesell-login-cliente"))
   );
+  const [valueSearch, setValueSearch] = useState('')
 
   function storageClient(data) {
     localStorage.setItem("wesell-login-cliente", JSON.stringify(data));
@@ -61,7 +62,9 @@ export default function ClienteProvider({ children }) {
     addToCart,
     client,
     setClient,
-    storageClient
+    storageClient,
+    setValueSearch,
+    valueSearch
   };
 
   return (

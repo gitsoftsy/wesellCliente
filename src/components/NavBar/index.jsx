@@ -1,10 +1,22 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
+import useContexts from "../../hooks/useContext";
 import styles from "./navbar.module.css";
 
 const CategoryDropdown = ({ visible, onMouseLeave }) => {
+  const { categorias } = useContexts();
+  const navigate = useNavigate();
+
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  const formatCategory = (categoria) => {
+    return removeAccents(categoria).toLowerCase().replace(/\s+/g, "-");
+  };
+
   return (
     <div
       className={visible ? styles.dropdownVisible : styles.dropdownHidden}
@@ -12,14 +24,18 @@ const CategoryDropdown = ({ visible, onMouseLeave }) => {
     >
       <div className={styles.dropdownContent}>
         <ul className={styles.categoryList}>
-          <li>Esportes</li>
-          <li>Eletrônicos</li>
-          <li>Roupas</li>
-          <li>Calçados</li>
-          <li>Brinquedos</li>
-          <li>Livros</li>
-          <li>Casa e Cozinha</li>
-          <li>Ferramentas</li>
+          {categorias.map((item) => {
+            const formattedCategory = formatCategory(item.categoria);
+
+            return (
+              <li
+                onClick={() => navigate("/c/" + formattedCategory)}
+                key={item.idCategoria}
+              >
+                {item.categoria}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

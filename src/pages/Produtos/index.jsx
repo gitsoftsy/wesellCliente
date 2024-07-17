@@ -4,12 +4,14 @@ import styles from "./produtos.module.css";
 import axios from "axios";
 import DoubleRangeSlider from "../../components/DoubleRangeSlider";
 import { url_base2 } from "../../services/apis";
+import useContexts from "../../hooks/useContext";
 
 export default function Produtos() {
   const [produtos, setProdutos] = useState([]);
   const [showAllCategorias, setShowAllCategorias] = useState(false);
   const [showAllMarcas, setShowAllMarcas] = useState(false);
   const [showAllLojas, setShowAllLojas] = useState(false);
+  const { valueSearch } = useContexts();
 
   const lojas = [
     "Softsy",
@@ -95,7 +97,7 @@ export default function Produtos() {
             {showAllMarcas ? <>Ver menos</> : <>Ver todos</>}
           </span>
         </ul>
-        <h6 className="mb-2">Preço</h6>
+        <h6 className="mb-2">Comissão</h6>
         <DoubleRangeSlider />
         <h6>Vendido por</h6>
         <ul>
@@ -116,11 +118,13 @@ export default function Produtos() {
             {showAllLojas ? <>Ver menos</> : <>Ver todos</>}
           </span>
         </ul>
+        <h6 className="mb-2">Preço</h6>
+        <DoubleRangeSlider />
       </aside>
       <section className={styles.containerProdutos}>
         <section className={styles.areaOrdenacao}>
           <div>
-            <h4>Resultados para &#34;celulares&#34;</h4>
+            <h4>Resultados para &#34;{valueSearch}&#34;</h4>
             <p className="mb-0">Mais de 10.000 produtos encontrados.</p>
           </div>
           <div className={styles.sortBar}>

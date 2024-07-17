@@ -2,8 +2,19 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import styles from "./carrosselCategorias.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CarrosselCategorias({ dadosApi }) {
+  const navigate = useNavigate();
+
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  const formatCategory = (categoria) => {
+    return removeAccents(categoria).toLowerCase().replace(/\s+/g, "-");
+  };
+
   return (
     <div className={`${styles.areaTendencias} container`}>
       <h5>TENDÊNCIAS NA WESELL</h5>
@@ -19,6 +30,8 @@ export default function CarrosselCategorias({ dadosApi }) {
         className={styles.carrosselCategorias}
       >
         {dadosApi.map((item) => {
+          const formattedCategory = formatCategory(item.categoria);
+
           const newPathImagem = item.pathImagem?.replace(
             "/opt/apache-tomcat-9.0.89/webapps/ROOT",
             "http://ec2-18-235-243-90.compute-1.amazonaws.com:8080"
@@ -27,9 +40,18 @@ export default function CarrosselCategorias({ dadosApi }) {
             <SwiperSlide key={item.idCategoria}>
               <div className={styles.cardTendencia}>
                 <div>
-                  <img src={newPathImagem} alt={item.categoria} />
+                  <img
+                    src={newPathImagem}
+                    alt={item.categoria}
+                    onClick={() => navigate("/c/" + formattedCategory)}
+                  />
                 </div>
-                <p className={styles.nomeCategoria}>{item.categoria}</p>
+                <p
+                  className={styles.nomeCategoria}
+                  onClick={() => navigate("/c/" + formattedCategory)}
+                >
+                  {item.categoria}
+                </p>
               </div>
             </SwiperSlide>
           );
