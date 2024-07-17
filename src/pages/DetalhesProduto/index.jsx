@@ -93,16 +93,18 @@ export default function DetalhesProduto() {
     const favoritado = favoritos.some((item) => item.idProduto == id);
     setIsFavoritado(favoritado);
 
-    let listIds = JSON.parse(
-      localStorage.getItem("historicoProdutosComprador")
-    );
+    let listIds =
+      JSON.parse(localStorage.getItem("historicoProdutosComprador")) || [];
 
-    if (!listIds) {
-      listIds = [id];
-    } else {
-      listIds.unshift(id);
+    const hasId = listIds.some((idProduct) => idProduct === id);
+
+    if (!hasId) {
+      listIds.push(id);
+      localStorage.setItem(
+        "historicoProdutosComprador",
+        JSON.stringify(listIds)
+      );
     }
-    localStorage.setItem("historicoProdutosComprador", JSON.stringify(listIds));
 
     window.scrollTo(0, 0);
     getProduto();
