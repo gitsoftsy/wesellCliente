@@ -9,6 +9,8 @@ export default function GridProdutos({
   produtos,
   qtdVisivel,
   titleVisivel,
+  btnVisivel,
+  removeFavorites
 }) {
   const [visibleCount, setVisibleCount] = useState(qtdVisivel);
 
@@ -28,7 +30,7 @@ export default function GridProdutos({
           produtos
             .slice(0, visibleCount)
             .map((produto) => (
-              <CardProduto produto={produto} key={produto.idProduto} />
+              <CardProduto produto={produto} key={produto.idProduto} btnVisivel={btnVisivel} removeFavorites={removeFavorites}/>
             ))
         )}
       </div>

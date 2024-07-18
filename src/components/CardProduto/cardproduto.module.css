@@ -30,8 +30,7 @@
 }
 .areaBtn {
   display: flex;
-  justify-content: space-between;
-  align-items: end;
+  align-items: center;
 }
 .valor {
   margin-bottom: 0;
@@ -56,7 +55,11 @@
   justify-content: center;
   transition: background-color 0.3s, box-shadow 0.3s;
 }
-
+.btnBuy2 {
+  border-radius: 6px !important;
+  padding: 0.4em;
+  height: 35px;
+}
 .btnBuy:hover {
   background-color: #ee8700;
 }

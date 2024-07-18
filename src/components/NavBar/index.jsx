@@ -87,10 +87,10 @@ export default function NavBar() {
         </NavLink>
 
         <NavLink
-          to="/moda"
+          to="/favoritos"
           className={({ isActive }) => (isActive ? styles.active : undefined)}
         >
-          Moda
+          Favoritos
         </NavLink>
         <NavLink
           to="/suporte-ao-cliente"

@@ -13,6 +13,7 @@ import Endereco from "../pages/Endereco";
 import Pedidos from "../pages/Pedidos";
 import FormasPagamento from "../pages/FormasPagamento";
 import Avaliacao from "../pages/Avaliacao";
+import Favoritos from "../pages/Favoritos";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: "registro", element: <CreateAccount /> },
       { path: "carrinho/endereco", element: <Endereco /> },
       { path: "carrinho/endereco/pagamentos", element: <FormasPagamento /> },
+      { path: "favoritos", element: <Favoritos /> },
       { path: "minha-conta/pedidos/avaliacao/:idProduto", element: <Avaliacao /> },
     ],
   },

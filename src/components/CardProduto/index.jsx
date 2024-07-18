@@ -6,15 +6,15 @@ import useContexts from "../../hooks/useContext";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis";
+import { FiTrash2 } from "react-icons/fi";
 
-export default function CardProduto({ produto }) {
+export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
   const { addToCart } = useContexts();
   const [srcImage, setSrcImage] = useState('')
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    console.log(produto)
     async function getImagensProduto() {
       await axios
         .get(url_base + `/imagens/produto/${produto.idProduto}`)
@@ -73,6 +73,15 @@ export default function CardProduto({ produto }) {
           >
             Adicionar ao carrinho
           </button>
+          {btnVisivel && (
+            <button
+            className={`${styles.btnBuy2} ms-2 px-2 btn btn-sm btn-danger`}
+            type="button"
+            onClick={() => removeFavorites(produto.idProduto)}
+          >
+            <FiTrash2 size={20}/>
+          </button>
+          )}
         </section>
       </section>
     </div>

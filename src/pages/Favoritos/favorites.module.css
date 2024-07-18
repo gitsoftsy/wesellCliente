@@ -1,0 +1,15 @@
+#contentFavorites {
+  padding-top: 3em;
+}
+
+#contentFavorites h4 {
+  margin: 0;
+  width: fit-content;
+  border-radius: 8%;
+  padding: 0 5px;
+  border-bottom: 2px solid var(--laranja);
+}
+
+#contentFavorites > div {
+  padding-top: 0;
+}
