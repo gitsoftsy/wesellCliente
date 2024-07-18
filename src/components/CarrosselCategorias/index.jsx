@@ -3,10 +3,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import styles from "./carrosselCategorias.module.css";
 import { useNavigate } from "react-router-dom";
+import useContexts from "../../hooks/useContext";
 
 export default function CarrosselCategorias({ dadosApi }) {
   const navigate = useNavigate();
-
+  const { setCategoria } = useContexts();
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
@@ -43,12 +44,18 @@ export default function CarrosselCategorias({ dadosApi }) {
                   <img
                     src={newPathImagem}
                     alt={item.categoria}
-                    onClick={() => navigate("/c/" + formattedCategory)}
+                    onClick={() => {
+                      navigate("/c/" + formattedCategory);
+                      setCategoria({nome: item.categoria, id: item.idCategoria})
+                    }}
                   />
                 </div>
                 <p
                   className={styles.nomeCategoria}
-                  onClick={() => navigate("/c/" + formattedCategory)}
+                  onClick={() => {
+                    navigate("/c/" + formattedCategory);
+                    setCategoria({nome: item.categoria, id: item.idCategoria})
+                  }}
                 >
                   {item.categoria}
                 </p>

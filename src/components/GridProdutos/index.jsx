@@ -3,7 +3,13 @@ import { useState } from "react";
 import CardProduto from "../CardProduto";
 import styles from "./gridProdutos.module.css";
 
-export default function GridProdutos({ nomeSecao, produtos, qtdVisivel, titleVisivel }) {
+export default function GridProdutos({
+  loading,
+  nomeSecao,
+  produtos,
+  qtdVisivel,
+  titleVisivel,
+}) {
   const [visibleCount, setVisibleCount] = useState(qtdVisivel);
 
   const loadMoreItems = () => {
@@ -14,11 +20,17 @@ export default function GridProdutos({ nomeSecao, produtos, qtdVisivel, titleVis
 
   return (
     <div className={`${styles.gridProdutos} container`}>
-      {titleVisivel && (<h5>{nomeSecao}</h5>)}    
+      {titleVisivel && <h5>{nomeSecao}</h5>}
       <div className={styles.areaProdutos}>
-        {produtos.slice(0, visibleCount).map((produto) => (
-          <CardProduto produto={produto} key={produto.idProduto} />
-        ))}
+        {loading ? (
+          <div>Carregando...</div>
+        ) : (
+          produtos
+            .slice(0, visibleCount)
+            .map((produto) => (
+              <CardProduto produto={produto} key={produto.idProduto} />
+            ))
+        )}
       </div>
       {hasMore && (
         <h6 onClick={loadMoreItems} className={styles.loadItens}>

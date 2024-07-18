@@ -3,24 +3,35 @@ import Logo from "../../assets/logoWesell.svg";
 import { IoCaretDown } from "react-icons/io5";
 import { PiShoppingCartLight } from "react-icons/pi";
 import NavBar from "../NavBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn, FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
 import { useEffect, useState } from "react";
+import useContexts from "../../hooks/useContext";
 
 export default function Header() {
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
+  const { setValueSearch } = useContexts();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setValueSearch(searchTerm);
+    navigate(`/produtos/${searchTerm}`);
+  };
 
   const logout = () => {
-    localStorage.removeItem('wesell-user-comprador')
-    window.location.reload()
-  }
+    localStorage.removeItem("wesell-user-comprador");
+    window.location.reload();
+  };
 
   useEffect(() => {
-    const jsonUser = JSON.parse(localStorage.getItem('wesell-user-comprador'))
+    const jsonUser = JSON.parse(localStorage.getItem("wesell-user-comprador"));
     if (jsonUser) {
-      setUser(jsonUser)
+      setUser(jsonUser);
     }
-  }, [])
+  }, []);
 
   return (
     <header className={styles.header}>
@@ -29,10 +40,12 @@ export default function Header() {
           <Link to="/">
             <img src={Logo} alt="Logo Wesell" />
           </Link>
-          <form className={styles.searchForm}>
+          <form className={styles.searchForm} onSubmit={handleSearch}>
             <input
               type="text"
               placeholder="Buscar produtos, marcas e muito mais..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button type="submit" className="ps-2">
               <FiSearch size={24} color="#797979d5" />
@@ -41,7 +54,7 @@ export default function Header() {
 
           <span className={styles.areaIconCar}>
             <span className="dropdown-center">
-              <p>Olá, {user.nome ? user.nome.split(' ')[0] : 'Bem vindo'}</p>
+              <p>Olá, {user.nome ? user.nome.split(" ")[0] : "Bem vindo"}</p>
               <p
                 className={`${styles.dropdownToggle} dropdown-toggle`}
                 data-bs-auto-close="outside"
@@ -52,12 +65,11 @@ export default function Header() {
                   Minha conta <IoCaretDown />
                 </strong>
               </p>
-              {user.id ?
+              {user.id ? (
                 <ul
                   className="dropdown-menu links-drop"
                   aria-labelledby="dropdownMenuButton"
                 >
-
                   <li>
                     <Link
                       to={"/minha-conta/pedidos"}
@@ -87,7 +99,7 @@ export default function Header() {
                     </Link>
                   </li>
                 </ul>
-                :
+              ) : (
                 <ul
                   className="dropdown-menu links-drop"
                   aria-labelledby="dropdownMenuButton"
@@ -111,13 +123,10 @@ export default function Header() {
                     </Link>
                   </li>
                 </ul>
-              }
+              )}
             </span>
-            <Link to='/carrinho'>
-              <PiShoppingCartLight
-                size={40}
-                color="fff"
-              />
+            <Link to="/carrinho">
+              <PiShoppingCartLight size={40} color="fff" />
             </Link>
           </span>
         </div>

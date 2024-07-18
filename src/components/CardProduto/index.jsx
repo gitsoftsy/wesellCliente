@@ -14,7 +14,7 @@ export default function CardProduto({ produto }) {
 
 
   useEffect(() => {
-
+    console.log(produto)
     async function getImagensProduto() {
       await axios
         .get(url_base + `/imagens/produto/${produto.idProduto}`)

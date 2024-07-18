@@ -6,7 +6,7 @@ import useContexts from "../../hooks/useContext";
 import styles from "./navbar.module.css";
 
 const CategoryDropdown = ({ visible, onMouseLeave }) => {
-  const { categorias } = useContexts();
+  const { categorias, setCategoria  } = useContexts();
   const navigate = useNavigate();
 
   const removeAccents = (str) => {
@@ -29,7 +29,10 @@ const CategoryDropdown = ({ visible, onMouseLeave }) => {
 
             return (
               <li
-                onClick={() => navigate("/c/" + formattedCategory)}
+              onClick={() => {
+                navigate("/c/" + formattedCategory);
+                setCategoria({nome: item.categoria, id: item.idCategoria})
+              }}
                 key={item.idCategoria}
               >
                 {item.categoria}
