@@ -1,25 +1,31 @@
 .boxAvaliation{
+    margin-top: 1em;
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    width: 75%;
 }
 .boxAvaliation span, .boxAvaliation p{
     color: #000;
 }
-
-.boxAvaliation span {
-    font-weight: 500;
+.boxAvaliation h6 span {
+    font-size: 0.9em;
 }
-
 .lineAvaliation{
+    width: 100%;
     display: flex;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.lineAvaliation p {
-    color: #000;
+.boxAvaliation p{
+    font-size: 1.1em;
+    padding: 0;
+    margin: 0;
 }
-
+.lineAvaliation p{
+    padding: 0;
+    margin: 0;
+}
 .avaliacao-estrelas {
     display: flex;
     font-size: 1.5em;
@@ -50,16 +56,4 @@
 
 .img{
     width: 100px;
-}
-
-.stars{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.stars p{
-    padding: 0;
-    margin: 0;
-    padding-top: 8px;
 }

@@ -268,12 +268,14 @@ export default function DetalhesProduto() {
           />
         </section>
         <section className={`${styles.areaProdutosSimilares} rounded-4`}>
-          <GridProdutos
-            nomeSecao="PRODUTOS SIMILARES"
-            titleVisivel={true}
-            produtos={produtosSimilares}
-            qtdVisivel={4}
-          />
+        {produtosSimilares.length > 0 && (
+            <GridProdutos
+              nomeSecao="PRODUTOS SIMILARES"
+              titleVisivel={true}
+              produtos={produtosSimilares}
+              qtdVisivel={4}
+            />
+          )}
         </section>
       </section>
     </>

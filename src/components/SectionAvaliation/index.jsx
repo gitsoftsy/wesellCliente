@@ -45,14 +45,15 @@ const SectionAvaliation = (props) => {
         )}
       </div>
       <div className={styles.commentsAvaliation}>
-        {props.avaliacaoCliente ? (
-          <>
+        {/* {props.avaliacaoCliente ? (
+          <> */}
             <h1>Avaliações de clientes</h1>
-            <Avaliation numeroAvaliacao="4" />
-          </>
+            <Avaliation numeroAvaliacao="5" />
+            <Avaliation numeroAvaliacao="3" />
+          {/* </>
         ) : (
           <h6>Nenhuma avaliação de cliente</h6>
-        )}
+        )} */}
       </div>
     </>
   );
