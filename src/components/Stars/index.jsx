@@ -1,4 +1,3 @@
-import React from 'react';
 import './AvaliacaoEstrelas.css';
 
 const AvaliacaoEstrelas = ({ numeroAvaliacao, color, font }) => {

@@ -1,9 +1,10 @@
 .card{
-    width: 150px;
+    width: 170px;
     height: 150px;
     background-color: #F7FAFF;
     padding: 16px 12px;
     border-radius: 10px;
+    margin-right: 10px;
 }
 
 .card span{

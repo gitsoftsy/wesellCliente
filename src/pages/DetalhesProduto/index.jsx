@@ -4,7 +4,6 @@ import parse from "html-react-parser";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./produto.module.css";
 import FavoriteIcon from "../../components/Heart";
-import AvaliacaoEstrelas from "../../components/Stars";
 import GridProdutos from "../../components/GridProdutos";
 import SectionAvaliation from "../../components/SectionAvaliation";
 import { toast } from "react-toastify";
@@ -12,6 +11,7 @@ import { url_base, url_img } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import formatCurrencyBR from "../../hooks/formatCurrency";
 import formatPriceBR from "../../hooks/formatPrice";
+import AvaliacaoFixa from "../../components/SectionAvaliation/AvaliacaoFixa";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
@@ -20,6 +20,34 @@ export default function DetalhesProduto() {
   const [isFavoritado, setIsFavoritado] = useState(false);
   const [listImages, setListImages] = useState([]);
   const [maximoParcela, setMaximoParcela] = useState(0);
+
+  const avaliations = [
+    { id: 1, star: 4, nome: "Wagner Moura" },
+    { id: 2, star: 3, nome: "Wagner Moura" },
+    { id: 3, star: 5, nome: "Wagner Moura" },
+    { id: 4, star: 5, nome: "Wagner Moura" },
+    { id: 5, star: 5, nome: "Wagner Moura" },
+    { id: 6, star: 3, nome: "Wagner Moura" },
+    { id: 7, star: 2, nome: "Wagner Moura" },
+    { id: 8, star: 5, nome: "Wagner Moura" },
+    { id: 9, star: 5, nome: "Wagner Moura" },
+    { id: 10, star: 5, nome: "Wagner Moura" },
+    { id: 11, star: 5, nome: "Wagner Moura" },
+    { id: 12, star: 4, nome: "Wagner Moura" },
+    { id: 13, star: 4, nome: "Wagner Moura" },
+    { id: 14, star: 4, nome: "Wagner Moura" },
+    { id: 15, star: 4, nome: "Wagner Moura" },
+    { id: 16, star: 5, nome: "Wagner Moura" },
+    { id: 17, star: 3, nome: "Wagner Moura" },
+    { id: 18, star: 3, nome: "Wagner Moura" },
+    { id: 19, star: 4, nome: "Wagner Moura" },
+    { id: 20, star: 4, nome: "Wagner Moura" },
+    { id: 21, star: 5, nome: "Wagner Moura" },
+    { id: 22, star: 5, nome: "Wagner Moura" },
+    { id: 23, star: 5, nome: "Wagner Moura" },
+    { id: 24, star: 5, nome: "Wagner Moura" },
+    { id: 25, star: 5, nome: "Wagner Moura" },
+  ];
 
   const path = useLocation();
 
@@ -160,20 +188,9 @@ export default function DetalhesProduto() {
                   </div>
                   <h6>{produto.nomeProduto}</h6>
                   <div className={styles.stars}>
-                    <span className={styles.textStar}>
-                      {produto.avaliacao ? produto.avaliacao : "0.0"}
-                    </span>
-                    <AvaliacaoEstrelas
-                      numeroAvaliacao={
-                        produto.avaliacao ? produto.avaliacao : 0
-                      }
-                      color="#5089D9"
-                    />
-                    <span className={styles.textStar}>
-                      {produto.avaliacao
-                        ? `(${produto.avaliacao})`
-                        : "Sem avaliações"}
-                    </span>
+                    <span className={styles.textStar}>4.3</span>
+                    <AvaliacaoFixa mediaAvaliacoes={4.3} heigth="18px" />
+                    <span className={styles.textStar}>(25)</span>
                   </div>
                 </div>
                 <div className={styles.soldPlus_console}>
@@ -252,23 +269,12 @@ export default function DetalhesProduto() {
       <section className={styles.areaBranca}>
         <section className={`${styles.areaAvaliacoes} container rounded-4`}>
           <SectionAvaliation
-            numeroAvaliacao={produto.avaliacao ? produto.avaliacao : 0}
-            color="amarelo"
-            porcentagem={
-              produto.porcentagens
-                ? produto.porcentagens
-                : {
-                    cinco: 0,
-                    quatro: 0,
-                    tres: 0,
-                    dois: 0,
-                    um: 0,
-                  }
-            }
+            avaliacoes={avaliations}
+            total={avaliations.length}
           />
         </section>
         <section className={`${styles.areaProdutosSimilares} rounded-4`}>
-        {produtosSimilares.length > 0 && (
+          {produtosSimilares.length > 0 && (
             <GridProdutos
               nomeSecao="PRODUTOS SIMILARES"
               titleVisivel={true}

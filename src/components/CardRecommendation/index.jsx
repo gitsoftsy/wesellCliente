@@ -18,12 +18,12 @@ const CardGood = ({value}) => {
     return (
         <>
             <span style={styleGood}>{value}%</span>
-            <p>dos clientes <strong>recomendam</strong> esse produto</p>
+            <p>dos clientes <strong>recomendam</strong> este produto</p>
         </>
     )
 }
 
-const CardBad = ({value, text}) => {
+const CardBad = ({value}) => {
     const styleBad = {
         color: '#8A8C8D'
     }
@@ -31,7 +31,7 @@ const CardBad = ({value, text}) => {
     return (
         <>
             <span style={styleBad}>{value}%</span>
-            <p>dos clientes <strong>não recomendam</strong> esse produto </p>
+            <p>dos clientes <strong>não recomendam</strong> este produto </p>
         </>
     )
 }
