@@ -19,17 +19,12 @@ export default function Login() {
         let dadosLogin = {
             email: email,
             senha: password,
-            perfil: "COMPRADOR"
+            perfil: "CLIENTE"
         }
 
-        await axios.post(url_base + `/login`, dadosLogin, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
+        await axios.post(url_base + `/login`, dadosLogin).then((response) => {
 
             const statusPage = JSON.parse(localStorage.getItem('statusPage'))
-            console.log(response.data)
             localStorage.setItem('wesell-user-comprador', JSON.stringify(response.data))
 
             if (statusPage == undefined) {
@@ -38,9 +33,8 @@ export default function Login() {
                 navigate(statusPage.url)
             }
         }).catch((error) => {
-            console.log(error.message);
             if (error.response.data == '' && error.response.status == 404) {
-                toast.error('Email ou senha inválidos');
+                toast.error('Email ou senha inválidos.');
                 setLoading(false)
             } else {
                 toast.error(error.message);

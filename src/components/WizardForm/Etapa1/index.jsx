@@ -4,9 +4,10 @@ import { toast } from "react-toastify";
 export default function Etapa1({ handleChange, formData, nextStep }) {
   const isFormValid = () => {
     return (
-      formData.nome &&
-      formData.nome.length >= 10 &&
+      formData.nomeCompleto &&
+      formData.nomeCompleto.length >= 10 &&
       formData.genero &&
+      formData.nomeSocial &&
       formData.dataNascimento
     );
   };
@@ -34,7 +35,7 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
 
   const handleNextStep = () => {
     if (!isFormValid()) {
-      if (!formData.nome || formData.nome.length < 10) {
+      if (!formData.nomeCompleto || formData.nomeCompleto.length < 10) {
         toast.warn("Informe o seu nome completo.", {
           autoClose: 6000,
           theme: "colored",
@@ -58,21 +59,36 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
   const currentDate = new Date().toISOString().split("T")[0];
 
   return (
-    <div>
+    <>
       <div className="form-floating mb-3">
         <input
           type="text"
           className="form-control"
-          id="nome"
-          name="nome" 
-          value={formData.nome}
+          id="nomeSocial"
+          name="nomeSocial"
+          value={formData.nomeSocial}
+          onChange={handleChange}
+          placeholder="Nome social"
+          required
+          autoComplete="off"
+        />
+        <label htmlFor="nomeSocial">Nome social</label>
+      </div>
+      <div className="form-floating mb-3">
+        <input
+          type="text"
+          className="form-control"
+          id="nomeCompleto"
+          name="nomeCompleto"
+          value={formData.nomeCompleto}
           onChange={handleChange}
           placeholder="Nome completo"
           required
           autoComplete="off"
         />
-        <label htmlFor="nome">Nome completo</label>
+        <label htmlFor="nomeCompleto">Nome completo</label>
       </div>
+
       <div className="form-floating mb-3">
         <input
           type="email"
@@ -87,7 +103,21 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
         />
         <label htmlFor="email">Email</label>
       </div>
-
+      <div className="form-floating mb-3">
+        <input
+          type="date"
+          className="form-control"
+          id="dataNascimento"
+          name="dataNascimento"
+          value={formData.dataNascimento}
+          onChange={handleChange}
+          max={currentDate}
+          placeholder="Data de Nascimento"
+          autoComplete="off"
+          required
+        />
+        <label htmlFor="dataNascimento">Data de Nascimento</label>
+      </div>
       <div className="form-floating mb-3">
         <select
           className="form-select"
@@ -110,25 +140,9 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
         <label htmlFor="genero">Gênero</label>
       </div>
 
-      <div className="form-floating mb-3">
-        <input
-          type="date"
-          className="form-control"
-          id="dataNascimento"
-          name="dataNascimento"
-          value={formData.dataNascimento}
-          onChange={handleChange}
-          max={currentDate}
-          placeholder="Data de Nascimento"
-          autoComplete="off"
-          required
-        />
-        <label htmlFor="dataNascimento">Data de Nascimento</label>
-      </div>
-
       <button className="btn btn-primary col-12" onClick={handleNextStep}>
         Próximo
       </button>
-    </div>
+    </>
   );
 }

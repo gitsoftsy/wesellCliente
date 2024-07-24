@@ -13,13 +13,13 @@ ClienteProvider.propTypes = {
 export default function ClienteProvider({ children }) {
   const [categorias, setCategorias] = useState([]);
   const [client, setClient] = useState(
-    JSON.parse(localStorage.getItem("wesell-login-cliente"))
+    JSON.parse(localStorage.getItem("wesell-user-comprador"))
   );
   const [valueSearch, setValueSearch] = useState('')
   const [categoria, setCategoria] = useState('')
 
   function storageClient(data) {
-    localStorage.setItem("wesell-login-cliente", JSON.stringify(data));
+    localStorage.setItem("wesell-user-comprador", JSON.stringify(data));
   }
 
   useEffect(() => {
@@ -62,6 +62,7 @@ export default function ClienteProvider({ children }) {
     categorias,
     addToCart,
     client,
+    clientLogado: !!client,
     setClient,
     storageClient,
     setValueSearch,

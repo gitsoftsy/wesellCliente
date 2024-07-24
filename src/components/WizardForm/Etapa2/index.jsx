@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ReactInputMask from "react-input-mask";
 import { toast } from "react-toastify";
 
@@ -8,17 +9,19 @@ export default function Etapa2({
   nextStep,
   previousStep,
 }) {
+  const [passwordConfirmed, setPasswordConfirmed] = useState(null);
+
   const isFormValid = () => {
     return (
       formData.cpf &&
       formData.celular &&
       formData.senha &&
-      formData.passwordConfirmed
+      passwordConfirmed
     );
   };
 
   const arePasswordsEqual = () => {
-    return formData.senha === formData.passwordConfirmed;
+    return formData.senha === passwordConfirmed;
   };
 
 
@@ -86,8 +89,8 @@ export default function Etapa2({
           className="form-control"
           id="passwordConfirmed"
           name="passwordConfirmed"
-          value={formData.passwordConfirmed}
-          onChange={handleChange}
+          value={passwordConfirmed}
+          onChange={(e) => setPasswordConfirmed(e.target.value)}
           placeholder="passwordConfirmed"
           autoComplete="off"
           required

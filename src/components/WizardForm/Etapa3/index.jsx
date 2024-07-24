@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ReactInputMask from "react-input-mask";
 import { toast } from "react-toastify";
 
@@ -10,6 +11,9 @@ export default function Etapa3({
   loading,
   setFormData,
 }) {
+  const [emailNotificChecked, setEmailNotificChecked] = useState(false);
+  const [celularNotificChecked, setCelularNotificChecked] = useState(false);
+
   const isFormValid = () => {
     return (
       formData.cep &&
@@ -23,7 +27,12 @@ export default function Etapa3({
 
   const handleOnSubmit = () => {
     if (isFormValid()) {
-      onSubmit();
+      const formDataParaEnvio = {
+        ...formData,
+        emailNotific: emailNotificChecked ? "S" : "N",
+        celularNotific: celularNotificChecked ? "S" : "N",
+      };
+      onSubmit(formDataParaEnvio);
     } else {
       toast.error("Preencha todos os campos.");
     }
@@ -157,6 +166,30 @@ export default function Etapa3({
           />
           <label htmlFor="complemento">Complemento (Opcional)</label>
         </div>
+      </div>
+      <div className="form-check checkForm">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          id="emailNotific"
+          checked={emailNotificChecked}
+          onChange={() => setEmailNotificChecked(!emailNotificChecked)}
+        />
+        <label className="form-check-label text-dark" htmlFor="emailNotific">
+          Aceito receber notificações por email em meu dispositivo
+        </label>
+      </div>
+      <div className="mb-4 form-check checkForm">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          id="celularNotific"
+          checked={celularNotificChecked}
+          onChange={() => setCelularNotificChecked(!celularNotificChecked)}
+        />
+        <label className="form-check-label text-dark" htmlFor="celularNotific">
+          Aceito receber notificações por SMS em meu dispositivo
+        </label>
       </div>
 
       <div className="btns-wizard">

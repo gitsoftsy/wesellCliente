@@ -5,15 +5,14 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import NavBar from "../NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn, FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useContexts from "../../hooks/useContext";
 
 export default function Header() {
-  const [user, setUser] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-  const { setValueSearch } = useContexts();
+  const { setValueSearch, client, clientLogado} = useContexts();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -25,13 +24,6 @@ export default function Header() {
     localStorage.removeItem("wesell-user-comprador");
     window.location.reload();
   };
-
-  useEffect(() => {
-    const jsonUser = JSON.parse(localStorage.getItem("wesell-user-comprador"));
-    if (jsonUser) {
-      setUser(jsonUser);
-    }
-  }, []);
 
   return (
     <header className={styles.header}>
@@ -54,7 +46,7 @@ export default function Header() {
 
           <span className={styles.areaIconCar}>
             <span className="dropdown-center">
-              <p>Olá, {user.nome ? user.nome.split(" ")[0] : "Bem vindo"}</p>
+              <p>Olá, {client ? client.nome.split(" ")[0] : "Bem vindo"}</p>
               <p
                 className={`${styles.dropdownToggle} dropdown-toggle`}
                 data-bs-auto-close="outside"
@@ -65,7 +57,7 @@ export default function Header() {
                   Minha conta <IoCaretDown />
                 </strong>
               </p>
-              {user.id ? (
+              {clientLogado ? (
                 <ul
                   className="dropdown-menu links-drop"
                   aria-labelledby="dropdownMenuButton"

@@ -13,7 +13,8 @@ import "./wizard.css";
 
 function WizardForm() {
   const [formData, setFormData] = useState({
-    nome: "",
+    nomeCompleto: "",
+    nomeSocial: "",
     cpf: "",
     genero: "",
     dataNascimento: "",
@@ -48,33 +49,29 @@ function WizardForm() {
     return valor;
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(data) {
     setLoading(true);
     const formDataLimpo = {};
-    for (const key in formData) {
-      if (Object.hasOwnProperty.call(formData, key)) {
-        formDataLimpo[key] = limparMascara(formData[key], key);
+    for (const key in data) {
+      if (Object.hasOwnProperty.call(data, key)) {
+        formDataLimpo[key] = limparMascara(data[key], key);
       }
     }
 
-    try {
-      const response = await axios.post(url_base + "clientes", formDataLimpo);
-
-      const user = response.data;
-      storageClient(user);
-      setClient(user);
-
-      await axios.get(
-        `https://api-academico.sumare.edu.br/api-gdv-emweb/responsavel/atualizar?idCliente=${user.idCliente}`
-      );
-      setLoading(false);
-      toast.success(`Cadastro realizado com sucesso!`);
-      navigate("/");
-    } catch (error) {
-      setLoading(false);
-      toast.error(error.response.data.message);
-      toast.error(error.response.data.message);
-    }
+    await axios
+      .post(url_base + "/clientes", formDataLimpo)
+      .then((response) => {
+        storageClient(response.data);
+        setClient(response.data);
+        setLoading(false);
+        toast.success(`Cadastro realizado com sucesso!`);
+        navigate("/");
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error(error.response.data.message);
+        toast.error(error.response.data.message);
+      });
   }
 
   return (

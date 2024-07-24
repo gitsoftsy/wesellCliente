@@ -7,7 +7,16 @@
 .etapa3 div .municipio input {
   width: 95%;
 }
+.etapa3 .checkForm input {
+  width: 1.2em;
+  height: 1.2em;
+}
 
+.etapa3 .checkForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .etapa3 button {
   width: 48%;
 }

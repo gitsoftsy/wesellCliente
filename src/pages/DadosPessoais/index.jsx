@@ -5,22 +5,155 @@ import { toast } from "react-toastify";
 import { url_base } from "../../services/apis";
 import styles from "./dadosPessoais.module.css";
 import InputPasswordToggle from "../../components/InputPasswordToggle";
+import useContexts from "../../hooks/useContext";
 
 export default function DadosPessoais() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmCassword, setConfirmPassword] = useState('')
-  const [user, setUser] = useState('')
-  const [cpf, setCpf] = useState('')
-  const [name, setName] = useState('')
+  const { client, setClient, storageClient } = useContexts();
+
+  const currentDate = new Date().toISOString().split("T")[0];
+  const [formData, setFormData] = useState({
+    id: null,
+    nomeSocial: null,
+    nomeCompleto: null,
+    bairro: null,
+    email: null,
+    genero: null,
+    cpf: null,
+    dataNascimento: null,
+    celular: null,
+    cep: null,
+    uf: null,
+    municipio: null,
+    endereco: null,
+    numero: null,
+    senha: null,
+    complemento: null,
+  });
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const [alteraSenha, setAlteraSenha] = useState("N");
+  const [senhaConfirm, setSenhaConfirm] = useState("");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("wesell-user-comprador"));
+
+    async function getDados() {
+      await axios
+        .get(url_base + `/clientes/${user.id}`)
+        .then((response) => {
+          const dados = response.data;
+
+          setFormData({
+            nomeCompleto: dados.nomeCompleto,
+            nomeSocial: dados.nomeSocial,
+            email: dados.email,
+            genero: dados.genero,
+            dataNascimento: dados.dataNascimento,
+            celular: dados.celular,
+            cep: dados.cep,
+            uf: dados.uf,
+            cpf: dados.cpf,
+            municipio: dados.municipio,
+            endereco: dados.endereco,
+            bairro: dados.bairro,
+            numero: dados.numero,
+            complemento: dados.complemento,
+          });
+        })
+        .catch(() => {
+          toast.error("Erro ao buscar dados.");
+        });
+    }
+    getDados();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [id]: value,
+    }));
+
+    setIsFormDirty(true);
+  };
+
+  const handleRadioChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+
+    setIsFormDirty(true);
+  };
+
+  function limparMascara(valor, campo) {
+    if (campo === "cpf" || campo === "celular" || campo === "cep") {
+      return valor ? valor.replace(/[^\d]+/g, "") : "";
+    }
+    return valor;
+  }
+  const handleAlteraSenha = (event) => {
+    const isChecked = event.target.checked;
+
+    const novoEstado = isChecked ? "S" : "N";
+
+    setAlteraSenha(novoEstado);
+  };
+
+  async function alteraSenhaUsuario() {
+    const formDataLimpo = {};
+
+    for (const key in formData) {
+      if (Object.hasOwnProperty.call(formData, key)) {
+        formDataLimpo[key] = limparMascara(formData[key], key);
+      }
+    }
+
+    if (senhaConfirm !== formData.senha) {
+      return toast.error("Senhas não conferem!");
+    }
+
+    await axios
+      .put(url_base + `clientes/${client.id}`, formDataLimpo)
+      .then(() => {
+        toast.success("Alterado com sucesso.");
+      })
+      .catch(() => {
+        toast.error("Erro ao alterar senha.");
+      });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    setIsFormDirty(false);
+
+    const formDataLimpo = {};
+
+    for (const key in formData) {
+      if (Object.hasOwnProperty.call(formData, key)) {
+        formDataLimpo[key] = limparMascara(formData[key], key);
+      }
+    }
+    await axios
+      .put(url_base + `clientes/${client.id}`, formDataLimpo)
+      .then(() => {
+        toast.success("Atualizado com sucesso.");
+      })
+      .catch(() => {
+        toast.error("Erro ao atualizar dados.");
+      });
+  }
 
   return (
     <div className={`container ${styles.container}`}>
       <div className={`content-user ${styles.contentUser}`}>
-        <form onSubmit={''/*handleSubmit*/}>
+        <form onSubmit={handleSubmit}>
           <h2 className="text-center">Minha conta</h2>
           <p className="text-center">
-            Edite as configurações da sua conta e altere sua senha aqui.
+            Edite as informações da sua conta e altere sua senha aqui.
           </p>
           <div className="col-md-12 mt-4">
             <span className="form-text fs-5 text">Dados da conta</span>
@@ -34,7 +167,7 @@ export default function DadosPessoais() {
               type="email"
               className={`form-control form-control-lg ${styles.disabled}`}
               id="email"
-              value={''}
+              value={formData.email}
               readOnly
             />
           </div>
@@ -48,52 +181,75 @@ export default function DadosPessoais() {
                 className="form-check-input"
                 type="checkbox"
                 id="alteraSenha"
-                onChange={''}
+                onChange={(e) => handleAlteraSenha(e)}
               />
             </div>
           </div>
           <div className="mb-3">
             <InputPasswordToggle
               id="senha"
-              value={''}
-              disabled={''}
+              value={formData.senha}
+              disabled={alteraSenha}
               placeholder="Digite a senha"
-              onChange={''}
+              onChange={(e) =>
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  senha: e.target.value,
+                }))
+              }
             />
           </div>
           <div className="mb-3">
             <InputPasswordToggle
-              disabled={'alteraSenha'}
+              disabled={alteraSenha}
               id="confirmSenha"
-              value={''}
+              value={senhaConfirm}
               placeholder="Confirme a senha"
-              onChange={''}
+              onChange={(e) => setSenhaConfirm(e.target.value)}
             />
           </div>
           <button
             type="button"
             id="btn-altera-senha"
-            disabled={'' === "N"}
+            disabled={alteraSenha === "N"}
             className="btn btn-secondary mb-3"
-            onClick={''}
+            onClick={alteraSenhaUsuario}
           >
             Alterar senha
           </button>
-
+          <div className="mt-2">
+            <span className="form-text fs-5 text">Dados pessoais</span>
+            <hr className="mt-2" />
+          </div>
           <div className="mb-4 mt-4">
-            <label htmlFor="nome" className="form-label">
+            <label htmlFor="nomeSocial" className="form-label">
+              Nome social
+            </label>
+            <input
+              type="text"
+              className="form-control form-control-lg"
+              id="nomeSocial"
+              required
+              autoComplete="off"
+              value={formData.nomeSocial}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4 mt-4">
+            <label htmlFor="nomeCompleto" className="form-label">
               Nome completo
             </label>
             <input
               type="text"
               className="form-control form-control-lg"
-              id="nome"
+              id="nomeCompleto"
               required
               autoComplete="off"
-              value={''}
-              onChange={''}
+              value={formData.nomeCompleto}
+              onChange={handleInputChange}
             />
           </div>
+
           <div className="mb-4">
             <label htmlFor="cpf" className="form-label">
               CPF
@@ -101,33 +257,203 @@ export default function DadosPessoais() {
             <ReactInputMask
               mask="999.999.999-99"
               maskChar={null}
-              type="tel"
+              type="text"
               className={`form-control form-control-lg ${styles.disabled}`}
               id="cpf"
               name="cpf"
-              value={''}
+              value={formData.cpf}
               readOnly
+              required
             />
           </div>
-          <div className="mb-4 mt-4">
-            <label htmlFor="usuario" className="form-label">
-              Usuário
+          <div className="mb-4">
+            <label className="form-label">Gênero</label>
+            <div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="genero"
+                  id="feminino"
+                  value="F"
+                  checked={formData.genero === "F"}
+                  onChange={handleRadioChange}
+                />
+                <label className="form-check-label" htmlFor="feminino">
+                  Feminino
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="genero"
+                  id="masculino"
+                  value="M"
+                  checked={formData.genero === "M"}
+                  onChange={handleRadioChange}
+                />
+                <label className="form-check-label" htmlFor="masculino">
+                  Masculino
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="genero"
+                  id="naoInformar"
+                  value="N"
+                  checked={formData.genero === "N"}
+                  onChange={handleRadioChange}
+                />
+                <label className="form-check-label" htmlFor="naoInformar">
+                  Não informar
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="dataNascimento" className="form-label">
+              Data de nascimento
+            </label>
+            <input
+              type="date"
+              className="form-control form-control-lg"
+              id="dataNascimento"
+              name="dataNascimento"
+              value={formData.dataNascimento}
+              max={currentDate}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="celular" className="form-label">
+              Celular
+            </label>
+            <ReactInputMask
+              mask="(99) 99999-9999"
+              maskChar={null}
+              type="text"
+              className="form-control form-control-lg"
+              id="celular"
+              name="celular"
+              value={formData.celular}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="mt-2">
+            <span className="form-text fs-5 text">Endereço</span>
+            <hr className="mt-2" />
+          </div>
+          <div className="my-4 d-flex justify-content-between">
+            <div className="col-6">
+              <label htmlFor="cep" className="form-label">
+                CEP
+              </label>
+              <ReactInputMask
+                mask="99999-999"
+                maskChar={null}
+                type="tel"
+                className="form-control form-control-lg"
+                id="cep"
+                name="cep"
+                value={formData.cep}
+                autoComplete="off"
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className={`${styles.areaUf} col-6`}>
+              <label htmlFor="uf" className="form-label">
+                UF
+              </label>
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                id="uf"
+                name="uf"
+                value={formData.uf}
+                autoComplete="off"
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+          <div className="mb-4 d-flex justify-content-between">
+            <div className="col-6">
+              <label htmlFor="cep" className="form-label">
+                Município
+              </label>
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                id="municipio"
+                value={formData.municipio}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className={`${styles.areaUf} col-6`}>
+              <label htmlFor="bairro" className="form-label">
+                Bairro
+              </label>
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                id="bairro"
+                name="bairro"
+                value={formData.bairro}
+                autoComplete="off"
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="endereco" className="form-label">
+              Logradouro
             </label>
             <input
               type="text"
               className="form-control form-control-lg"
-              id="usuario"
-              required
-              autoComplete="off"
-              value={''}
-              onChange={''}
+              id="endereco"
+              value={formData.endereco}
+              onChange={handleInputChange}
             />
           </div>
-          <div className="col-12 btns-minha-conta">
+          <div className="mb-4 ">
+            <label htmlFor="numero" className="form-label">
+              Número
+            </label>
+            <input
+              type="tel"
+              className="form-control form-control-lg"
+              id="numero"
+              name="numero"
+              value={formData.numero}
+              autoComplete="off"
+              required
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="complemento" className="form-label">
+              Complemento
+            </label>
+            <input
+              type="text"
+              className="form-control form-control-lg"
+              id="complemento"
+              value={formData.complemento}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className={`${styles.btns} col-12`}>
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={''}
+              disabled={!isFormDirty}
             >
               Salvar alterações
             </button>
