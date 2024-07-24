@@ -18,12 +18,14 @@ export default function Produtos() {
   const [subCategorias, setSubCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [lojistas, setLojistas] = useState([]);
-  const [idMarca, setIdMarca] = useState(null);
-  const [idLojista, setIdLojista] = useState(null);
+  const [idMarca, setIdMarca] = useState([]);
+  const [idLojista, setIdLojista] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null);
   const [idSubCategoria, setIdSubCategoria] = useState(null);
   const [precoDeVendaMin, setPrecoDeVendaMin] = useState(null);
   const [precoDeVendaMax, setPrecoDeVendaMax] = useState(null);
+  const [orderBy, setOrderBy] = useState(null);
+
 
   const { valueSearch, categoria } = useContexts();
   const currentUrl = window.location.href;
@@ -82,15 +84,14 @@ export default function Produtos() {
     }
   }
   async function getProdutos() {
+    const params = {
+      nmProduto: routeCategory ? null : valueSearch,
+      idCategoria: routeCategory ? categoria.id : null,
+      ordenacao: 1,
+    };
+
     await axios
-      .get(
-        url_base +
-          `${
-            routeCategory
-              ? `/produtos/listar?nmProduto=&idCategoria=${categoria.id}`
-              : "/produtos/listar?nmProduto=" + valueSearch
-          }`
-      )
+      .post(url_base + "/produtos/listar", params)
       .then((response) => {
         setProdutos(response.data);
         getFilters(response.data);
@@ -104,33 +105,30 @@ export default function Produtos() {
 
   useEffect(() => {
     setIdCategoria(null);
-    setIdMarca(null);
-    setIdLojista(null);
+    setIdMarca([]);
+    setIdLojista([]);
     setIdSubCategoria(null);
     setPrecoDeVendaMin(null);
     setPrecoDeVendaMax(null);
+    setOrderBy(null);
     getProdutos();
   }, [valueSearch]);
 
   useEffect(() => {
     async function filtrarProdutos() {
+      const params = {
+        nmProduto: routeCategory ? null : valueSearch,
+        idCategoria: routeCategory ? categoria.id : idCategoria,
+        idSubCategoria: idSubCategoria || null,
+        precoDeVendaMin: precoDeVendaMin || null,
+        precoDeVendaMax: precoDeVendaMax || null,
+        idMarca: idMarca.length > 0 ? idMarca : null,
+        idLojista: idLojista.length > 0 ? idLojista : null,
+        ordenacao: orderBy || 1
+      };
+
       await axios
-        .get(
-          `${url_base}/produtos/listar?` +
-            `${
-              !routeCategory
-                ? `nmProduto=${valueSearch}&${
-                    idCategoria ? `idCategoria=${idCategoria}&` : ""
-                  }`
-                : `idCategoria=${categoria.id}&`
-            }` +
-            `${idSubCategoria ? `idSubCategoria=${idSubCategoria}&` : ""}` +
-            `${precoDeVendaMin ? `precoDeVendaMin=${precoDeVendaMin}&` : ""}` +
-            `${precoDeVendaMax ? `precoDeVendaMax=${precoDeVendaMax}&` : ""}` +
-           
-            `${idMarca ? `idMarca=${idMarca}&` : ""}` +
-            `${idLojista ? `idLojista=${idLojista}&` : ""}`
-        )
+      .post(url_base + "/produtos/listar", params)
         .then((response) => {
           setProdutos(response.data);
           getFilters(response.data);
@@ -145,11 +143,11 @@ export default function Produtos() {
       
       idCategoria !== null ||
       idSubCategoria !== null ||
-     
       precoDeVendaMin !== null ||
       precoDeVendaMax !== null ||
       idMarca !== null ||
-      idLojista !== null
+      idLojista !== null ||
+      orderBy !== null
     ) {
       setLoading(true);
       filtrarProdutos();
@@ -161,6 +159,7 @@ export default function Produtos() {
     precoDeVendaMax,
     idMarca,
     idLojista,
+    orderBy
   ]);
 
   return (
@@ -222,14 +221,21 @@ export default function Produtos() {
             .slice(0, showAllMarcas ? marcas.length : 5)
             .map((item, index) => {
               const id = `marca-checkbox-${index}`;
+              const isChecked = idMarca.includes(item.id);
+
               return (
                 <li key={index}>
                   <input
                     className="form-check-input"
                     type="checkbox"
                     id={id}
+                    checked={isChecked}
                     onChange={() => {
-                      setIdMarca(idMarca === item.id ? null : item.id);
+                      if (isChecked) {
+                        setIdMarca(idMarca.filter((id) => id !== item.id));
+                      } else {
+                        setIdMarca([...idMarca, item.id]);
+                      }
                     }}
                   />
                   <label htmlFor={id} className={styles.labelItem}>
@@ -250,6 +256,7 @@ export default function Produtos() {
             .slice(0, showAllLojas ? lojistas.length : 5)
             .map((item, index) => {
               const id = `lojista-checkbox-${index}`;
+              const isChecked = idLojista.includes(item.id);
 
               return (
                 <li key={index}>
@@ -257,8 +264,15 @@ export default function Produtos() {
                     className="form-check-input"
                     type="checkbox"
                     id={id}
+                    checked={isChecked}
                     onChange={() => {
-                      setIdLojista(idLojista === item.id ? null : item.id);
+                      if (isChecked) {
+                        setIdLojista(
+                          idLojista.filter((id) => id !== item.id)
+                        );
+                      } else {
+                        setIdLojista([...idLojista, item.id]);
+                      }
                     }}
                   />
                   <label htmlFor={id} className={styles.labelItem}>
@@ -301,13 +315,17 @@ export default function Produtos() {
                 name="sort-by"
                 id="sort-by"
                 className="form-select form-select-sm"
+                value={orderBy}
+                onChange={(e) => setOrderBy(e.target.value)}
               >
-                <option selected value="relevancia">
+                <option selected value={1}>
                   Relevância
                 </option>
-                <option value="maisVendidos">Mais vendidos</option>
-                <option value="maiorComissao">Maior comissão</option>
-                <option value="menorComissao">Menor comissão</option>
+                <option value={2} disabled>
+                    Mais vendidos
+                  </option>
+                  <option value={5}>Menor preço</option>
+                  <option value={6}>Maior preço</option>
               </select>
             </div>
           </div>
