@@ -25,6 +25,7 @@
     "react-star-ratings": "^2.3.0",
     "react-step-wizard": "^5.3.11",
     "react-toastify": "^10.0.5",
+    "sweetalert2": "^11.12.3",
     "swiper": "^11.1.1"
   },
   "devDependencies": {

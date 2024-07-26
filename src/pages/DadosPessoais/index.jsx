@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import ReactInputMask from "react-input-mask";
 import { toast } from "react-toastify";
 import { url_base } from "../../services/apis";
 import styles from "./dadosPessoais.module.css";
 import InputPasswordToggle from "../../components/InputPasswordToggle";
 import useContexts from "../../hooks/useContext";
+import { useNavigate } from "react-router-dom";
 
 export default function DadosPessoais() {
   const { client, setClient, storageClient } = useContexts();
@@ -26,23 +28,24 @@ export default function DadosPessoais() {
     municipio: null,
     endereco: null,
     numero: null,
-    senha: null,
     complemento: null,
   });
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [alteraSenha, setAlteraSenha] = useState("N");
-  const [senhaConfirm, setSenhaConfirm] = useState("");
+  const [senhaConfirm, setSenhaConfirm] = useState('');
+  const [senha, setSenha] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("wesell-user-comprador"));
-
     async function getDados() {
       await axios
-        .get(url_base + `/clientes/${user.id}`)
+        .get(url_base + `/clientes/${client.id}`)
         .then((response) => {
           const dados = response.data;
 
           setFormData({
+            idCliente: client.id,
             nomeCompleto: dados.nomeCompleto,
             nomeSocial: dados.nomeSocial,
             email: dados.email,
@@ -57,13 +60,24 @@ export default function DadosPessoais() {
             bairro: dados.bairro,
             numero: dados.numero,
             complemento: dados.complemento,
+            emailNotific: dados.emailNotific,
+            celularNotific: dados.celularNotific,
           });
         })
         .catch(() => {
           toast.error("Erro ao buscar dados.");
+        })
+        .finally(() => {
+          Swal.close();
         });
     }
-    getDados();
+
+    if (!client) {
+      navigate("/login");
+    } else {
+      Swal.showLoading();
+      getDados();
+    }
   }, []);
 
   const handleInputChange = (e) => {
@@ -111,17 +125,26 @@ export default function DadosPessoais() {
       }
     }
 
-    if (senhaConfirm !== formData.senha) {
+    if (senhaConfirm !== senha) {
       return toast.error("Senhas não conferem!");
+    }
+    if (senha) {
+      formDataLimpo.senha = senha;
     }
 
     await axios
-      .put(url_base + `clientes/${client.id}`, formDataLimpo)
+      .put(url_base + `/clientes/${client.id}`, formDataLimpo)
       .then(() => {
         toast.success("Alterado com sucesso.");
       })
       .catch(() => {
         toast.error("Erro ao alterar senha.");
+      })
+      .finally(() => {
+        delete formDataLimpo.senha;
+        setSenha('');
+        setSenhaConfirm('');
+        setAlteraSenha('N');
       });
   }
 
@@ -129,6 +152,7 @@ export default function DadosPessoais() {
     e.preventDefault();
 
     setIsFormDirty(false);
+    Swal.showLoading();
 
     const formDataLimpo = {};
 
@@ -138,12 +162,17 @@ export default function DadosPessoais() {
       }
     }
     await axios
-      .put(url_base + `clientes/${client.id}`, formDataLimpo)
-      .then(() => {
+      .put(url_base + `/clientes/${client.id}`, formDataLimpo)
+      .then((response) => {
+        storageClient(response.data);
+        setClient(response.data);
         toast.success("Atualizado com sucesso.");
       })
       .catch(() => {
         toast.error("Erro ao atualizar dados.");
+      })
+      .finally(() => {
+        Swal.close();
       });
   }
 
@@ -173,7 +202,7 @@ export default function DadosPessoais() {
           </div>
 
           <div className="mb-3 d-flex gap-3">
-            <label htmlFor="senha" className="form-label">
+            <label htmlFor="alteraSenha" className="form-label">
               Alterar senha atual?
             </label>
             <div className="form-check form-switch">
@@ -181,6 +210,8 @@ export default function DadosPessoais() {
                 className="form-check-input"
                 type="checkbox"
                 id="alteraSenha"
+                value={alteraSenha}
+                checked={alteraSenha === 'S'}
                 onChange={(e) => handleAlteraSenha(e)}
               />
             </div>
@@ -188,15 +219,10 @@ export default function DadosPessoais() {
           <div className="mb-3">
             <InputPasswordToggle
               id="senha"
-              value={formData.senha}
+              value={senha}
               disabled={alteraSenha}
               placeholder="Digite a senha"
-              onChange={(e) =>
-                setFormData((prevFormData) => ({
-                  ...prevFormData,
-                  senha: e.target.value,
-                }))
-              }
+              onChange={(e) => setSenha(e.target.value)}
             />
           </div>
           <div className="mb-3">
@@ -438,12 +464,13 @@ export default function DadosPessoais() {
           </div>
           <div className="mb-4">
             <label htmlFor="complemento" className="form-label">
-              Complemento
+              Complemento (Opcional)
             </label>
             <input
               type="text"
               className="form-control form-control-lg"
               id="complemento"
+              autoComplete="off"
               value={formData.complemento}
               onChange={handleInputChange}
             />

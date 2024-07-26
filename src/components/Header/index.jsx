@@ -22,7 +22,7 @@ export default function Header() {
 
   const logout = () => {
     localStorage.removeItem("wesell-user-comprador");
-    window.location.reload();
+    navigate('/login')
   };
 
   return (
@@ -82,7 +82,6 @@ export default function Header() {
                   </li>
                   <li>
                     <Link
-                      to={"/"}
                       className={`${styles.dropdownItem} dropdown-item`}
                       onClick={logout}
                     >
