@@ -12,6 +12,7 @@ import useContexts from "../../hooks/useContext";
 import formatCurrencyBR from "../../hooks/formatCurrency";
 import formatPriceBR from "../../hooks/formatPrice";
 import AvaliacaoFixa from "../../components/SectionAvaliation/AvaliacaoFixa";
+import ModalFrete from "../../components/ModalFrete";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
@@ -234,9 +235,13 @@ export default function DetalhesProduto() {
                   <span className={styles.deadline}>
                     Saiba os prazos de entrega e as formas de envio.
                   </span>
-                  <a className={styles.calculate}>
+                  <span
+                    className={styles.calculate}
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalFrete"
+                  >
                     Calcular o prazo de entrega
-                  </a>
+                  </span>
                 </div>
                 <div className={styles.stock_quantity_unit}>
                   <span className={styles.stock}>Estoque disponivel</span>
@@ -284,6 +289,7 @@ export default function DetalhesProduto() {
           )}
         </section>
       </section>
+      <ModalFrete dadosFrete={produto}/>
     </>
   );
 }
