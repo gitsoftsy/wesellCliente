@@ -40,7 +40,7 @@ export default function DadosPessoais() {
   useEffect(() => {
     async function getDados() {
       await axios
-        .get(url_base + `/clientes/${client.id}`)
+        .get(url_base + `/clientes/${client.id || client.idCliente}`)
         .then((response) => {
           const dados = response.data;
 

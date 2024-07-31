@@ -46,7 +46,7 @@ export default function Header() {
 
           <span className={styles.areaIconCar}>
             <span className="dropdown-center">
-              <p>Olá, {client ? client.nome.split(" ")[0] : "Bem vindo"}</p>
+              <p>Olá, {client ? client.nomeSocial : "Bem vindo"}</p>
               <p
                 className={`${styles.dropdownToggle} dropdown-toggle`}
                 data-bs-auto-close="outside"
