@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import styles from "./bannersSecundarios.module.css";
+import { url_img } from "../../services/apis";
 
 export default function BannersSecundarios({ banners }) {
   const bannersOrdenados = banners.sort((a, b) => a.ordem - b.ordem);
@@ -24,7 +25,7 @@ export default function BannersSecundarios({ banners }) {
         {bannersOrdenados.map((item) => {
           const newPathImagem = item.pathImagem.replace(
             "/opt/apache-tomcat-9.0.89/webapps/ROOT",
-            "http://ec2-18-235-243-90.compute-1.amazonaws.com:8080"
+            url_img
           );
           return (
             <SwiperSlide key={item.idBanner}>

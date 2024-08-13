@@ -4,6 +4,7 @@ import { Autoplay } from "swiper/modules";
 import styles from "./carrosselCategorias.module.css";
 import { useNavigate } from "react-router-dom";
 import useContexts from "../../hooks/useContext";
+import { url_img } from "../../services/apis";
 
 export default function CarrosselCategorias({ dadosApi }) {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function CarrosselCategorias({ dadosApi }) {
 
           const newPathImagem = item.pathImagem?.replace(
             "/opt/apache-tomcat-9.0.89/webapps/ROOT",
-            "http://ec2-18-235-243-90.compute-1.amazonaws.com:8080"
+            url_img
           );
           return (
             <SwiperSlide key={item.idCategoria}>

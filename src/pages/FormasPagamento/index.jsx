@@ -60,7 +60,7 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="cartao"
                 >
-                  <span>CARTÃO DE CRÉDITO<br /><span className="fw-normal" style={{color: '#f49516'}}>Parcele em até 12x sem juros</span></span>
+                  <span>CARTÃO DE CRÉDITO<br /><span className={`${styles.textCard} fw-normal`} style={{color: '#f49516'}}>Parcele em até 12x sem juros</span></span>
                   <FaCreditCard size={22} />
                 </label>
               </div>
@@ -146,7 +146,7 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="pix"
                 >
-                  <span>PAGAMENTO VIA PIX <br /><span className="fw-normal" style={{color: '#f49516'}}>Aprovação imediata</span></span>
+                  <span>PAGAMENTO VIA PIX <br /><span className={`${styles.textCard} fw-normal`} style={{color: '#f49516'}}>Aprovação imediata</span></span>
                   <MdPix size={22} />
                 </label>
               </div>
@@ -169,7 +169,7 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="boleto"
                 >
-                  <span>BOLETO<br /><span className="fw-normal" style={{color: '#f49516'}}>Será aprovado em 1 ou 2 dias úteis.</span></span>
+                  <span>BOLETO<br /><span className={`${styles.textCard} fw-normal`} style={{color: '#f49516'}}>Será aprovado em 1 ou 2 dias úteis.</span></span>
                   <FaBarcode size={22} />
                 </label>
               </div>

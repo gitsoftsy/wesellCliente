@@ -40,16 +40,16 @@
 }
 
 .cardItensCarrinho .cardEndereco:hover {
-    background-color: #f3f3f3;
+  background-color: #f3f3f3;
 }
 .cardEndereco {
   min-height: 60px;
 }
 .cardEndereco > div label {
-    cursor: pointer;
-    font-size: 1.1em;
-    height: 60px !important;
-    align-items: center;
+  cursor: pointer;
+  font-size: 1.1em;
+  height: 60px !important;
+  align-items: center;
 }
 
 .cardEndereco form {
@@ -59,7 +59,7 @@
 }
 
 .radioSelected {
-    background-color: #f3f3f3 !important;
+  background-color: #f3f3f3 !important;
 }
 
 .radioSelected > div label {
@@ -122,4 +122,44 @@
 
 #editar:hover {
   color: #0051ca !important;
+}
+
+@media (width <= 992px) {
+  .contentCart {
+    flex-direction: column;
+    gap: 1em;
+    padding-bottom: 1em;
+  }
+
+  .sectionItensCarrinho {
+    width: 100%;
+  }
+  .sectionItensCarrinho a {
+    display: none;
+  }
+  .cardResumo {
+    width: 100%;
+  }
+
+  .textCard {
+    font-size: 14px;
+  }
+  .cardEndereco > div label {
+    height: 70px !important;
+  }
+  .cardEndereco form {
+    margin-left: 0;
+    padding-right: 0;
+    width: 100%;
+  }
+   .cardEndereco form button{
+    width: 100% !important;
+  }
+
+  .cardEndereco form div div {
+    min-width: 100%;
+  }
+  .cardEndereco form div div:first-child {
+    margin-bottom: 1em;
+  }
 }
