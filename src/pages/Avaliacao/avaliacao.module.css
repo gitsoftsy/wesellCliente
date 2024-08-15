@@ -139,3 +139,34 @@
 .cardWave {
     min-height: 340px !important;
 }
+
+@media (max-width: 620px) {
+    .boxConteudo {
+        height: auto;
+    }
+    .cardProduto {
+        width: 60%;
+        min-width: 90%;
+    }
+}
+
+@media (max-width: 360px) {
+    .avalicaoMobile {
+        display: flex;
+    }
+
+    .avaliacao {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .txt {
+        text-align: center !important;
+        font-size: 12px;
+    }
+
+    .txt:nth-child(1) {
+        text-align: center !important;
+    }
+}

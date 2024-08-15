@@ -84,7 +84,7 @@ const StaticHeader = () => {
                                 >
                                     <li>
                                         <Link
-                                            to={"/static/registro"}
+                                            to={"/static/signup"}
                                             className={`${styles.dropdownItem} dropdown-item`}
                                         >
                                             <FiUser size={18} />

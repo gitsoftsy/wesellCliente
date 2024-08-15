@@ -103,7 +103,7 @@ export default function Header() {
                 >
                   <li>
                     <Link
-                      to={"/registro"}
+                      to={"/signup"}
                       className={`${styles.dropdownItem} dropdown-item`}
                     >
                       <FiUser size={18} />

@@ -181,3 +181,66 @@
     font-weight: 500;
     margin-bottom: 40px;
 }
+
+@media (max-width: 1020px) {
+    .boxDados {
+        display: grid;
+        grid-template-columns: 100%;
+        padding: 1rem;
+        grid-column: 2;
+    }
+
+    .boxVendedor {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-top: 12px;
+    }
+
+    #valor {
+        font-weight: 500;
+        margin-bottom: 0px;
+    }
+
+    .boxDescricao {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .statusCompra {
+        margin-bottom: 0;
+    }
+
+    .nomeProduto {
+        margin-top: 0rem;
+    }
+
+    .boxCompra {
+        display: grid;
+        grid-template-columns: 20% 45% 35%;
+    }
+
+    .dataCompra {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 12px;
+        grid-column: 1/-1;
+        font-weight: 600;
+    }
+}
+
+@media (max-width: 620px) {
+    .boxCompra {
+        display: grid;
+        grid-template-columns: 20% 80%;
+    }
+
+    .boxDados {
+        grid-column: 2;
+    }
+
+    .boxBtn {
+        grid-column: 2;
+    }
+}

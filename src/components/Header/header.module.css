@@ -100,3 +100,12 @@
     width: 500px;
   }
 }
+
+@media (max-width: 1020px) {
+  .searchForm input[type="text"] {
+    width: 300px;
+    font-size: clamp(0.5rem, -0.3037rem + 1.6529vw, 0.75rem);
+    height: 40px;
+    padding-left: 10px;
+  }
+}

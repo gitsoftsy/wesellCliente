@@ -32,7 +32,7 @@ const StarsAvaliation = ({ color, font }) => {
     }
 
     return (
-        <div className="avaliacao-estrelas">
+        <div className={`avaliacao-estrelas ${styles.avalicaoMobile}`}>
             {estrelas}
         </div>
     );

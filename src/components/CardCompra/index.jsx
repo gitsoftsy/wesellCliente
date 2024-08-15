@@ -55,7 +55,7 @@ export default function CardCompra({ compra }) {
                 </div>
                 <div className={styles.boxBtn}>
                     <Link to='' className={styles.btnCompra}>Ver produto</Link>
-                    <Link to='' className={styles.comprarMais}>Comprar novamente</Link>
+                    <Link to='' className={styles.comprarMais}>Avaliar</Link>
                 </div>
             </div>
         </article>
