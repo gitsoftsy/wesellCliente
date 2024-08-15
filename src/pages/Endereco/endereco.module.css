@@ -50,12 +50,29 @@
   background-color: #f3f3f3 !important;
 }
 
+.cardModalEndereco p {
+  margin: 0;
+}
+
+.cardModalEndereco label {
+  display: flex;
+  align-items: center;
+}
+
 #editar {
   cursor: pointer;
 }
 
 #editar:hover {
   color: #0051ca !important;
+}
+.imgFrete {
+  height: 20px;
+}
+
+#headerFretes p {
+  text-transform: uppercase;
+  color: #0051ca;
 }
 
 @media (width <= 992px) {

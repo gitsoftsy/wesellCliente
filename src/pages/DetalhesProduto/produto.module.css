@@ -234,6 +234,10 @@
   padding-bottom: 2rem;
 }
 
+.descriptionProduct p, .descriptionProduct span {
+  color: #fff !important;
+}
+
 .descriptionDetailed {
   font-weight: 800;
 }

@@ -64,20 +64,6 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
         <input
           type="text"
           className="form-control"
-          id="nomeSocial"
-          name="nomeSocial"
-          value={formData.nomeSocial}
-          onChange={handleChange}
-          placeholder="Nome social"
-          required
-          autoComplete="off"
-        />
-        <label htmlFor="nomeSocial">Nome social</label>
-      </div>
-      <div className="form-floating mb-3">
-        <input
-          type="text"
-          className="form-control"
           id="nomeCompleto"
           name="nomeCompleto"
           value={formData.nomeCompleto}
@@ -88,7 +74,19 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
         />
         <label htmlFor="nomeCompleto">Nome completo</label>
       </div>
-
+      <div className="form-floating mb-3">
+        <input
+          type="text"
+          className="form-control"
+          id="nomeSocial"
+          name="nomeSocial"
+          value={formData.nomeSocial}
+          onChange={handleChange}
+          placeholder="Nome social"
+          autoComplete="off"
+        />
+        <label htmlFor="nomeSocial">Nome social</label>
+      </div>
       <div className="form-floating mb-3">
         <input
           type="email"

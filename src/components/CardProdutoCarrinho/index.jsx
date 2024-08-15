@@ -13,14 +13,14 @@ export default function CardProdutoCarrinho({
   removeProductSave,
   addToCart
 }) {
-  // const removerAcentos = (str) => {
-  //   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  // };
+  const encodeCustom = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
-  const nomeAtualizado = item.nomeProduto
+  const produtoNome = encodeCustom(item.nomeProduto)
     .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/\//g, "");
+    .replace(/\s+/g, "-") 
+    .replace(/\//g, "-")
 
   return (
     <div className={styles.cardItemCarrinho} key={item.id}>
@@ -32,7 +32,7 @@ export default function CardProdutoCarrinho({
       </div>
       <div className={styles.areaDescricao}>
         <Link
-          to={`/produto/${item.id}/${nomeAtualizado}`}
+          to={`/produto/${item.id}/${produtoNome}`}
           id={styles.nomeProduto}
         >
           {item.nomeProduto}

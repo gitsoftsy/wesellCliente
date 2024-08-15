@@ -2,5 +2,6 @@
 const url_base2 = 'http://localhost:3001';
 const url_img = 'https://api.we-sell.store';
 const url_base = 'https://api.we-sell.store/api-wesell';
+const apiFrete = 'https://melhorenvio.com.br/api/v2/me/shipment/calculate'
 
-export { url_base, url_base2, url_img };
+export { url_base, url_base2, url_img, apiFrete };

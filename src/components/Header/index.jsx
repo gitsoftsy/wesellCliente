@@ -5,14 +5,14 @@ import { PiShoppingCartLight } from "react-icons/pi";
 import NavBar from "../NavBar";
 import { Link, useNavigate } from "react-router-dom";
 import { FiLogIn, FiLogOut, FiPackage, FiSearch, FiUser } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useContexts from "../../hooks/useContext";
 
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-  const { setValueSearch, client, clientLogado} = useContexts();
+  const { setValueSearch, categoria, client, clientLogado} = useContexts();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -24,6 +24,12 @@ export default function Header() {
     localStorage.removeItem("wesell-user-comprador");
     navigate('/login')
   };
+
+  useEffect(() => {
+    if (categoria) {
+      setSearchTerm('')
+    }
+  }, [categoria])
 
   return (
     <header className={styles.header}>

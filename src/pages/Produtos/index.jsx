@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GridProdutos from "../../components/GridProdutos";
 import axios from "axios";
 import DoubleRangeSlider from "../../components/DoubleRangeSlider";
@@ -26,10 +26,11 @@ export default function Produtos() {
   const [precoDeVendaMax, setPrecoDeVendaMax] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
 
-
-  const { valueSearch, categoria } = useContexts();
+  const { valueSearch, categoria, setValueSearch, setCategoria } = useContexts();
   const currentUrl = window.location.href;
   let routeCategory = currentUrl.includes("/c/");
+  const prevValueSearchRef = useRef(valueSearch);
+  const prevCategoriaRef = useRef(categoria);
 
   function getFilters(produtos) {
     let categoriasArray = [];
@@ -78,7 +79,14 @@ export default function Produtos() {
 
     setCategorias(categoriasArray);
     setSubCategorias(subCategoriasArray);
-    if (!marcas.length > 0) {
+    const valueSearchChanged = prevValueSearchRef.current !== valueSearch;
+    const categoriaChanged = prevCategoriaRef.current !== categoria;
+
+
+    prevValueSearchRef.current = valueSearch;
+    prevCategoriaRef.current = categoria;
+
+    if (valueSearchChanged || categoriaChanged || !marcas.length) {
       setMarcas(marcasArray);
       setLojistas(lojistasArray);
     }
@@ -104,6 +112,12 @@ export default function Produtos() {
   }
 
   useEffect(() => {
+    if (routeCategory) {
+      setValueSearch("");
+    } else {
+      setCategoria("")
+    }
+
     setIdCategoria(null);
     setIdMarca([]);
     setIdLojista([]);
@@ -112,7 +126,7 @@ export default function Produtos() {
     setPrecoDeVendaMax(null);
     setOrderBy(null);
     getProdutos();
-  }, [valueSearch]);
+  }, [valueSearch, categoria]);
 
   useEffect(() => {
     async function filtrarProdutos() {
@@ -124,11 +138,11 @@ export default function Produtos() {
         precoDeVendaMax: precoDeVendaMax || null,
         idMarca: idMarca.length > 0 ? idMarca : null,
         idLojista: idLojista.length > 0 ? idLojista : null,
-        ordenacao: orderBy || 1
+        ordenacao: orderBy || 1,
       };
 
       await axios
-      .post(url_base + "/produtos/listar", params)
+        .post(url_base + "/produtos/listar", params)
         .then((response) => {
           setProdutos(response.data);
           getFilters(response.data);
@@ -140,7 +154,6 @@ export default function Produtos() {
     }
 
     if (
-      
       idCategoria !== null ||
       idSubCategoria !== null ||
       precoDeVendaMin !== null ||
@@ -159,7 +172,7 @@ export default function Produtos() {
     precoDeVendaMax,
     idMarca,
     idLojista,
-    orderBy
+    orderBy,
   ]);
 
   return (
@@ -267,9 +280,7 @@ export default function Produtos() {
                     checked={isChecked}
                     onChange={() => {
                       if (isChecked) {
-                        setIdLojista(
-                          idLojista.filter((id) => id !== item.id)
-                        );
+                        setIdLojista(idLojista.filter((id) => id !== item.id));
                       } else {
                         setIdLojista([...idLojista, item.id]);
                       }
@@ -322,10 +333,10 @@ export default function Produtos() {
                   Relevância
                 </option>
                 <option value={2} disabled>
-                    Mais vendidos
-                  </option>
-                  <option value={5}>Menor preço</option>
-                  <option value={6}>Maior preço</option>
+                  Mais vendidos
+                </option>
+                <option value={5}>Menor preço</option>
+                <option value={6}>Maior preço</option>
               </select>
             </div>
           </div>

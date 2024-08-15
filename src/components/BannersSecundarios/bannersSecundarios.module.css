@@ -9,7 +9,8 @@
 
 .carrossel {
     margin-top: 3em;
-    height: 320px;
+    height: auto;
+    max-height: 371px;
 }
 
 .carrossel img {

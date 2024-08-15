@@ -250,13 +250,20 @@ export default function DetalhesProduto() {
                   </a>
                 </div>
                 <div className={styles.purchase_addCart}>
-                  <button className={styles.purchase}>Comprar</button>
+                  <button
+                    className={styles.purchase}
+                    onClick={() => {
+                      addToCart({ ...produto, qtd: 1, imagem: selectedImage })
+                      navigate("/carrinho")
+                    }}
+                  >
+                    Comprar
+                  </button>
                   <button
                     type="button"
                     className={styles.addCart}
                     onClick={() => {
-                      addToCart({ ...produto, qtd: 1, imagem: selectedImage }),
-                        navigate("/carrinho");
+                      addToCart({ ...produto, qtd: 1, imagem: selectedImage });
                     }}
                   >
                     Adicionar ao carrinho
@@ -289,7 +296,7 @@ export default function DetalhesProduto() {
           )}
         </section>
       </section>
-      <ModalFrete dadosFrete={produto}/>
+      <ModalFrete produto={produto} />
     </>
   );
 }

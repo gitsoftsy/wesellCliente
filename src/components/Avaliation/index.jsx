@@ -13,7 +13,7 @@ const Avaliation = ({ numeroAvaliacoes }) => {
         <AvaliacaoFixa heigth="1.4em" mediaAvaliacoes={numeroAvaliacoes} />
       </div>
       <p>
-        O console é top demais gráficos realistas, gostei muito. Entrega foi
+        O produto é top demais, excelente qualidade, gostei muito. Entrega foi
         rápida e chegou antes do prazo.
       </p>
     </div>

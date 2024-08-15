@@ -12,6 +12,8 @@ import { FiArrowLeft } from "react-icons/fi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido";
+import { apiFrete } from "../../services/apis";
+import formatPriceBR from "../../hooks/formatPrice";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -19,6 +21,222 @@ export default function Endereco() {
   const [addresses, setAddresses] = useState([]);
   const [total, setTotal] = useState(0);
   const [exibirFormulario, setExibirFormulario] = useState(false);
+  const [fretes, setFretes] = useState([
+    {
+      id: 1,
+      name: "PAC",
+      company: {
+        id: 1,
+        name: "Correios",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/correios.png",
+      },
+      error: "Dimensões do objeto ultrapassam o limite da transportadora.",
+    },
+    {
+      id: 2,
+      name: "SEDEX",
+      company: {
+        id: 1,
+        name: "Correios",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/correios.png",
+      },
+      error: "Dimensões do objeto ultrapassam o limite da transportadora.",
+    },
+    {
+      id: 3,
+      name: ".Package",
+      price: "1248.51",
+      custom_price: "1248.51",
+      discount: "0.00",
+      currency: "R$",
+      delivery_time: 16,
+      delivery_range: {
+        min: 15,
+        max: 16,
+      },
+      custom_delivery_time: 16,
+      custom_delivery_range: {
+        min: 15,
+        max: 16,
+      },
+      packages: [
+        {
+          format: "box",
+          weight: "8.00",
+          insurance_value: "0.00",
+          dimensions: {
+            height: 50,
+            width: 65,
+            length: 120,
+          },
+        },
+      ],
+      additional_services: {
+        receipt: false,
+        own_hand: false,
+        collect: false,
+      },
+      company: {
+        id: 2,
+        name: "Jadlog",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/jadlog.png",
+      },
+    },
+    {
+      id: 4,
+      name: ".Com",
+      price: "1697.52",
+      custom_price: "1697.52",
+      discount: "0.00",
+      currency: "R$",
+      delivery_time: 10,
+      delivery_range: {
+        min: 9,
+        max: 10,
+      },
+      custom_delivery_time: 10,
+      custom_delivery_range: {
+        min: 9,
+        max: 10,
+      },
+      packages: [
+        {
+          format: "box",
+          weight: "8.00",
+          insurance_value: "0.00",
+          dimensions: {
+            height: 50,
+            width: 65,
+            length: 120,
+          },
+        },
+      ],
+      additional_services: {
+        receipt: false,
+        own_hand: false,
+        collect: false,
+      },
+      company: {
+        id: 2,
+        name: "Jadlog",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/jadlog.png",
+      },
+    },
+    {
+      id: 12,
+      name: "éFácil",
+      company: {
+        id: 6,
+        name: "LATAM Cargo",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/latamcargo.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 15,
+      name: "Amanhã",
+      company: {
+        id: 9,
+        name: "Azul Cargo Express",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/azulcargo.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 16,
+      name: "e-commerce",
+      company: {
+        id: 9,
+        name: "Azul Cargo Express",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/azulcargo.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 17,
+      name: "Mini Envios",
+      company: {
+        id: 1,
+        name: "Correios",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/correios.png",
+      },
+      error: "Dimensões do objeto ultrapassam o limite da transportadora.",
+    },
+    {
+      id: 22,
+      name: "Rodoviário",
+      company: {
+        id: 12,
+        name: "Buslog",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/buslog.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 27,
+      name: ".Package Centralizado",
+      company: {
+        id: 2,
+        name: "Jadlog",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/jadlog.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 31,
+      name: "Express",
+      company: {
+        id: 14,
+        name: "Loggi",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/loggi.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 32,
+      name: "Coleta",
+      company: {
+        id: 14,
+        name: "Loggi",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/loggi.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 33,
+      name: "Standard",
+      company: {
+        id: 15,
+        name: "JeT",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/jet.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+    {
+      id: 34,
+      name: "Loggi Ponto",
+      company: {
+        id: 14,
+        name: "Loggi",
+        picture:
+          "https://www.melhorenvio.com.br/images/shipping-companies/loggi.png",
+      },
+      error: "Transportadora não atende este trecho.",
+    },
+  ]);
 
   const [editandoEndereco, setEditandoEndereco] = useState(false);
   const [valoresFormulario, setValoresFormulario] = useState({
@@ -36,6 +254,32 @@ export default function Endereco() {
   });
   const navigate = useNavigate();
 
+  async function calculaFrete(produto, cep) {
+    let objetoApi = {
+      from: {
+        postal_code: produto.lojista.cepCd,
+      },
+      to: {
+        postal_code: cep,
+      },
+      package: {
+        height: produto.altura,
+        width: produto.largura,
+        length: produto.profundidade,
+        weight: produto.peso,
+      },
+    };
+
+    console.log(objetoApi);
+
+    try {
+      const response = await axios.post(apiFrete, objetoApi);
+      setFretes(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     const productsInCart = localStorage.getItem("wesell-items-in-cart");
     const addressesStorage = localStorage.getItem("wesell-customer-addresses");
@@ -46,6 +290,8 @@ export default function Endereco() {
     setExibirFormulario(trueOrFalse);
     if (addresses.length > 0) {
       setEnderecoSelecionado(addresses[0].id);
+      console.log(products);
+      // calculaFrete(products[0], addresses[0].cep);
     }
 
     const subtotalCalculado = products.reduce(
@@ -498,33 +744,77 @@ export default function Endereco() {
               </>
             )}
           </section>
-          {!exibirFormulario && (
+          {fretes.length > 0 && (
             <section className={`${styles.cardItensCarrinho} card`}>
               <div className={styles.titleCarrinho}>
                 <h5 className="d-flex align-items-center gap-2">
                   <MdOutlineLocalShipping size={25} /> Formas de envio
                 </h5>
               </div>
-              <div
-                className={`${styles.cardEndereco} card rounded-1 px-3 py-2 ${styles.radioSelected}`}
-              >
-                <div className="form-check d-flex align-items-center py-2">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="melhorEnvio"
-                    id="melhorEnvio"
-                    checked={true}
-                  />
-                  <label
-                    className={`ms-3 pe-2 form-check-label col-12 d-flex justify-content-between`}
-                    htmlFor="melhorEnvio"
-                  >
-                    <span>Melhor Envio - de 1 a 20 dias úteis</span>
-                    <span className="fw-semibold">R$ 25,37</span>
-                  </label>
+              <div className="d-flex px-4" id={styles.headerFretes}>
+                <div className="col">
+                  <p className="mb-0">Transportadora</p>
+                </div>
+
+                <div className="col">
+                  <p className="mb-0">Modalidade</p>
+                </div>
+
+                <div className="col">
+                  <p className="mb-0">Prazo Estimado</p>
+                </div>
+
+                <div className="col text-end">
+                  <p className="mb-0">Preço</p>
                 </div>
               </div>
+              {fretes
+                .filter((item) => !item.error)
+                .map((frete) => (
+                  <div
+                    key={frete.id}
+                    className={`${styles.cardEndereco} card rounded-1 px-3 py-2 ${styles.radioSelected}`}
+                  >
+                    <div className="form-check d-flex align-items-center py-2">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name={frete.name}
+                        id={frete.name}
+                        checked={true}
+                      />
+                      <label
+                        className={`ms-3 pe-2 form-check-label col-12 d-flex justify-content-between`}
+                        htmlFor={frete.name}
+                      >
+                        <div className="col">
+                          <img
+                            src={frete?.company?.picture}
+                            alt={frete?.company?.name}
+                            className={styles.imgFrete}
+                          />
+                        </div>
+
+                        <div className="col">
+                          <p>{frete?.name}</p>
+                        </div>
+
+                        <div className="col">
+                          <p>
+                            {frete?.delivery_range?.min} -{" "}
+                            {frete?.delivery_range?.max} dias úteis
+                          </p>
+                        </div>
+
+                        <div className="col text-end">
+                          <p className="fw-semibold">
+                            {formatPriceBR(frete?.price)}
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                ))}
             </section>
           )}
         </div>
