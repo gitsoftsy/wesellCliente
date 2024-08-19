@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import formatCurrencyBR from "../../hooks/formatCurrency.js";
+import formatPriceBR from "../../hooks/formatPrice.js";
 import styles from "./resumo.module.css";
 
 export default function ResumoPedido({
@@ -7,6 +8,8 @@ export default function ResumoPedido({
   disabled,
   total,
   continuarCompra,
+  frete,
+  subtotal
 }) {
   return (
     <div className={`${styles.cardResumo} card`}>
@@ -15,13 +18,13 @@ export default function ResumoPedido({
       </div>
       <div className={styles.infoResumo}>
         <span>
-          <p>Produtos ({totalProdutos})</p> <p>{formatCurrencyBR(total)}</p>
+          <p>Produtos ({totalProdutos})</p> <p>{formatCurrencyBR(subtotal)}</p>
         </span>
         <span>
-          <p>Frete</p> <p>R$ 25,37</p>
+          <p>Frete</p> <p>{formatPriceBR(frete?.price)}</p>
         </span>
         <span className={styles.spanTotal}>
-          <p>Total</p> <p>{formatCurrencyBR(total + 25.37)}</p>
+          <p>Total</p> <p>{formatCurrencyBR(total)}</p>
         </span>
       </div>
       <div id={styles.areaBtn}>

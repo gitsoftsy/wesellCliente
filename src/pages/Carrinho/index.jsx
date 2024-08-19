@@ -11,6 +11,7 @@ export default function Carrinho() {
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
   const [produtosSalvos, setProdutosSalvos] = useState([]);
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
@@ -30,6 +31,7 @@ export default function Carrinho() {
       0
     );
     setTotal(subtotalCalculado);
+    setSubtotal(subtotalCalculado);
     setProdutosSalvos(productsInListSave);
     setProdutosCarrinho(products);
   }, []);
@@ -65,6 +67,7 @@ export default function Carrinho() {
       );
 
       setTotal(subtotalCalculado);
+      setSubtotal(subtotalCalculado);
 
       const quantidadeTotal = produtosFiltrados.reduce(
         (acc, produto) => acc + produto.qtd,
@@ -90,6 +93,7 @@ export default function Carrinho() {
       );
 
       setTotal(subtotalCalculado);
+      setSubtotal(subtotalCalculado);
 
       const quantidadeTotal = novoCarrinho.reduce(
         (acc, produto) => acc + produto.qtd,
@@ -118,6 +122,7 @@ export default function Carrinho() {
       0
     );
     setTotal(subtotalCalculado);
+    setSubtotal(subtotalCalculado);
 
     const quantidadeTotal = productsInCart.reduce(
       (acc, produto) => acc + produto.qtd,
@@ -149,6 +154,7 @@ export default function Carrinho() {
       );
 
       setTotal(subtotalCalculado);
+      setSubtotal(subtotalCalculado);
       toast.success("Item salvo!");
       setProdutosSalvos((produtosSalvosAntigos) => [
         ...produtosSalvosAntigos,
@@ -238,6 +244,7 @@ export default function Carrinho() {
             total={total}
             disabled={false}
             totalProdutos={quantidadeTotalProdutos}
+            subtotal={subtotal}
           />
         ) : (
           <div className={`${styles.cardResumo2} card`}>

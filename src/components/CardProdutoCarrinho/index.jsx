@@ -23,7 +23,7 @@ export default function CardProdutoCarrinho({
     .replace(/\//g, "-")
 
   return (
-    <div className={styles.cardItemCarrinho} key={item.id}>
+    <div className={styles.cardItemCarrinho} key={item.idProduto}>
       <div className={styles.areaImg}>
         <img
           src={item.imagem ? item.imagem : item.imagens[0]}
@@ -32,7 +32,7 @@ export default function CardProdutoCarrinho({
       </div>
       <div className={styles.areaDescricao}>
         <Link
-          to={`/produto/${item.id}/${produtoNome}`}
+          to={`/produto/${item.idProduto}/${produtoNome}`}
           id={styles.nomeProduto}
         >
           {item.nomeProduto}

@@ -83,7 +83,7 @@ export default function Header() {
                       className={`${styles.dropdownItem} dropdown-item`}
                     >
                       <FiUser size={18} />
-                      Cadastro
+                      Dados pessoais
                     </Link>
                   </li>
                   <li>

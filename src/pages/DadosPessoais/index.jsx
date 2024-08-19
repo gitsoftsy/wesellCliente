@@ -32,8 +32,8 @@ export default function DadosPessoais() {
   });
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [alteraSenha, setAlteraSenha] = useState("N");
-  const [senhaConfirm, setSenhaConfirm] = useState('');
-  const [senha, setSenha] = useState('');
+  const [senhaConfirm, setSenhaConfirm] = useState("");
+  const [senha, setSenha] = useState("");
 
   const navigate = useNavigate();
 
@@ -142,9 +142,9 @@ export default function DadosPessoais() {
       })
       .finally(() => {
         delete formDataLimpo.senha;
-        setSenha('');
-        setSenhaConfirm('');
-        setAlteraSenha('N');
+        setSenha("");
+        setSenhaConfirm("");
+        setAlteraSenha("N");
       });
   }
 
@@ -211,7 +211,7 @@ export default function DadosPessoais() {
                 type="checkbox"
                 id="alteraSenha"
                 value={alteraSenha}
-                checked={alteraSenha === 'S'}
+                checked={alteraSenha === "S"}
                 onChange={(e) => handleAlteraSenha(e)}
               />
             </div>
@@ -247,20 +247,7 @@ export default function DadosPessoais() {
             <span className="form-text fs-5 text">Dados pessoais</span>
             <hr className="mt-2" />
           </div>
-          <div className="mb-4 mt-4">
-            <label htmlFor="nomeSocial" className="form-label">
-              Nome social
-            </label>
-            <input
-              type="text"
-              className="form-control form-control-lg"
-              id="nomeSocial"
-              required
-              autoComplete="off"
-              value={formData.nomeSocial}
-              onChange={handleInputChange}
-            />
-          </div>
+
           <div className="mb-4 mt-4">
             <label htmlFor="nomeCompleto" className="form-label">
               Nome completo
@@ -275,7 +262,19 @@ export default function DadosPessoais() {
               onChange={handleInputChange}
             />
           </div>
-
+          <div className="mb-4 mt-4">
+            <label htmlFor="nomeSocial" className="form-label">
+              Nome social
+            </label>
+            <input
+              type="text"
+              className="form-control form-control-lg"
+              id="nomeSocial"
+              autoComplete="off"
+              value={formData.nomeSocial}
+              onChange={handleInputChange}
+            />
+          </div>
           <div className="mb-4">
             <label htmlFor="cpf" className="form-label">
               CPF

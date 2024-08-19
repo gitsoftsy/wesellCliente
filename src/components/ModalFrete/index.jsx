@@ -10,7 +10,7 @@ import formatPriceBR from "../../hooks/formatPrice";
 export default function ModalFrete({ produto }) {
   const [endereco, setEndereco] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [fretes, setFretes] = useState([]);
+  const [frete, setFrete] = useState(null);
   const [cep, setCep] = useState("");
 
   function limparMascara(valor) {
@@ -48,16 +48,29 @@ export default function ModalFrete({ produto }) {
         weight: produto.peso,
       },
     };
-    
-    console.log(objetoApi)
+
+    console.log(objetoApi);
 
     try {
       const response = await axios.post(apiFrete, objetoApi);
-      setFretes(response.data);
+
+      const fretes = response.data;
+
+      const freteMaiorValor = fretes
+        .filter((item) => !item.error)
+        .reduce(
+          (maxFrete, currentFrete) => {
+            return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
+              ? currentFrete
+              : maxFrete;
+          },
+          { price: "0.00" }
+        );
+
+      setFrete(freteMaiorValor);
     } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+      console.error(error);
+      return null;
     }
   }
 
@@ -127,7 +140,7 @@ export default function ModalFrete({ produto }) {
                 {endereco && (
                   <>
                     <p className="mt-4 fs-5 d-flex align-items-center justify-content-center">
-                      <MdOutlineLocationOn size={23} className="me-1" />
+                      <MdOutlineLocationOn size={22} className="me-1" />
                       {endereco.logradouro}, {endereco.bairro} -{" "}
                       {endereco.localidade} - {endereco.uf}
                     </p>
@@ -150,49 +163,44 @@ export default function ModalFrete({ produto }) {
                     </div>
                   </>
                 )}
-                {fretes.length > 0 &&
-                  fretes
-                    .filter((item) => !item.error)
-                    .map((frete) => {
-                      return (
-                        <div
-                          key={frete.id}
-                          className={`${styles.cardEndereco} mb-1 card rounded-1 py-2 ${styles.cardModalEndereco} ${styles.radioSelected}`}
-                        >
-                          <div className="d-flex align-items-center px-3 py-2">
-                            <label
-                              className={`form-check-label col-12 d-flex justify-content-between`}
-                              htmlFor={frete.name}
-                            >
-                              <div className="col">
-                                <img
-                                  src={frete?.company?.picture}
-                                  alt={frete?.company?.name}
-                                  className={styles.imgFrete}
-                                />
-                              </div>
-
-                              <div className="col">
-                                <p>{frete?.name}</p>
-                              </div>
-
-                              <div className="col">
-                                <p>
-                                  {frete?.delivery_range?.min} -{" "}
-                                  {frete?.delivery_range?.max} dias úteis
-                                </p>
-                              </div>
-
-                              <div className="col text-end">
-                                <p className="fw-semibold">
-                                  {formatPriceBR(frete?.price)}
-                                </p>
-                              </div>
-                            </label>
-                          </div>
+                {frete && (
+                  <div
+                    key={frete.id}
+                    className={`${styles.cardEndereco} mb-1 card rounded-1 py-2 ${styles.cardModalEndereco} ${styles.radioSelected}`}
+                  >
+                    <div className="d-flex align-items-center px-3 py-2">
+                      <label
+                        className={`form-check-label col-12 d-flex justify-content-between`}
+                        htmlFor={frete.name}
+                      >
+                        <div className="col">
+                          <img
+                            src={frete?.company?.picture}
+                            alt={frete?.company?.name}
+                            className={styles.imgFrete}
+                          />
                         </div>
-                      );
-                    })}
+
+                        <div className="col">
+                          <p>{frete?.name}</p>
+                        </div>
+
+                        <div className="col">
+                          <p>
+                            {frete?.delivery_range?.min} -{" "}
+                            {frete?.delivery_range?.max} dias úteis
+                          </p>
+                        </div>
+
+                        <div className="col text-end">
+                          <p className="fw-semibold">
+                            {formatPriceBR(frete?.price)}
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>

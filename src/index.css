@@ -137,7 +137,7 @@ ul.pagination {
 }
 
 .css-dip3t8 {
-  padding-top: 24px;
+  padding-top: 10px;
   color: white;
   background-color: #1e1e1e !important;
 }
@@ -145,7 +145,9 @@ ul.pagination {
 .css-18unl23 {
   background-color: transparent !important;
 }
-
+.css-1wvake5 {
+  border-color: #353535 !important;
+}
 .css-1tqrhto > .ps-menu-button:hover {
   background-color: #353535 !important;
 }
