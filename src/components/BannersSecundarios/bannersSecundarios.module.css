@@ -1,18 +1,29 @@
 .areaBanner {
-    padding: 3.5em 0;
+  padding: 3.5em 0;
 }
 
 .areaBanner h5 {
-    font-weight: bolder;
-    color: #383838;
+  font-weight: bolder;
+  color: #383838;
 }
 
 .carrossel {
-    margin-top: 3em;
-    height: auto;
-    max-height: 371px;
+  margin-top: 3em;
+  height: auto;
+  max-height: 371px;
 }
 
 .carrossel img {
-    width: 100%;
+  width: 100%;
+}
+
+.areaBanner {
+  padding: 3.5em 0;
+}
+
+@media (width <= 768px) {
+    .areaBanner {
+        padding-top: 2.5em;
+        padding-bottom: 0;
+    }
 }

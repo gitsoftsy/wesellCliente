@@ -4,11 +4,11 @@ import { Autoplay } from "swiper/modules";
 import CardProduto from "../CardProduto";
 import styles from "./carrosselprodutos.module.css";
 
-export default function CarrosselProdutos({ produtos }) {
+export default function CarrosselProdutos({ produtos, isMobile }) {
   return (
     <div className="container">
       <Swiper
-        slidesPerView={4}
+        slidesPerView={isMobile ? 1 : 4}
         spaceBetween={25}
         loop={true}
         autoplay={{

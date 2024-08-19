@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useContexts from "../../hooks/useContext";
 import { url_img } from "../../services/apis";
 
-export default function CarrosselCategorias({ dadosApi }) {
+export default function CarrosselCategorias({ dadosApi, isMobile }) {
   const navigate = useNavigate();
   const { setCategoria } = useContexts();
   const removeAccents = (str) => {
@@ -21,8 +21,8 @@ export default function CarrosselCategorias({ dadosApi }) {
     <div className={`${styles.areaTendencias} container`}>
       <h5>TENDÊNCIAS NA WESELL</h5>
       <Swiper
-        slidesPerView={6}
-        spaceBetween={25}
+        slidesPerView={isMobile ? 3 : 6}
+        spaceBetween={isMobile ? 0 : 25}
         loop={true}
         autoplay={{
           delay: 3000,

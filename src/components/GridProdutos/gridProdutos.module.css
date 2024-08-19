@@ -32,4 +32,10 @@
   .loadItens:hover {
     border-bottom: 1px solid var(--cinza-secundario);
   }
+
+  @media (width <= 768px) {
+    .gridProdutos h5 {
+      margin-bottom: 1.5em;
+    }
+  }
   

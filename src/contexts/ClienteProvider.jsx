@@ -17,6 +17,7 @@ export default function ClienteProvider({ children }) {
   );
   const [valueSearch, setValueSearch] = useState('')
   const [categoria, setCategoria] = useState('')
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   function storageClient(data) {
     localStorage.setItem("wesell-user-comprador", JSON.stringify(data));
@@ -34,6 +35,14 @@ export default function ClienteProvider({ children }) {
         });
     }
     getCategorias();
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
+
+  window.addEventListener("resize", handleResize);
+
+  // Cleanup event listener on component unmount
+  return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   function addToCart(product) {
@@ -67,6 +76,7 @@ export default function ClienteProvider({ children }) {
     storageClient,
     setValueSearch,
     setCategoria,
+    isMobile,
     categoria,
     valueSearch
   };
