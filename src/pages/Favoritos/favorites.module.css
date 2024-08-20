@@ -13,3 +13,8 @@
 #contentFavorites > div {
   padding-top: 0;
 }
+
+.cardFavoritos {
+  margin-top: 3em;
+  padding: 7em 0;
+}

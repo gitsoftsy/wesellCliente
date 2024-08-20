@@ -16,3 +16,14 @@
     height: 10px;
     border-radius: 16px;
 }
+@media (max-width: 1024px) {
+
+    .bar{
+        font-size: .9rem;
+    }
+
+    .ratingBarBg{
+        width: 90%;
+    }
+    
+}

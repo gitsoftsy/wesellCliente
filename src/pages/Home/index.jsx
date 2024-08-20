@@ -52,6 +52,7 @@ export default function Home() {
           setBannersSecMobile(secundariosMobile);
         })
         .catch((error) => {
+          console.log(error)
           toast.error(error.message);
         });
     }
@@ -66,6 +67,7 @@ export default function Home() {
         })
         .catch((error) => {
           toast.error(error.message);
+          console.log(error)
         });
     }
     getProdutosAdicionadosRecentemente();
@@ -85,8 +87,6 @@ export default function Home() {
     const listaIds = JSON.parse(
       localStorage.getItem("historicoProdutosComprador")
     );
-
-    console.log(listaIds);
     async function getHistoricoProdutos() {
       await axios
         .post(url_base + "/produtos/recentes", {
@@ -96,7 +96,7 @@ export default function Home() {
           setHistoricoProdutos(response.data);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
         });
     }
 

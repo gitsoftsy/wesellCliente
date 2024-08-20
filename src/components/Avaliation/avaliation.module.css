@@ -32,12 +32,6 @@
     gap: 5px;
 }
 
-/* .carrosselImagens{
-    position: absolute;
-    top: -110px;
-    padding: 0.5em !important;
-} */
-
 .carrosselImagens{
     display: flex;
     margin-bottom: 20px;
@@ -56,4 +50,12 @@
 
 .img{
     width: 100px;
+}
+
+@media (max-width: 1024px) {
+
+    .boxAvaliation{
+        width: 100%;
+    }
+    
 }

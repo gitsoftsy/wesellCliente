@@ -32,6 +32,7 @@ export default function ClienteProvider({ children }) {
         })
         .catch((error) => {
           toast.error(error.message);
+          console.log(error)
         });
     }
     getCategorias();

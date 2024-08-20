@@ -204,9 +204,9 @@ export default function Carrinho() {
             </section>
           ) : (
             <section className={`${styles.cardItensCarrinho} card`}>
-              <div className="col-4 text-center mx-auto my-5">
-                <MdOutlineRemoveShoppingCart size={30} color="#FF5E93" />
-                <h5 style={{ color: "#FF5E93" }}>Seu carrinho está vazio!</h5>
+              <div className="col-12 text-center px-1 my-5">
+                <MdOutlineRemoveShoppingCart size={35} className="mb-2"/>
+                <h5>Seu carrinho está vazio!</h5>
                 <p>Você ainda não possui itens no seu carrinho.</p>
                 <Link to={"/home"} className="btn btn-primary">
                   Ver produtos
