@@ -63,7 +63,7 @@ export default function Avaliacao() {
                         </div>
                         <div className={styles.btns}>
                             <button>Salvar</button>
-                            <Link to="" className={styles.link}>Excluir Opniao</Link>
+                            <Link to="/minha-conta/pedidos" className={styles.link}>Cancelar</Link>
                         </div>
                     </>
                     :
