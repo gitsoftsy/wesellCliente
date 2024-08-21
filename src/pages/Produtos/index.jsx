@@ -26,7 +26,8 @@ export default function Produtos() {
   const [precoDeVendaMax, setPrecoDeVendaMax] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
 
-  const { valueSearch, categoria, setValueSearch, setCategoria } = useContexts();
+  const { valueSearch, categoria, setValueSearch, setCategoria } =
+    useContexts();
   const currentUrl = window.location.href;
   let routeCategory = currentUrl.includes("/c/");
   const prevValueSearchRef = useRef(valueSearch);
@@ -82,7 +83,6 @@ export default function Produtos() {
     const valueSearchChanged = prevValueSearchRef.current !== valueSearch;
     const categoriaChanged = prevCategoriaRef.current !== categoria;
 
-
     prevValueSearchRef.current = valueSearch;
     prevCategoriaRef.current = categoria;
 
@@ -115,7 +115,7 @@ export default function Produtos() {
     if (routeCategory) {
       setValueSearch("");
     } else {
-      setCategoria("")
+      setCategoria("");
     }
 
     setIdCategoria(null);
@@ -316,7 +316,13 @@ export default function Produtos() {
                 : `Resultados para "${valueSearch}"`}
             </h4>
             <p className="mb-0">
-              Mais de {produtos.length - 1} produtos encontrados.
+              {produtos.length < 2
+                ? `${produtos.length} produto encontrado.`
+                : `Mais de ${produtos.length - 1} ${
+                    produtos.length < 3
+                      ? "produto encontrado."
+                      : "produtos encontrados."
+                  }`}
             </p>
           </div>
           <div className={styles.sortBar}>
