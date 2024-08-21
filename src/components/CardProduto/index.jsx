@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis";
 import { FiTrash2 } from "react-icons/fi";
+import ImageDefault from "../../assets/imageDefault.png"
 
 export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
   const { addToCart } = useContexts();
@@ -56,7 +57,7 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
           src={
             srcImage
               ? srcImage
-              : "https://imgs.casasbahia.com.br/55060824/1g.jpg"
+              : ImageDefault
           }
           alt={produto.descrProduto}
         />
