@@ -157,13 +157,10 @@
     background-color: rgba(244, 149, 22, 0.2);
 }
 
-.nomeProduto {
-    margin-top: 1rem;
-}
-
 .boxVendedor {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .boxVendedor h3 {
@@ -179,7 +176,6 @@
 
 #valor {
     font-weight: 500;
-    margin-bottom: 40px;
 }
 
 @media (max-width: 1020px) {

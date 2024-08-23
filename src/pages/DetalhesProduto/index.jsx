@@ -244,7 +244,7 @@ export default function DetalhesProduto() {
                   </span>
                 </div>
                 <div className={styles.stock_quantity_unit}>
-                  <span className={styles.stock}>Estoque disponivel</span>
+                  <span className={styles.stock}>Estoque disponível</span>
                   <a href="#" className={styles.unit}>
                     Consulte o regulamento
                   </a>
