@@ -38,7 +38,7 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        if (error.response.data == "" && error.response.status == 404) {
+        if (error.response.status == 403) {
           toast.error("Email ou senha inválidos.");
           setLoading(false);
         } else {
