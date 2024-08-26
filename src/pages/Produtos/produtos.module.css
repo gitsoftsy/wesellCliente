@@ -110,3 +110,27 @@ input[type="range"] {
   width: 100%;
   margin-bottom: 10px;
 }
+
+@media screen and (max-width: 767px) {
+  .mainContainer {
+    padding-top: 1em;
+  }
+  .areaOrdenacaoMobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+  .sortBarMobile {
+    display: flex;
+    width: 100%;
+  }
+  .sortByMobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 50%;
+    padding: 0.4em;
+    border: 1px solid var(--cinza-secundario);
+  }
+}

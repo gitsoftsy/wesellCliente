@@ -6,6 +6,9 @@ import { url_base } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import styles from "./produtos.module.css";
 import { toast } from "react-toastify";
+import { FaFilter, FaSort } from "react-icons/fa";
+import ModalFilters from "../../components/ModalFilters";
+import ModalOrderBy from "../../components/ModalOrderBy";
 
 export default function Produtos() {
   const [produtos, setProdutos] = useState([]);
@@ -18,7 +21,7 @@ export default function Produtos() {
   const [subCategorias, setSubCategorias] = useState([]);
   const [marcas, setMarcas] = useState([]);
   const [lojistas, setLojistas] = useState([]);
-  const [idMarca, setIdMarca] = useState([]);
+  const [idsMarcas, setIdsMarcas] = useState([]);
   const [idLojista, setIdLojista] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null);
   const [idSubCategoria, setIdSubCategoria] = useState(null);
@@ -26,7 +29,7 @@ export default function Produtos() {
   const [precoDeVendaMax, setPrecoDeVendaMax] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
 
-  const { valueSearch, categoria, setValueSearch, setCategoria } =
+  const { valueSearch, categoria, setValueSearch, setCategoria, isMobile } =
     useContexts();
   const currentUrl = window.location.href;
   let routeCategory = currentUrl.includes("/c/");
@@ -119,12 +122,12 @@ export default function Produtos() {
     }
 
     setIdCategoria(null);
-    setIdMarca([]);
+    setIdsMarcas([]);
     setIdLojista([]);
     setIdSubCategoria(null);
     setPrecoDeVendaMin(null);
     setPrecoDeVendaMax(null);
-    setOrderBy(null);
+    setOrderBy(1);
     getProdutos();
   }, [valueSearch, categoria]);
 
@@ -136,7 +139,7 @@ export default function Produtos() {
         idSubCategoria: idSubCategoria || null,
         precoDeVendaMin: precoDeVendaMin || null,
         precoDeVendaMax: precoDeVendaMax || null,
-        idMarca: idMarca.length > 0 ? idMarca : null,
+        idMarca: idsMarcas.length > 0 ? idsMarcas : null,
         idLojista: idLojista.length > 0 ? idLojista : null,
         ordenacao: orderBy || 1,
       };
@@ -158,7 +161,7 @@ export default function Produtos() {
       idSubCategoria !== null ||
       precoDeVendaMin !== null ||
       precoDeVendaMax !== null ||
-      idMarca !== null ||
+      idsMarcas !== null ||
       idLojista !== null ||
       orderBy !== null
     ) {
@@ -170,190 +173,252 @@ export default function Produtos() {
     idSubCategoria,
     precoDeVendaMin,
     precoDeVendaMax,
-    idMarca,
+    idsMarcas,
     idLojista,
     orderBy,
   ]);
 
   return (
-    <section className={`${styles.mainContainer} container`}>
-      <aside className={styles.containerFiltros}>
-        <h6>Categoria</h6>
-        <ul>
-          {categorias
-            .slice(0, showAllCategorias ? categorias.length : 5)
-            .map((item, index) => {
-              return (
-                <li key={index}>
-                  <label
-                    className={styles.labelItem}
-                    onClick={() => {
-                      setIdCategoria(item.id);
-                    }}
+    <>
+      <section className={`${styles.mainContainer} container`}>
+        {!isMobile && (
+          <aside className={styles.containerFiltros}>
+            <h6>Categoria</h6>
+            <ul>
+              {categorias
+                .slice(0, showAllCategorias ? categorias.length : 5)
+                .map((item, index) => {
+                  return (
+                    <li key={index}>
+                      <label
+                        className={styles.labelItem}
+                        onClick={() => {
+                          setIdCategoria(item.id);
+                        }}
+                      >
+                        {item.nome}
+                      </label>
+                    </li>
+                  );
+                })}
+              {categorias.length > 5 && (
+                <span onClick={() => setShowAllCategorias(!showAllCategorias)}>
+                  {showAllCategorias ? <>Ver menos</> : <>Ver todos</>}
+                </span>
+              )}
+            </ul>
+            <h6>Subcategoria</h6>
+            <ul>
+              {subCategorias
+                .slice(0, showAllSubCategorias ? subCategorias.length : 5)
+                .map((item, index) => {
+                  return (
+                    <li key={index}>
+                      <label
+                        className={styles.labelItem}
+                        onClick={() => {
+                          setIdSubCategoria(item.id);
+                        }}
+                      >
+                        {item.nome}
+                      </label>
+                    </li>
+                  );
+                })}
+              {subCategorias.length > 5 && (
+                <span
+                  onClick={() => setShowAllSubCategorias(!showAllSubCategorias)}
+                >
+                  {showAllSubCategorias ? <>Ver menos</> : <>Ver todos</>}
+                </span>
+              )}
+            </ul>
+            <h6>Marcas</h6>
+            <ul>
+              {marcas
+                .slice(0, showAllMarcas ? marcas.length : 5)
+                .map((item, index) => {
+                  const id = `marca-checkbox-${index}`;
+                  const isChecked = idsMarcas.includes(item.id);
+
+                  return (
+                    <li key={index}>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={id}
+                        checked={isChecked}
+                        onChange={() => {
+                          if (isChecked) {
+                            setIdsMarcas(
+                              idsMarcas.filter((id) => id !== item.id)
+                            );
+                          } else {
+                            setIdsMarcas([...idsMarcas, item.id]);
+                          }
+                        }}
+                      />
+                      <label htmlFor={id} className={styles.labelItem}>
+                        {item.nome}
+                      </label>
+                    </li>
+                  );
+                })}
+              {marcas.length > 5 && (
+                <span onClick={() => setShowAllMarcas(!showAllMarcas)}>
+                  {showAllMarcas ? <>Ver menos</> : <>Ver todos</>}
+                </span>
+              )}
+            </ul>
+            <h6>Vendido por</h6>
+            <ul>
+              {lojistas
+                .slice(0, showAllLojas ? lojistas.length : 5)
+                .map((item, index) => {
+                  const id = `lojista-checkbox-${index}`;
+                  const isChecked = idLojista.includes(item.id);
+
+                  return (
+                    <li key={index}>
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={id}
+                        checked={isChecked}
+                        onChange={() => {
+                          if (isChecked) {
+                            setIdLojista(
+                              idLojista.filter((id) => id !== item.id)
+                            );
+                          } else {
+                            setIdLojista([...idLojista, item.id]);
+                          }
+                        }}
+                      />
+                      <label htmlFor={id} className={styles.labelItem}>
+                        {item.nome}
+                      </label>
+                    </li>
+                  );
+                })}
+              {lojistas.length > 5 && (
+                <span onClick={() => setShowAllLojas(!showAllLojas)}>
+                  {showAllLojas ? <>Ver menos</> : <>Ver todos</>}
+                </span>
+              )}
+            </ul>
+            <h6 className="mb-2">Preço</h6>
+            <DoubleRangeSlider
+              onApplyFilter={(min, max) => {
+                setPrecoDeVendaMin(min);
+                setPrecoDeVendaMax(max);
+              }}
+            />
+          </aside>
+        )}
+        <section className={styles.containerProdutos}>
+          {isMobile ? (
+            <section className={styles.areaOrdenacaoMobile}>
+              <div className={styles.sortBarMobile}>
+                <div
+                  className={styles.sortByMobile}
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalFilters"
+                >
+                  <FaFilter size={14} />
+                  Filtrar
+                </div>
+                <div
+                  className={styles.sortByMobile}
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalOrder"
+                >
+                  <FaSort size={16} /> Ordenar
+                </div>
+              </div>
+              <div>
+                <h4>
+                  {routeCategory
+                    ? categoria.nome
+                    : `Resultados para "${valueSearch}"`}
+                </h4>
+                <p className="mb-0">
+                  Mais de {produtos.length - 1} produtos encontrados.
+                </p>
+              </div>
+            </section>
+          ) : (
+            <section className={styles.areaOrdenacao}>
+              <div>
+                <h4>
+                  {routeCategory
+                    ? categoria.nome
+                    : `Resultados para "${valueSearch}"`}
+                </h4>
+                <p className="mb-0">
+                  {produtos.length < 2
+                    ? `${produtos.length} produto encontrado.`
+                    : `Mais de ${produtos.length - 1} ${
+                        produtos.length < 3
+                          ? "produto encontrado."
+                          : "produtos encontrados."
+                      }`}
+                </p>
+              </div>
+              <div className={styles.sortBar}>
+                <label>Ordenar por:</label>
+                <div className={styles.sortBy}>
+                  <select
+                    name="sort-by"
+                    id="sort-by"
+                    className="form-select form-select-sm"
+                    value={orderBy}
+                    onChange={(e) => setOrderBy(e.target.value)}
                   >
-                    {item.nome}
-                  </label>
-                </li>
-              );
-            })}
-          {categorias.length > 5 && (
-            <span onClick={() => setShowAllCategorias(!showAllCategorias)}>
-              {showAllCategorias ? <>Ver menos</> : <>Ver todos</>}
-            </span>
+                    <option selected value={1}>
+                      Relevância
+                    </option>
+                    <option value={2} disabled>
+                      Mais vendidos
+                    </option>
+                    <option value={5}>Menor preço</option>
+                    <option value={6}>Maior preço</option>
+                  </select>
+                </div>
+              </div>
+            </section>
           )}
-        </ul>
-        <h6>Subcategoria</h6>
-        <ul>
-          {subCategorias
-            .slice(0, showAllSubCategorias ? subCategorias.length : 5)
-            .map((item, index) => {
-              return (
-                <li key={index}>
-                  <label
-                    className={styles.labelItem}
-                    onClick={() => {
-                      setIdSubCategoria(item.id);
-                    }}
-                  >
-                    {item.nome}
-                  </label>
-                </li>
-              );
-            })}
-          {subCategorias.length > 5 && (
-            <span
-              onClick={() => setShowAllSubCategorias(!showAllSubCategorias)}
-            >
-              {showAllSubCategorias ? <>Ver menos</> : <>Ver todos</>}
-            </span>
-          )}
-        </ul>
-        <h6>Marcas</h6>
-        <ul>
-          {marcas
-            .slice(0, showAllMarcas ? marcas.length : 5)
-            .map((item, index) => {
-              const id = `marca-checkbox-${index}`;
-              const isChecked = idMarca.includes(item.id);
-
-              return (
-                <li key={index}>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id={id}
-                    checked={isChecked}
-                    onChange={() => {
-                      if (isChecked) {
-                        setIdMarca(idMarca.filter((id) => id !== item.id));
-                      } else {
-                        setIdMarca([...idMarca, item.id]);
-                      }
-                    }}
-                  />
-                  <label htmlFor={id} className={styles.labelItem}>
-                    {item.nome}
-                  </label>
-                </li>
-              );
-            })}
-          {marcas.length > 5 && (
-            <span onClick={() => setShowAllMarcas(!showAllMarcas)}>
-              {showAllMarcas ? <>Ver menos</> : <>Ver todos</>}
-            </span>
-          )}
-        </ul>
-        <h6>Vendido por</h6>
-        <ul>
-          {lojistas
-            .slice(0, showAllLojas ? lojistas.length : 5)
-            .map((item, index) => {
-              const id = `lojista-checkbox-${index}`;
-              const isChecked = idLojista.includes(item.id);
-
-              return (
-                <li key={index}>
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id={id}
-                    checked={isChecked}
-                    onChange={() => {
-                      if (isChecked) {
-                        setIdLojista(idLojista.filter((id) => id !== item.id));
-                      } else {
-                        setIdLojista([...idLojista, item.id]);
-                      }
-                    }}
-                  />
-                  <label htmlFor={id} className={styles.labelItem}>
-                    {item.nome}
-                  </label>
-                </li>
-              );
-            })}
-
-          {lojistas.length > 5 && (
-            <span onClick={() => setShowAllLojas(!showAllLojas)}>
-              {showAllLojas ? <>Ver menos</> : <>Ver todos</>}
-            </span>
-          )}
-        </ul>
-        <h6 className="mb-2">Preço</h6>
-        <DoubleRangeSlider
-          onApplyFilter={(min, max) => {
-            setPrecoDeVendaMin(min);
-            setPrecoDeVendaMax(max);
-          }}
-        />
-      </aside>
-      <section className={styles.containerProdutos}>
-        <section className={styles.areaOrdenacao}>
-          <div>
-            <h4>
-              {routeCategory
-                ? categoria.nome
-                : `Resultados para "${valueSearch}"`}
-            </h4>
-            <p className="mb-0">
-              {produtos.length < 2
-                ? `${produtos.length} produto encontrado.`
-                : `Mais de ${produtos.length - 1} ${
-                    produtos.length < 3
-                      ? "produto encontrado."
-                      : "produtos encontrados."
-                  }`}
-            </p>
-          </div>
-          <div className={styles.sortBar}>
-            <label>Ordenar por:</label>
-            <div className={styles.sortBy}>
-              <select
-                name="sort-by"
-                id="sort-by"
-                className="form-select form-select-sm"
-                value={orderBy}
-                onChange={(e) => setOrderBy(e.target.value)}
-              >
-                <option selected value={1}>
-                  Relevância
-                </option>
-                <option value={2} disabled>
-                  Mais vendidos
-                </option>
-                <option value={5}>Menor preço</option>
-                <option value={6}>Maior preço</option>
-              </select>
-            </div>
-          </div>
+          <GridProdutos
+            loading={loading}
+            titleVisivel={false}
+            qtdVisivel={12}
+            produtos={produtos}
+          />
         </section>
-        <GridProdutos
-          loading={loading}
-          titleVisivel={false}
-          qtdVisivel={12}
-          produtos={produtos}
-        />
       </section>
-    </section>
+      <ModalFilters
+        categorias={categorias}
+        idLojista={idLojista}
+        lojistas={lojistas}
+        marcas={marcas}
+        setIdCategoria={setIdCategoria}
+        setIdLojista={setIdLojista}
+        setIdSubCategoria={setIdSubCategoria}
+        setPrecoDeVendaMax={setPrecoDeVendaMax}
+        setPrecoDeVendaMin={setPrecoDeVendaMin}
+        setShowAllCategorias={setShowAllCategorias}
+        setShowAllLojas={setShowAllLojas}
+        idsMarcas={idsMarcas}
+        setIdsMarcas={setIdsMarcas}
+        setShowAllMarcas={setShowAllMarcas}
+        setShowAllSubCategorias={setShowAllSubCategorias}
+        showAllCategorias={showAllCategorias}
+        showAllLojas={showAllLojas}
+        showAllMarcas={showAllMarcas}
+        showAllSubCategorias={showAllSubCategorias}
+        subCategorias={subCategorias}
+      />
+      <ModalOrderBy orderBy={orderBy} setOrderBy={setOrderBy} />
+    </>
   );
 }
