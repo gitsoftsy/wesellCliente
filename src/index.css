@@ -159,3 +159,13 @@ ul.pagination {
 .css-1t8x7v1 > .ps-menu-button:hover {
   background-color: #353535 !important;
 }
+
+.paddingModal {
+  padding: 3rem;
+}
+
+@media screen and (max-width: 767px) { 
+  .paddingModal {
+    padding: 1rem;
+  }
+}

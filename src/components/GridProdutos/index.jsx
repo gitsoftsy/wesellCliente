@@ -2,6 +2,7 @@
 import { useState } from "react";
 import CardProduto from "../CardProduto";
 import styles from "./gridProdutos.module.css";
+import { IoIosArrowDown } from "react-icons/io";
 
 export default function GridProdutos({
   loading,
@@ -36,7 +37,7 @@ export default function GridProdutos({
       </div>
       {hasMore && (
         <h6 onClick={loadMoreItems} className={styles.loadItens}>
-          Carregar mais
+          Carregar mais <IoIosArrowDown size={18} />
         </h6>
       )}
     </div>

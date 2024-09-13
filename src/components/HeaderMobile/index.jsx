@@ -5,6 +5,7 @@ import useContexts from "../../hooks/useContext";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import Logo from "../../assets/logoWesell.svg";
+import { MdMenuOpen } from "react-icons/md";
 
 export default function HeaderMobile() {
   const [toggled, setToggled] = useState(false);
@@ -54,25 +55,78 @@ export default function HeaderMobile() {
         breakPoint="always"
       >
         <Menu>
-          <MenuItem onClick={() => navigate("/")}>
-            <img src={Logo} className={styles.logo} alt="Logo Wesell" />
+          <MenuItem className={styles.menuItemMobile}>
+            <img
+              src={Logo}
+              className={styles.logo}
+              alt="Logo Wesell"
+              onClick={() => {
+                navigate("/");
+                setToggled(false);
+              }}
+            />
+            <MdMenuOpen
+              id={styles.iconCloseMenu}
+              size={35}
+              className="sb-button me-2"
+              color="#fff"
+              onClick={() => setToggled(false)}
+            />
           </MenuItem>
           <SubMenu label="Minha conta">
             {clientLogado ? (
               <>
-                <MenuItem onClick={() => navigate("/minha-conta")}>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/minha-conta");
+                    setToggled(false);
+                  }}
+                >
                   Dados pessoais
                 </MenuItem>
-                <MenuItem onClick={() => navigate("/minha-conta/pedidos")}>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/minha-conta/pedidos");
+                    setToggled(false);
+                  }}
+                >
                   Pedidos
                 </MenuItem>
-                <MenuItem onClick={logout}>Sair</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    logout();
+                    setToggled(false);
+                  }}
+                >
+                  Sair
+                </MenuItem>
               </>
             ) : (
               <>
-                <MenuItem onClick={() => navigate("/")}>Login</MenuItem>
-                <MenuItem onClick={() => navigate("/")}> Criar conta</MenuItem>
-                <MenuItem onClick={() => navigate("/")}>Carrinho</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/");
+                    setToggled(false);
+                  }}
+                >
+                  Login
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/");
+                    setToggled(false);
+                  }}
+                >
+                  Criar conta
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    navigate("/");
+                    setToggled(false);
+                  }}
+                >
+                  Carrinho
+                </MenuItem>
               </>
             )}
           </SubMenu>
@@ -89,27 +143,57 @@ export default function HeaderMobile() {
                       nome: item.categoria,
                       id: item.idCategoria,
                     });
+                    setToggled(false);
                   }}
                 >
-                  {" "}
-                  {item.categoria}{" "}
+                  {item.categoria}
                 </MenuItem>
               );
             })}
           </SubMenu>
-          <MenuItem onClick={() => navigate("/")}> Ofertas do dia</MenuItem>
-          <MenuItem onClick={() => navigate("/tecnologia")}>
-            {" "}
-            Tecnologia{" "}
+          <MenuItem
+            onClick={() => {
+              navigate("/");
+              setToggled(false);
+            }}
+          >
+            Ofertas do dia
           </MenuItem>
-          <MenuItem onClick={() => navigate("/esportes")}> Esportes</MenuItem>
-          <MenuItem onClick={() => navigate("/favoritos")}> Favoritos</MenuItem>
-          <MenuItem onClick={() => navigate("/suporte-ao-cliente")}>
-            {" "}
+          <MenuItem
+            onClick={() => {
+              navigate("/tecnologia");
+              setToggled(false);
+            }}
+          >
+            Tecnologia
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigate("/esportes");
+              setToggled(false);
+            }}
+          >
+            Esportes
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigate("/favoritos");
+              setToggled(false);
+            }}
+          >
+            Favoritos
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigate("/suporte-ao-cliente");
+              setToggled(false);
+            }}
+          >
             Suporte ao cliente
           </MenuItem>
         </Menu>
       </Sidebar>
+
       <header className={styles.header}>
         <div className={`${styles.headerContent} container`}>
           <FiMenu

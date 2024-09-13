@@ -74,7 +74,9 @@
   text-transform: uppercase;
   color: #0051ca;
 }
-
+#titleModal {
+  margin: 0;
+}
 @media (width <= 992px) {
   .contentCart {
     flex-direction: column;
@@ -91,5 +93,7 @@
   }
 }
 @media (width < 768px) {
-
+  #titleModal {
+    font-size: 1.1em;
+  }
 }
