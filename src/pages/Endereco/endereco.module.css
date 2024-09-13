@@ -97,3 +97,38 @@
     font-size: 1.1em;
   }
 }
+
+
+.btnCalc {
+  transition:
+      box-shadow 0.25s ease-out,
+      background-color 0.2s ease-out;
+  box-shadow: 0 0 0 0 #fff;
+  cursor: pointer;
+  border: 0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  height: 32px;
+  line-height: 32px;
+  padding: 0 12px;
+  text-align: center;
+  width: auto;
+  -webkit-font-smoothing: antialiased;
+  background-color: rgba(244, 149, 22, 1);
+  border-color: transparent;
+  color: #fff;
+}
+
+.btnCalc:focus,
+.btnCalc:visited {
+  background-color: rgba(244, 149, 22, 1);
+  border-color: transparent;
+  color: #fff;
+}
+
+.btnCalc:after,
+.btnCalc:hover {
+  background-color: rgba(244, 132, 22);
+  color: #fff;
+}

@@ -280,7 +280,7 @@ export default function Endereco() {
       resumo: {
         produtos: produtos,
         total: total,
-        frete: parseFloat(frete.price),
+        frete: parseFloat(14.90),
         subtotal: subtotal,
         qtdProdutos: quantidadeTotalProdutos,
       },
@@ -660,7 +660,7 @@ export default function Endereco() {
         <ResumoPedido
           disabled={exibirFormulario}
           continuarCompra={irParaPagamento}
-          total={total}
+          total={1299.99}
           subtotal={subtotal}
           frete={frete}
           totalProdutos={quantidadeTotalProdutos}

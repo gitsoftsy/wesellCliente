@@ -61,7 +61,6 @@ export default function ModalFrete({ produto }) {
         },
       });
 
-
       const fretes = response.data;
 
       const freteMaiorValor = fretes
@@ -94,19 +93,58 @@ export default function ModalFrete({ produto }) {
         <div className="modal-content">
           <div className="modal-body paddingModal">
             {loading ? (
-              <div className="d-flex justify-content-center">
-                <div
-                  className="spinner-border text-primary"
-                  style={{ width: "200px", height: "200px" }}
-                  role="status"
-                >
-                  <span className="visually-hidden">Loading...</span>
+              // <div className="d-flex justify-content-center">
+              //   <div
+              //     className="spinner-border text-primary"
+              //     style={{ width: "200px", height: "200px" }}
+              //     role="status"
+              //   >
+              //     <span className="visually-hidden">Loading...</span>
+              //   </div>
+              // </div>
+              <>
+                <p className="mt-4 fs-5 d-flex align-items-center justify-content-center">
+                  <MdOutlineLocationOn size={22} className="me-1" />
+                  {endereco?.logradouro
+                    ? `${endereco.logradouro}, ${endereco.bairro} -
+                  ${endereco.localidade} - ${endereco.uf}`
+                    : ""}
+                </p>
+                <div className="d-flex px-3" id={styles.headerFretes}>
+                  <div className="col">
+                    <p>Transportadora</p>
+                    <span>Manir</span>
+                  </div>
+
+                  <div className="col">
+                    <p>Modalidade</p>
+                    <span>Normal</span>
+                  </div>
+
+                  <div className="col">
+                    <p>Prazo Estimado</p>
+                    <span>20/09/2024</span>
+                  </div>
+
+                  <div className="col text-end">
+                    <p>Preço</p>
+                    <span>14,90</span>
+                  </div>
+
                 </div>
-              </div>
+                <div className="col text-center mt-4">
+                  <button className={styles.btnCalc} onClick={() => {
+                    setLoading(false)
+                    setEndereco(false)
+                  }}>Calcular novamente</button>
+                </div>
+              </>
             ) : (
               <>
                 <span className="d-flex align-items-center justify-content-between">
-                  <h5 id={styles.titleModal}>Calcule o frete e prazo de entrega</h5>
+                  <h5 id={styles.titleModal}>
+                    Calcule o frete e prazo de entrega
+                  </h5>
                   <button
                     type="button"
                     className="btn-close"
@@ -149,8 +187,10 @@ export default function ModalFrete({ produto }) {
                   <>
                     <p className="mt-4 fs-5 d-flex align-items-center justify-content-center">
                       <MdOutlineLocationOn size={22} className="me-1" />
-                      {endereco.logradouro}, {endereco.bairro} -{" "}
-                      {endereco.localidade} - {endereco.uf}
+                      {endereco?.logradouro
+                        ? `${endereco.logradouro}, ${endereco.bairro} -
+                  ${endereco.localidade} - ${endereco.uf}`
+                        : ""}
                     </p>
                     <div className="d-flex px-3" id={styles.headerFretes}>
                       <div className="col">

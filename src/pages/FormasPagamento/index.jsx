@@ -6,15 +6,20 @@ import ReactInputMask from "react-input-mask";
 import { FaBarcode, FaCreditCard } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
+import ModalCompra from "../../components/ModalCompra";
 
 export default function FormasPagamento() {
   const [formaPagamento, setFormaPagamento] = useState("cartao");
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [total, setTotal] = useState(0);
+  const [lojista, setLojista] = useState({});
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     const productsInCart = localStorage.getItem("wesell-items-in-cart");
     const products = JSON.parse(productsInCart) || [];
+
+    setLojista(products[0].lojista);
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.precoVenda * produto.qtd,
@@ -60,7 +65,16 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="cartao"
                 >
-                  <span>CARTÃO DE CRÉDITO<br /><span className={`${styles.textCard} fw-normal`} style={{color: '#f49516'}}>Parcele em até 12x sem juros</span></span>
+                  <span>
+                    CARTÃO DE CRÉDITO
+                    <br />
+                    <span
+                      className={`${styles.textCard} fw-normal`}
+                      style={{ color: "#f49516" }}
+                    >
+                      Parcele em até 12x sem juros
+                    </span>
+                  </span>
                   <FaCreditCard size={22} />
                 </label>
               </div>
@@ -121,10 +135,34 @@ export default function FormasPagamento() {
                       />
                     </div>
                   </div>
+                  <div className="row mb-3">
+                    <div className="col-md-8">
+                      <label htmlFor="parcelas" className="form-label">
+                        Parcelas
+                      </label>
+                      <select
+                        className="form-select"
+                        name="parcelas"
+                        id="parcelas"
+                      >
+                        <option value="0" disabled selected>
+                          Selecione uma opção
+                        </option>
+                        {Array.from(
+                          { length: lojista.maximoParcelas },
+                          (_, index) => (
+                            <option key={index + 1} value={index + 1}>
+                              {index + 1} parcela(s)
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                  </div>
 
-                  <button type="submit" className="btn btn-primary px-4">
+                  <span className="btn btn-primary px-4" onClick={() => setShowModal(true)}>
                     Continuar
-                  </button>
+                  </span>
                 </form>
               )}
             </div>
@@ -146,7 +184,15 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="pix"
                 >
-                  <span>PAGAMENTO VIA PIX <br /><span className={`${styles.textCard} fw-normal`} style={{color: '#f49516'}}>Aprovação imediata</span></span>
+                  <span>
+                    PAGAMENTO VIA PIX <br />
+                    <span
+                      className={`${styles.textCard} fw-normal`}
+                      style={{ color: "#f49516" }}
+                    >
+                      Aprovação imediata
+                    </span>
+                  </span>
                   <MdPix size={22} />
                 </label>
               </div>
@@ -169,15 +215,24 @@ export default function FormasPagamento() {
                   className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
                   htmlFor="boleto"
                 >
-                  <span>BOLETO<br /><span className={`${styles.textCard} fw-normal`} style={{color: '#f49516'}}>Será aprovado em 1 ou 2 dias úteis.</span></span>
+                  <span>
+                    BOLETO
+                    <br />
+                    <span
+                      className={`${styles.textCard} fw-normal`}
+                      style={{ color: "#f49516" }}
+                    >
+                      Será aprovado em 1 ou 2 dias úteis.
+                    </span>
+                  </span>
                   <FaBarcode size={22} />
                 </label>
               </div>
             </div>
-
-           
           </section>
-          <Link to='/carrinho/endereco'><FiArrowLeft size={18}/> Voltar para endereço</Link>
+          <Link to="/carrinho/endereco">
+            <FiArrowLeft size={18} /> Voltar para endereço
+          </Link>
         </div>
 
         <div className={`${styles.cardResumo} card`}>
@@ -204,6 +259,7 @@ export default function FormasPagamento() {
           )}
         </div>
       </section>
+      <ModalCompra status={false} isShow={showModal}/>
     </div>
   );
 }
