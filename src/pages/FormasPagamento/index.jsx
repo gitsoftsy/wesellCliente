@@ -7,6 +7,7 @@ import { FaBarcode, FaCreditCard } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import ModalCompra from "../../components/ModalCompra";
+import QRCode from "qrcode.react";
 
 export default function FormasPagamento() {
   const [formaPagamento, setFormaPagamento] = useState("cartao");
@@ -14,6 +15,18 @@ export default function FormasPagamento() {
   const [total, setTotal] = useState(0);
   const [lojista, setLojista] = useState({});
   const [showModal, setShowModal] = useState(false)
+  // Dados fictícios para simular um QR Code de Pix
+  const fakePixData = {
+    chave: '00000000000',
+    nome: 'Fulano de Tal',
+    valor: '10.00',
+    cidade: 'São Paulo',
+  };
+
+  // Formato de exemplo para um QR Code de Pix
+  const qrCode =
+    "https://images.tcdn.com.br/img/img_prod/691184/teste_213_1_20200528133119.png";
+
 
   useEffect(() => {
     const productsInCart = localStorage.getItem("wesell-items-in-cart");
@@ -48,9 +61,8 @@ export default function FormasPagamento() {
               </h5>
             </div>
             <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "cartao" ? styles.radioSelected : ""
-              }`}
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${formaPagamento === "cartao" ? styles.radioSelected : ""
+                }`}
             >
               <div className="form-check d-flex align-items-center">
                 <input
@@ -152,7 +164,7 @@ export default function FormasPagamento() {
                           { length: lojista.maximoParcelas },
                           (_, index) => (
                             <option key={index + 1} value={index + 1}>
-                              {index + 1} parcela(s)
+                              {index + 1} {index > 0 ? 'Parcela(s)' : 'Parcela'}
                             </option>
                           )
                         )}
@@ -160,16 +172,15 @@ export default function FormasPagamento() {
                     </div>
                   </div>
 
-                  <span className="btn btn-primary px-4" onClick={() => setShowModal(true)}>
+                  <span className="btn btn-primary px-4" onClick={formaPagamento === "pix" ? <QRCode size={280} value={qrCode} /> : () => setShowModal(true)}>
                     Continuar
                   </span>
                 </form>
               )}
             </div>
             <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "pix" ? styles.radioSelected : ""
-              }`}
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${formaPagamento === "pix" ? styles.radioSelected : ""
+                }`}
             >
               <div className="form-check d-flex align-items-center">
                 <input
@@ -198,9 +209,8 @@ export default function FormasPagamento() {
               </div>
             </div>
             <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "boleto" ? styles.radioSelected : ""
-              }`}
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${formaPagamento === "boleto" ? styles.radioSelected : ""
+                }`}
             >
               <div className="form-check d-flex align-items-center">
                 <input
@@ -259,7 +269,7 @@ export default function FormasPagamento() {
           )}
         </div>
       </section>
-      <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal}/>
+      <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal} />
     </div>
   );
 }
