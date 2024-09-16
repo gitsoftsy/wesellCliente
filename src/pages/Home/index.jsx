@@ -63,7 +63,7 @@ export default function Home() {
         .get(url_base + "/produtos/ultimos10")
         .then((response) => {
           setProdutosRecentes(response.data);
-          console.log(response.data);
+          console.log(response.data)
         })
         .catch((error) => {
           toast.error(error.message);
@@ -76,7 +76,6 @@ export default function Home() {
         .get(url_base + "/produtos/destaques")
         .then((response) => {
           setProdutosDestaques(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           toast.error(error.message);

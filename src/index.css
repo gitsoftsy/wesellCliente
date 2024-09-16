@@ -161,7 +161,7 @@ ul.pagination {
 }
 
 .paddingModal {
-  padding: 3rem;
+  padding: 2rem 3rem;
 }
 
 @media screen and (max-width: 767px) { 

@@ -7,19 +7,26 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis";
 import { FiTrash2 } from "react-icons/fi";
-import ImageDefault from "../../assets/imageDefault.png"
+import ImageDefault from "../../assets/imageDefault.png";
 
 export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
   const { addToCart } = useContexts();
   const [srcImage, setSrcImage] = useState("");
+  const [valorParcela, setValorParcela] = useState(null);
   const navigate = useNavigate();
-  const valor =
-    produto.precoVenda /
-    (produto?.lojista?.maximoParcelas ?? produto?.maximoParcelas);
-  const valorFixado = Math.floor(valor * 100) / 100;
-  const valorFormatado = valorFixado.toFixed(2).replace(".", ",");
 
   useEffect(() => {
+    if (produto?.lojista && produto?.lojista?.possuiParcelamento === "S") {
+      let valor = produto.precoVenda / produto.lojista.maximoParcelas;
+      let valorFixado = Math.floor(valor * 100) / 100;
+      setValorParcela(valorFixado.toFixed(2).replace(".", ","));
+    } else if (produto.possuiParcelamento === "S") {
+      let valor = produto.precoVenda / produto.maximoParcelas;
+      let valorFixado = Math.floor(valor * 100) / 100;
+      setValorParcela(valorFixado.toFixed(2).replace(".", ","));
+    } else {
+      setValorParcela(null);
+    }
     async function getImagensProduto() {
       await axios
         .get(url_base + `/imagens/produto/${produto.idProduto}`)
@@ -43,9 +50,8 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
 
   const produtoNome = encodeCustom(produto.nomeProduto)
     .toLowerCase()
-    .replace(/\s+/g, "-") 
-    .replace(/\//g, "-")
-
+    .replace(/\s+/g, "-")
+    .replace(/\//g, "-");
 
   return (
     <div className={`${styles.cardProduto}`}>
@@ -54,11 +60,7 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
         className={styles.areaImg}
       >
         <img
-          src={
-            srcImage
-              ? srcImage
-              : ImageDefault
-          }
+          src={srcImage ? srcImage : ImageDefault}
           alt={produto.descrProduto}
         />
       </Link>
@@ -73,10 +75,13 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
           <p className={styles.valor}>
             {produto.precoVenda && formatCurrencyBR(produto.precoVenda)}
           </p>
-          <p className={styles.infoParcelas}>
-            em até {produto?.lojista?.maximoParcelas ?? produto?.maximoParcelas}
-            x de {valorFormatado} sem juros
-          </p>
+          {valorParcela && (
+            <p className={styles.infoParcelas}>
+              em até{" "}
+              {produto?.lojista?.maximoParcelas ?? produto?.maximoParcelas}x de{" "}
+              {valorParcela} sem juros
+            </p>
+          )}
         </div>
         <section className={styles.areaBtn}>
           <button

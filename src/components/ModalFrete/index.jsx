@@ -51,7 +51,6 @@ export default function ModalFrete({ produto }) {
       },
     };
 
-    console.log(objetoApi);
 
     try {
       const response = await axios.post(apiFrete, objetoApi, {
@@ -103,8 +102,19 @@ export default function ModalFrete({ produto }) {
               //   </div>
               // </div>
               <>
-                <p className="mt-4 fs-5 d-flex align-items-center justify-content-center">
-                  <MdOutlineLocationOn size={22} className="me-1" />
+                <span className="d-flex align-items-center justify-content-between">
+                  <h5 id={styles.titleModal}>
+                    Frete e prazo de entrega
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </span>
+                <p className="mt-4 fs-6 d-flex align-items-center justify-content-center">
+                  <MdOutlineLocationOn size={20} className="me-1" />
                   {endereco?.logradouro
                     ? `${endereco.logradouro}, ${endereco.bairro} -
                   ${endereco.localidade} - ${endereco.uf}`
@@ -128,15 +138,19 @@ export default function ModalFrete({ produto }) {
 
                   <div className="col text-end">
                     <p>Preço</p>
-                    <span>14,90</span>
+                    <span>R$ 14,90</span>
                   </div>
-
                 </div>
                 <div className="col text-center mt-4">
-                  <button className={styles.btnCalc} onClick={() => {
-                    setLoading(false)
-                    setEndereco(false)
-                  }}>Calcular novamente</button>
+                  <button
+                    className={styles.btnCalc}
+                    onClick={() => {
+                      setLoading(false);
+                      setEndereco(false);
+                    }}
+                  >
+                    Calcular novamente
+                  </button>
                 </div>
               </>
             ) : (
@@ -185,7 +199,7 @@ export default function ModalFrete({ produto }) {
                 </form>
                 {endereco && (
                   <>
-                    <p className="mt-4 fs-5 d-flex align-items-center justify-content-center">
+                    <p className="mt-4 fs-6 d-flex align-items-center justify-content-center">
                       <MdOutlineLocationOn size={22} className="me-1" />
                       {endereco?.logradouro
                         ? `${endereco.logradouro}, ${endereco.bairro} -

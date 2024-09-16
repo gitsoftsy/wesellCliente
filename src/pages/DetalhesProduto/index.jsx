@@ -20,7 +20,7 @@ export default function DetalhesProduto() {
   const [produtosSimilares, setProdutosSimilares] = useState([]);
   const [isFavoritado, setIsFavoritado] = useState(false);
   const [listImages, setListImages] = useState([]);
-  const [maximoParcela, setMaximoParcela] = useState(0);
+  const [maximoParcela, setMaximoParcela] = useState(false);
 
   const avaliations = [
     { id: 1, star: 4, nome: "Wagner Moura" },
@@ -96,9 +96,14 @@ export default function DetalhesProduto() {
     await axios
       .get(url_base + `/produtos/${id}`)
       .then((response) => {
-        setProduto(response.data);
-        getProdutosSimilares(response.data);
-        setMaximoParcela(response.data.lojista.maximoParcelas);
+        const data = response.data;
+        setProduto(data);
+        getProdutosSimilares(data);
+        if (data.lojista.possuiParcelamento === 'S'){
+          setMaximoParcela(data.lojista.maximoParcelas);
+        } else {
+          setMaximoParcela(false)
+        }
       })
       .catch((error) => {
         console.log(error.message);
@@ -210,20 +215,13 @@ export default function DetalhesProduto() {
                       {formatCurrencyBR(produto.precoPromocional)}
                     </h5>
                   </div>
-                  {maximoParcela > 0 ? (
+                  {maximoParcela && (
                     <div>
                       <span>em </span>
                       <span className={styles.interestFree}>
                         {`${maximoParcela}x de ${formatPriceBR(
                           produto.precoVenda / maximoParcela
                         )} sem juros`}
-                      </span>
-                    </div>
-                  ) : (
-                    <div>
-                      <span>em </span>
-                      <span className={styles.interestFree}>
-                        {`10x de 36,90 sem juros`}
                       </span>
                     </div>
                   )}
