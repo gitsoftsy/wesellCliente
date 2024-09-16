@@ -78,7 +78,7 @@
     min-height: 180px;
 }
 
-.containerAvaliacao button {
+.containerAvaliacao .btnSave {
     transition:
         box-shadow 0.25s ease-out,
         background-color 0.2s ease-out;
@@ -100,16 +100,16 @@
     color: #fff;
 }
 
-.containerAvaliacao button:focus,
-.containerAvaliacao button:link,
-.containerAvaliacao button:visited {
+.containerAvaliacao .btnSave:focus,
+.containerAvaliacao .btnSave:link,
+.containerAvaliacao .btnSave:visited {
     background-color: #3483fa;
     border-color: transparent;
     color: #fff;
 }
 
-.containerAvaliacao button:after,
-.containerAvaliacao button:hover {
+.containerAvaliacao .btnSave:after,
+.containerAvaliacao .btnSave:hover {
     background-color: #2968c8;
     color: #fff;
 }

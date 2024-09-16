@@ -259,7 +259,7 @@ export default function FormasPagamento() {
           )}
         </div>
       </section>
-      <ModalCompra status={false} isShow={showModal}/>
+      <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal}/>
     </div>
   );
 }

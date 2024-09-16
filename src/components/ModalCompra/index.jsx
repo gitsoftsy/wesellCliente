@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "./modalCompra.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function ModalCompra({ status, isShow }) {
+export default function ModalCompra({ status, isShow, setIsShow }) {
   const navigate = useNavigate();
   useEffect(() => {
     // Não é mais necessário gerenciar manualmente a exibição da modal
@@ -48,7 +48,7 @@ export default function ModalCompra({ status, isShow }) {
             <Button
               variant="primary"
               className="mt-4 px-5"
-              onClick={handleClose}
+              onClick={() => setIsShow(false)}
             >
               Fechar
             </Button>

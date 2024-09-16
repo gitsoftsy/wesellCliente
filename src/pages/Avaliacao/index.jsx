@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import StarsAvaliation from '../../components/StarsAvaliation';
 
 export default function Avaliacao() {
+    const navigate = useNavigate();
     const [produto, setProduto] = useState('')
     const [imgProduto, setImgProduto] = useState('')
     const { idProduto } = useParams();
@@ -62,7 +63,7 @@ export default function Avaliacao() {
                             <textarea name="descricao" id="descricao" placeholder='Eu achei o meu produto...'></textarea>
                         </div>
                         <div className={styles.btns}>
-                            <button>Salvar</button>
+                            <Link to="/minha-conta/pedidos" className={styles.btnSave}>Salvar</Link>
                             <Link to="/minha-conta/pedidos" className={styles.link}>Cancelar</Link>
                         </div>
                     </>
