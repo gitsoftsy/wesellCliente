@@ -12,7 +12,7 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
-  const { setValueSearch, categoria, client, clientLogado} = useContexts();
+  const { setValueSearch, categoria, client,setClient, clientLogado } = useContexts();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -21,15 +21,17 @@ export default function Header() {
   };
 
   const logout = () => {
+    setClient(null);
     localStorage.removeItem("wesell-user-comprador");
-    navigate('/login')
+    localStorage.setItem("@wesellRouteOnCar", false);
+    navigate("/login");
   };
 
   useEffect(() => {
     if (categoria) {
-      setSearchTerm('')
+      setSearchTerm("");
     }
-  }, [categoria])
+  }, [categoria]);
 
   return (
     <header className={styles.header}>
@@ -113,6 +115,9 @@ export default function Header() {
                   <li>
                     <Link
                       to={"/login"}
+                      onClick={() =>
+                        localStorage.setItem("@wesellRouteOnCar", false)
+                      }
                       className={`${styles.dropdownItem} dropdown-item`}
                     >
                       <FiLogIn size={18} />

@@ -35,7 +35,7 @@ export default function FormasPagamento() {
     setLojista(products[0].lojista);
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.precoVenda * produto.qtd,
+      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
       0
     );
     const quantidadeTotal = products.reduce(

@@ -16,12 +16,13 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(produto);
     if (produto?.lojista && produto?.lojista?.possuiParcelamento === "S") {
-      let valor = produto.precoVenda / produto.lojista.maximoParcelas;
+      let valor = produto.precoPromocional / produto.lojista.maximoParcelas;
       let valorFixado = Math.floor(valor * 100) / 100;
       setValorParcela(valorFixado.toFixed(2).replace(".", ","));
     } else if (produto.possuiParcelamento === "S") {
-      let valor = produto.precoVenda / produto.maximoParcelas;
+      let valor = produto.precoPromocional / produto.maximoParcelas;
       let valorFixado = Math.floor(valor * 100) / 100;
       setValorParcela(valorFixado.toFixed(2).replace(".", ","));
     } else {
@@ -72,9 +73,17 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
           <h6 className={styles.descricao}>{produto.nomeProduto}</h6>
         </Link>
         <div>
-          <p className={styles.valor}>
-            {produto.precoVenda && formatCurrencyBR(produto.precoVenda)}
-          </p>
+          {produto.precoVenda && (
+            <>
+              <span className={styles.values_liquid}>
+                <s>{formatCurrencyBR(produto.precoVenda)}</s>
+              </span>
+              <p className={styles.valor}>
+                {formatCurrencyBR(produto.precoPromocional)}
+              </p>
+            </>
+          )}
+
           {valorParcela && (
             <p className={styles.infoParcelas}>
               em até{" "}

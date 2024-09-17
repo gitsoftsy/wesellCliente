@@ -24,7 +24,8 @@ export default function ClienteProvider({ children }) {
   }
 
   useEffect(() => {
-
+    localStorage.setItem("@wesellRouteOnCar", false)
+    
     async function getCategorias() {
       await axios
         .get(url_base + "/categorias/ativos")

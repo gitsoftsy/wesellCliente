@@ -1,6 +1,6 @@
 .cardProduto {
   width: 100%;
-  height: 430px;
+  height: 440px;
   padding: 1em;
   background-color: #fff;
   border-radius: 6px;
@@ -33,13 +33,13 @@
   align-items: center;
 }
 .valor {
-  margin-bottom: 0;
+  margin: 0;
   color: var(--laranja);
   font-size: 1.6em;
   font-weight: 600;
 }
 .infoParcelas {
-  margin: 0;
+  margin-bottom: 5px;
   color: var(--cinza-secundario);
 }
 .btnBuy {

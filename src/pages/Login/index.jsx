@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import useContexts from "../../hooks/useContext";
 
 export default function Login() {
+  const routeOnCar = localStorage.getItem("@wesellRouteOnCar");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -32,7 +33,11 @@ export default function Login() {
         setClient(response.data);
 
         if (statusPage == undefined) {
-          navigate("/home");
+          if (routeOnCar) {
+            navigate("/carrinho");
+          } else {
+            navigate("/home");
+          }
         } else {
           navigate(statusPage.url);
         }

@@ -96,7 +96,7 @@ export default function Endereco() {
     setEndereco(addresses[0] ? addresses[0] : null);
     setProdutos(products);
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.precoVenda * produto.qtd,
+      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
       0
     );
     const quantidadeTotal = products.reduce(

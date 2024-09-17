@@ -220,7 +220,7 @@ export default function DetalhesProduto() {
                       <span>em </span>
                       <span className={styles.interestFree}>
                         {`${maximoParcela}x de ${formatPriceBR(
-                          produto.precoVenda / maximoParcela
+                          produto.precoPromocional / maximoParcela
                         )} sem juros`}
                       </span>
                     </div>

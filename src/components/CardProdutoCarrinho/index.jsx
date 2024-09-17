@@ -66,7 +66,7 @@ export default function CardProdutoCarrinho({
         />
       </div>
       <div className={`${styles.areaValor} ${savedItemsArea ? styles.valor : ''}`}>
-        <p>{formatCurrencyBR(item.precoVenda)}</p>
+        <p>{formatCurrencyBR(item.precoPromocional)}</p>
       </div>
     </div>
   );

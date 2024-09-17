@@ -16,7 +16,7 @@ export default function HeaderMobile() {
     setCategoria,
     setValueSearch,
     categoria,
-    client,
+    setClient,
     clientLogado,
   } = useContexts();
 
@@ -36,7 +36,9 @@ export default function HeaderMobile() {
   };
 
   const logout = () => {
+    setClient(null)
     localStorage.removeItem("wesell-user-comprador");
+    localStorage.setItem("@wesellRouteOnCar", false);
     navigate("/login");
   };
 

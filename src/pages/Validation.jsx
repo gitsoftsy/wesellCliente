@@ -6,7 +6,6 @@ export default function Validation() {
 
     useEffect(() => {
         const statusPage = JSON.parse(localStorage.getItem('statusPage'))
-        console.log(statusPage);
 
         if (statusPage == undefined) {
             navigate('/home')

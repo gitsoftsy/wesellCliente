@@ -48,7 +48,7 @@ export default function CardCompra({ pedido, status, imagem }) {
           <div className={styles.boxVendedor}>
             <p id={styles.pagamento}>Forma de pagamento: Cartão de crédito</p>
             <p id={styles.valor}>
-              Valor: {formatCurrencyBR(pedido.precoVenda)}
+              Valor: {formatCurrencyBR(pedido.precoPromocional)}
             </p>
             <span>Vendedor Kabum</span>
           </div>

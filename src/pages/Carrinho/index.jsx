@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido/index.jsx";
+import useContexts from "../../hooks/useContext.js";
 
 export default function Carrinho() {
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
@@ -13,6 +14,8 @@ export default function Carrinho() {
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
+  const { clientLogado } = useContexts();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,7 +30,7 @@ export default function Carrinho() {
     setQuantidadeTotalProdutos(quantidadeTotal);
 
     const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.precoVenda * produto.qtd,
+      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
@@ -62,7 +65,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = produtosFiltrados.reduce(
-        (acc, produto) => acc + produto.precoVenda * produto.qtd,
+        (acc, produto) => acc + produto.precoPromocional * produto.qtd,
         0
       );
 
@@ -88,7 +91,7 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = novoCarrinho.reduce(
-        (acc, produto) => acc + produto.precoVenda * produto.qtd,
+        (acc, produto) => acc + produto.precoPromocional * produto.qtd,
         0
       );
 
@@ -118,7 +121,7 @@ export default function Carrinho() {
     setProdutosCarrinho((produtosAntigos) => [...produtosAntigos, product]);
 
     const subtotalCalculado = productsInCart.reduce(
-      (acc, produto) => acc + produto.precoVenda * produto.qtd,
+      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
       0
     );
     setTotal(subtotalCalculado);
@@ -149,7 +152,8 @@ export default function Carrinho() {
       );
 
       const subtotalCalculado = produtosFiltrados.reduce(
-        (acc, produtoList) => acc + produtoList.precoVenda * produtoList.qtd,
+        (acc, produtoList) =>
+          acc + produtoList.precoPromocional * produtoList.qtd,
         0
       );
 
@@ -172,11 +176,16 @@ export default function Carrinho() {
   }
 
   function continuarCompra() {
-    localStorage.setItem(
-      "wesell-items-in-cart",
-      JSON.stringify(produtosCarrinho)
-    );
-    navigate("endereco");
+    if (clientLogado) {
+      localStorage.setItem(
+        "wesell-items-in-cart",
+        JSON.stringify(produtosCarrinho)
+      );
+      navigate("endereco");
+    } else {
+      localStorage.setItem("@wesellRouteOnCar", true);
+      navigate("/login");
+    }
   }
 
   return (
@@ -205,7 +214,7 @@ export default function Carrinho() {
           ) : (
             <section className={`${styles.cardItensCarrinho} card`}>
               <div className="col-12 text-center px-1 my-5">
-                <MdOutlineRemoveShoppingCart size={35} className="mb-2"/>
+                <MdOutlineRemoveShoppingCart size={35} className="mb-2" />
                 <h5>Seu carrinho está vazio!</h5>
                 <p>Você ainda não possui itens no seu carrinho.</p>
                 <Link to={"/home"} className="btn btn-primary">
