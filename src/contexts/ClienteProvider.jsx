@@ -15,8 +15,8 @@ export default function ClienteProvider({ children }) {
   const [client, setClient] = useState(
     JSON.parse(localStorage.getItem("wesell-user-comprador"))
   );
-  const [valueSearch, setValueSearch] = useState('')
-  const [categoria, setCategoria] = useState('')
+  const [valueSearch, setSearch] = useState(JSON.parse(localStorage.getItem("@wesell-search-value")) ?? null)
+  const [categoria, setCategoriaId] = useState(JSON.parse(localStorage.getItem("@wesell-category-id")) ?? null)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   function storageClient(data) {
@@ -24,6 +24,7 @@ export default function ClienteProvider({ children }) {
   }
 
   useEffect(() => {
+
     async function getCategorias() {
       await axios
         .get(url_base + "/categorias/ativos")
@@ -32,19 +33,30 @@ export default function ClienteProvider({ children }) {
         })
         .catch((error) => {
           toast.error(error.message);
-          console.log(error)
+          console.log(error);
         });
     }
     getCategorias();
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const setCategoria = (categoria) => {
+    setCategoriaId(categoria)
+    localStorage.setItem("@wesell-category-id", JSON.stringify(categoria));
   };
 
-  window.addEventListener("resize", handleResize);
-
-  // Cleanup event listener on component unmount
-  return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const setValueSearch = (value) => {
+    setSearch(value)
+    localStorage.setItem("@wesell-search-value", JSON.stringify(value));
+  };
 
   function addToCart(product) {
     const carrinho = localStorage.getItem("wesell-items-in-cart");
@@ -79,7 +91,7 @@ export default function ClienteProvider({ children }) {
     setCategoria,
     isMobile,
     categoria,
-    valueSearch
+    valueSearch,
   };
 
   return (
