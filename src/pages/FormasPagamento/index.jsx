@@ -7,7 +7,8 @@ import { FaBarcode, FaCreditCard } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import ModalCompra from "../../components/ModalCompra";
-import { QRCodeSVG } from "qrcode.react";
+import ModalPix from "../../components/ModalPix";
+import ModalBoleto from "../../components/ModalBoleto";
 
 export default function FormasPagamento() {
   const [formaPagamento, setFormaPagamento] = useState("cartao");
@@ -15,6 +16,8 @@ export default function FormasPagamento() {
   const [total, setTotal] = useState(0);
   const [lojista, setLojista] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [showPix, setShowPix] = useState(false);
+  const [showBoleto, setShowBoleto] = useState(false);
   // Dados fictícios para simular um QR Code de Pix
   // const fakePixData = {
   //   chave: "00000000000",
@@ -24,8 +27,6 @@ export default function FormasPagamento() {
   // };
 
   // Formato de exemplo para um QR Code de Pix
-  const qrCode =
-    "https://images.tcdn.com.br/img/img_prod/691184/teste_213_1_20200528133119.png";
 
   useEffect(() => {
     const productsInCart = localStorage.getItem("wesell-items-in-cart");
@@ -48,6 +49,9 @@ export default function FormasPagamento() {
   const handleEnderecoChange = (e) => {
     setFormaPagamento(e.target.id);
   };
+
+  const listMes = [1,2,3,4,5,6,7,8,9,10,11,12]
+  const listAno = [2024, 2025, 2026, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
 
   return (
     <div className={styles.containerCart}>
@@ -85,7 +89,7 @@ export default function FormasPagamento() {
                       style={{ color: "#f49516" }}
                     >
                       {/* pegar numero de parcelas do produto */}
-                      Parcele em até 12x sem juros
+                      Parcele em até {lojista.maximoParcelas}x sem juros
                     </span>
                   </span>
                   <FaCreditCard size={22} />
@@ -121,19 +125,36 @@ export default function FormasPagamento() {
                   </div>
 
                   <div className="row mb-3">
-                    <div className="col">
-                      <label htmlFor="expirationDate" className="form-label">
-                        Data de vencimento
-                      </label>
-                      <ReactInputMask
-                        type="tel"
-                        required
-                        mask="99/9999"
-                        maskChar=""
-                        className="form-control"
-                        id="expirationDate"
-                      />
+                    <label htmlFor="expirationDate" className="form-label">
+                      Data de vencimento
+                    </label>
+                      <div className="col-md-6">
+                        <select className="form-select" name="mes" id="mes">
+                          <option value="0" disabled selected>
+                            Mês
+                          </option>
+                          {listMes.map((mes) => (
+                            <option key={mes} value={mes}>
+                              {mes}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="col-md-6">
+                        <select className="form-select" name="ano" id="ano">
+                          <option value="0" disabled selected>
+                            Ano
+                          </option>
+                          {listAno.map((ano) => (
+                            <option key={ano} value={ano}>
+                              {ano}
+                            </option>
+                          ))}
+                        </select>
                     </div>
+                  </div>
+
+                  <div className="row mb-3">
                     <div className="col">
                       <label htmlFor="cvv" className="form-label">
                         Código de segurança
@@ -149,7 +170,7 @@ export default function FormasPagamento() {
                     </div>
                   </div>
                   <div className="row mb-3">
-                    <div className="col-md-8">
+                    <div className="col-md-12">
                       <label htmlFor="parcelas" className="form-label">
                         Parcelas
                       </label>
@@ -273,6 +294,11 @@ export default function FormasPagamento() {
             <button
               type="button"
               className="btn btn-primary"
+              onClick={() => {
+                formaPagamento === "pix"
+                  ? setShowPix(true)
+                  : setShowBoleto(true);
+              }}
               // chamar funcao que verifia qual a forma de pagamento e identifica qual modal deve ser exibido (pix ou boleto)
             >
               Fazer pagamento
@@ -281,8 +307,10 @@ export default function FormasPagamento() {
         </div>
       </section>
       {/* deve ser colocado dentro de um modal e o modal ser exibido ao clicar no botao */}
-      <QRCodeSVG size={280} value={qrCode} />
+      {/* <QRCodeSVG size={280}  value={qrCode} /> */}
       <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal} />
+      <ModalPix isShow={showPix} setIsShow={setShowPix} />
+      <ModalBoleto isShow={showBoleto} setIsShow={setShowBoleto} />
     </div>
   );
 }
