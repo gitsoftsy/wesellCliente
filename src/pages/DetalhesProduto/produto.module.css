@@ -53,17 +53,17 @@
   display: flex;
   justify-content: center;
   width: 400px;
+  height: 320px;
 }
 
 .mainImage {
   padding: 0.5em;
-  width: 400px;
-  width: auto;
-  max-height: 320px;
-  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .desc {
@@ -234,7 +234,8 @@
   padding-bottom: 2rem;
 }
 
-.descriptionProduct p, .descriptionProduct span {
+.descriptionProduct p,
+.descriptionProduct span {
   color: #fff !important;
 }
 
@@ -270,36 +271,35 @@
 }
 
 @media (max-width: 1024px) {
-  .areaImagens{
-      display: flex;
-      flex-direction: column;
+  .areaImagens {
+    display: flex;
+    flex-direction: column;
   }
 
-  .thumbnails_mainImage{
+  .thumbnails_mainImage {
     justify-content: center;
   }
 
-  .desc{
+  .desc {
     width: 100%;
   }
 
-  .boxMainImage{
+  .boxMainImage {
     width: 90%;
   }
-  .areaAvaliacoes{
+  .areaAvaliacoes {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .thumbnails{
+  .thumbnails {
     justify-content: center;
   }
 
-  .frete{
+  .frete {
     min-width: auto;
   }
-  
 }
 
 @media (max-width: 999px) {
