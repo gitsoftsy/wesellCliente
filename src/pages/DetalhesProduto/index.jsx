@@ -30,31 +30,33 @@ export default function DetalhesProduto() {
       link: link,
     };
 
-    await axios
-      .post(url_base + `/indicacoesVenda/link`, jsonDados, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((result) => {
-        if (result.data.length == 0) {
+    if (path.pathname.includes("static")) {
+      await axios
+        .post(url_base + `/indicacoesVenda/link`, jsonDados, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((result) => {
+          if (result.data.length == 0) {
+            setActive(false);
+            toast.info("Link está inválido, pode ter expirado.");
+            navigate("/home");
+          } else {
+            setActive(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
           setActive(false);
           toast.info("Link está inválido, pode ter expirado.");
           navigate("/home");
-        } else {
-          setActive(false);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        setActive(false);
-          toast.info("Link está inválido, pode ter expirado.");
-          navigate("/home");
-      });
+        });
+    }
   };
 
   useEffect(() => {
-    getLink(window.location.href );
+    getLink(window.location.href);
   });
 
   const avaliations = [
@@ -108,7 +110,7 @@ export default function DetalhesProduto() {
 
       localStorage.setItem("statusPage", JSON.stringify(jsonPage));
     }
-  }, [path.pathname]);  
+  }, [path.pathname]);
 
   async function getProdutosSimilares(produto) {
     if (produto.categorias) {
@@ -156,6 +158,8 @@ export default function DetalhesProduto() {
         setListImages(response.data);
         let caminho = response.data[0].imagem.split("ROOT");
         setSelectedImage(`${url_img}${caminho[1]}`);
+        setActive(false);
+
       })
       .catch((error) => {
         console.log(error.message);
@@ -183,7 +187,7 @@ export default function DetalhesProduto() {
 
     window.scrollTo(0, 0);
     getProduto();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // let porcentagens = {
