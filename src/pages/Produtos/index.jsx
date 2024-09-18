@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { FaFilter, FaSort } from "react-icons/fa";
 import ModalFilters from "../../components/ModalFilters";
 import ModalOrderBy from "../../components/ModalOrderBy";
+import { LuSearchX } from "react-icons/lu";
 
 export default function Produtos() {
   const [produtos, setProdutos] = useState([]);
@@ -109,11 +110,11 @@ export default function Produtos() {
           response.data ===
           "Nenhum resultado encontrado para os parâmetros informados."
         ) {
-          setSemProdutos(true)
+          setSemProdutos(true);
         } else {
           setProdutos(response.data);
           getFilters(response.data);
-          setSemProdutos(false)
+          setSemProdutos(false);
           setLoading(false);
         }
       })
@@ -189,10 +190,26 @@ export default function Produtos() {
 
   if (semProdutos) {
     return (
-      <section className={`${styles.mainContainer} container`}>
-        <h1>Ops.... Sem produtos encontrados para a pesquisa</h1>
+      <section
+        className={`${styles.mainContainer} mt-5 container justify-content-center`}
+      >
+        <div className="col-12 col-md-10 p-5 shadow-sm border-0" id={styles.avisoErroBusca}>
+          <div className="col-3 d-flex justify-content-center">
+            <LuSearchX size={72} color="#3b3b3b"/>
+          </div>
+          <div>
+            <h4>Não há anúncios que correspondam à sua busca</h4>
+            <ul className="ps-3 mt-3">
+              <li>Revise a ortografia da palavra.</li>
+              <li>Utilize palavras mais genéricas ou menos palavras.</li>
+              <li>
+                Navegue pelas categorias para encontrar um produto semelhante.
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
-    )
+    );
   }
 
   return (

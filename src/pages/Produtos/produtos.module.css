@@ -6,6 +6,10 @@
   gap: 1em;
 }
 
+#avisoErroBusca {
+ display: flex;
+ align-items: center;
+}
 .containerFiltros {
   position: relative;
   flex: 0 0 300px;
@@ -112,6 +116,12 @@ input[type="range"] {
 }
 
 @media screen and (max-width: 767px) {
+  #avisoErroBusca {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em 2em !important;
+   }
   .mainContainer {
     padding-top: 1em;
   }
