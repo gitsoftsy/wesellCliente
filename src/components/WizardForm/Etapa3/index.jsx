@@ -70,12 +70,12 @@ export default function Etapa3({
             name="cep"
             value={formData.cep}
             onChange={(e) => handleChange(e)}
-            placeholder="CEP"
+            placeholder="CEP*"
             autoComplete="off"
             onBlur={getCep}
             required
           />
-          <label htmlFor="cep">CEP</label>
+          <label htmlFor="cep">CEP*</label>
         </div>
         <div className="form-floating uf mb-3 col-6">
           <input
@@ -85,11 +85,11 @@ export default function Etapa3({
             name="uf"
             value={formData.uf}
             onChange={handleChange}
-            placeholder="UF"
+            placeholder="UF*"
             autoComplete="off"
             required
           />
-          <label htmlFor="uf">UF</label>
+          <label htmlFor="uf">UF*</label>
         </div>
       </div>
       <div className="d-flex justify-content-between">
@@ -101,11 +101,11 @@ export default function Etapa3({
             name="municipio"
             value={formData.municipio}
             onChange={handleChange}
-            placeholder="Município"
+            placeholder="Município*"
             autoComplete="off"
             required
           />
-          <label htmlFor="municipio">Município</label>
+          <label htmlFor="municipio">Município*</label>
         </div>
         <div className="form-floating bairro mb-3 col-6">
           <input
@@ -115,11 +115,11 @@ export default function Etapa3({
             name="bairro"
             value={formData.bairro}
             onChange={handleChange}
-            placeholder="Bairro"
+            placeholder="Bairro*"
             autoComplete="off"
             required
           />
-          <label htmlFor="bairro">Bairro</label>
+          <label htmlFor="bairro">Bairro*</label>
         </div>
       </div>
 
@@ -131,11 +131,11 @@ export default function Etapa3({
           name="endereco"
           value={formData.endereco}
           onChange={handleChange}
-          placeholder="Logradouro"
+          placeholder="Logradouro*"
           autoComplete="off"
           required
         />
-        <label htmlFor="logradouro">Logradouro</label>
+        <label htmlFor="logradouro">Logradouro*</label>
       </div>
       <div className="d-flex justify-content-between">
         <div className="form-floating num mb-3">
@@ -146,11 +146,11 @@ export default function Etapa3({
             name="numero"
             value={formData.numero}
             onChange={handleChange}
-            placeholder="Número"
+            placeholder="Número*"
             autoComplete="off"
             required
           />
-          <label htmlFor="numero">Número</label>
+          <label htmlFor="numero">Número*</label>
         </div>
         <div className="form-floating mb-3 col-8">
           <input

@@ -21,6 +21,7 @@ export default function DetalhesProduto() {
   const [isFavoritado, setIsFavoritado] = useState(false);
   const [listImages, setListImages] = useState([]);
   const [maximoParcela, setMaximoParcela] = useState(false);
+  const [calculaFrete, setCalculaFrete] = useState(true);
 
   const avaliations = [
     { id: 1, star: 4, nome: "Wagner Moura" },
@@ -97,12 +98,18 @@ export default function DetalhesProduto() {
       .get(url_base + `/produtos/${id}`)
       .then((response) => {
         const data = response.data;
+        console.log(data);
         setProduto(data);
         getProdutosSimilares(data);
-        if (data.lojista.possuiParcelamento === 'S'){
+
+        data.freteGratis === "S"
+          ? setCalculaFrete(false)
+          : setCalculaFrete(true);
+
+        if (data.lojista.possuiParcelamento === "S") {
           setMaximoParcela(data.lojista.maximoParcelas);
         } else {
-          setMaximoParcela(false)
+          setMaximoParcela(false);
         }
       })
       .catch((error) => {
@@ -227,46 +234,87 @@ export default function DetalhesProduto() {
                   )}
                 </div>
               </div>
-              <div className={styles.frete}>
-                <div className={styles.freeShipping_deadline_calculate}>
-                  <h5 className={styles.freeShipping}>Calcule o frete</h5>
-                  <span className={styles.deadline}>
-                    Saiba os prazos de entrega e as formas de envio.
-                  </span>
-                  <span
-                    className={styles.calculate}
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalFrete"
-                  >
-                    Calcular o prazo de entrega
-                  </span>
-                </div>
-                <div className={styles.stock_quantity_unit}>
-                  <span className={styles.stock}>Estoque disponível</span>
-                  <a href="#" className={styles.unit}>
-                    Consulte o regulamento
-                  </a>
-                </div>
-                <div className={styles.purchase_addCart}>
-                  <button
-                    className={styles.purchase}
-                    onClick={() => {
-                      addToCart({ ...produto, qtd: 1, imagem: selectedImage })
-                      navigate("/carrinho")
-                    }}
-                  >
-                    Comprar
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.addCart}
-                    onClick={() => {
-                      addToCart({ ...produto, qtd: 1, imagem: selectedImage });
-                    }}
-                  >
-                    Adicionar ao carrinho
-                  </button>
-                </div>
+              <div className={`${styles.frete} ${!calculaFrete && 'justify-content-center'}`}>
+                {calculaFrete ? (
+                  <>
+                    <div className={styles.freeShipping_deadline_calculate}>
+                      <h5 className={styles.freeShipping}>Calcule o frete</h5>
+                      <span className={styles.deadline}>
+                        Saiba os prazos de entrega e as formas de envio.
+                      </span>
+                      <span
+                        className={styles.calculate}
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalFrete"
+                      >
+                        Calcular o prazo de entrega
+                      </span>
+                    </div>
+                    <div className={styles.stock_quantity_unit}>
+                      <span className={styles.stock}>Estoque disponível</span>
+                      <a href="#" className={styles.unit}>
+                        Consulte o regulamento
+                      </a>
+                    </div>
+                    <div className={styles.purchase_addCart}>
+                      <button
+                        className={styles.purchase}
+                        onClick={() => {
+                          addToCart({
+                            ...produto,
+                            qtd: 1,
+                            imagem: selectedImage,
+                          });
+                          navigate("/carrinho");
+                        }}
+                      >
+                        Comprar
+                      </button>
+                      <button
+                        type="button"
+                        className={styles.addCart}
+                        onClick={() => {
+                          addToCart({
+                            ...produto,
+                            qtd: 1,
+                            imagem: selectedImage,
+                          });
+                        }}
+                      >
+                        Adicionar ao carrinho
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <div className={styles.purchase_addCart}>
+                    <button
+                      className={styles.purchase}
+                      onClick={() => {
+                        addToCart({
+                          ...produto,
+                          qtd: 1,
+                          imagem: selectedImage,
+                        });
+                        navigate("/carrinho");
+                      }}
+                    >
+                      Comprar
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.addCart}
+                      onClick={() => {
+                        addToCart({
+                          ...produto,
+                          qtd: 1,
+                          imagem: selectedImage,
+                        });
+                      }}
+                    >
+                      Adicionar ao carrinho
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </section>

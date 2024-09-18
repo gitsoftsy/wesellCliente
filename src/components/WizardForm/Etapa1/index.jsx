@@ -7,7 +7,6 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
       formData.nomeCompleto &&
       formData.nomeCompleto.length >= 10 &&
       formData.genero &&
-      formData.nomeSocial &&
       formData.dataNascimento
     );
   };
@@ -68,11 +67,11 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
           name="nomeCompleto"
           value={formData.nomeCompleto}
           onChange={handleChange}
-          placeholder="Nome completo"
+          placeholder="Nome completo*"
           required
           autoComplete="off"
         />
-        <label htmlFor="nomeCompleto">Nome completo</label>
+        <label htmlFor="nomeCompleto">Nome completo*</label>
       </div>
       <div className="form-floating mb-3">
         <input
@@ -95,11 +94,11 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
           name="email"
           value={formData.email}
           onChange={handleChange}
-          placeholder="Email"
+          placeholder="Email*"
           autoComplete="off"
           required
         />
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Email*</label>
       </div>
       <div className="form-floating mb-3">
         <input
@@ -110,11 +109,11 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
           value={formData.dataNascimento}
           onChange={handleChange}
           max={currentDate}
-          placeholder="Data de Nascimento"
+          placeholder="Data de Nascimento*"
           autoComplete="off"
           required
         />
-        <label htmlFor="dataNascimento">Data de Nascimento</label>
+        <label htmlFor="dataNascimento">Data de Nascimento*</label>
       </div>
       <div className="form-floating mb-3">
         <select
@@ -125,7 +124,7 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
           name="genero"
           value={formData.genero}
           onChange={handleChange}
-          placeholder="Gênero"
+          placeholder="Gênero*"
           required
         >
           <option disabled={true} value="">
@@ -135,7 +134,7 @@ export default function Etapa1({ handleChange, formData, nextStep }) {
           <option value="M">Masculino</option>
           <option value="N">Prefiro não informar</option>
         </select>
-        <label htmlFor="genero">Gênero</label>
+        <label htmlFor="genero">Gênero*</label>
       </div>
 
       <button className="btn btn-primary col-12" onClick={handleNextStep}>

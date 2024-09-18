@@ -27,6 +27,7 @@ export default function Produtos() {
   const [idSubCategoria, setIdSubCategoria] = useState(null);
   const [precoDeVendaMin, setPrecoDeVendaMin] = useState(null);
   const [precoDeVendaMax, setPrecoDeVendaMax] = useState(null);
+  const [semProdutos, setSemProdutos] = useState(false);
   const [orderBy, setOrderBy] = useState(null);
 
   const { valueSearch, categoria, setValueSearch, setCategoria, isMobile } =
@@ -104,9 +105,17 @@ export default function Produtos() {
     await axios
       .post(url_base + "/produtos/listar", params)
       .then((response) => {
-        setProdutos(response.data);
-        getFilters(response.data);
-        setLoading(false);
+        if (
+          response.data ===
+          "Nenhum resultado encontrado para os parâmetros informados."
+        ) {
+          setSemProdutos(true)
+        } else {
+          setProdutos(response.data);
+          getFilters(response.data);
+          setSemProdutos(false)
+          setLoading(false);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -177,6 +186,14 @@ export default function Produtos() {
     idLojista,
     orderBy,
   ]);
+
+  if (semProdutos) {
+    return (
+      <section className={`${styles.mainContainer} container`}>
+        <h1>Ops.... Sem produtos encontrados para a pesquisa</h1>
+      </section>
+    )
+  }
 
   return (
     <>

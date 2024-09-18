@@ -47,11 +47,11 @@ export default function Etapa2({
           name="cpf"
           value={formData.cpf}
           onChange={handleChange}
-          placeholder="CPF"
+          placeholder="CPF*"
           autoComplete="off"
           required
         />
-        <label htmlFor="cpf">CPF</label>
+        <label htmlFor="cpf">CPF*</label>
       </div>
       <div className="form-floating mb-3">
       <ReactInputMask
@@ -63,11 +63,11 @@ export default function Etapa2({
           name="celular"
           value={formData.celular}
           onChange={handleChange}
-          placeholder="Celular"
+          placeholder="Celular*"
           autoComplete="off"
           required
         />
-        <label htmlFor="celular">Celular</label>
+        <label htmlFor="celular">Celular*</label>
       </div>
       <div className="form-floating mb-3">
         <input
@@ -77,11 +77,11 @@ export default function Etapa2({
           name="senha"
           value={formData.senha}
           onChange={handleChange}
-          placeholder="Senha"
+          placeholder="Senha*"
           autoComplete="off"
           required
         />
-        <label htmlFor="senha">Senha</label>
+        <label htmlFor="senha">Senha*</label>
       </div>
       <div className="form-floating mb-3">
         <input
@@ -91,11 +91,11 @@ export default function Etapa2({
           name="passwordConfirmed"
           value={passwordConfirmed}
           onChange={(e) => setPasswordConfirmed(e.target.value)}
-          placeholder="passwordConfirmed"
+          placeholder="passwordConfirmed*"
           autoComplete="off"
           required
         />
-        <label htmlFor="passwordConfirmed">Confirme a senha</label>
+        <label htmlFor="passwordConfirmed">Confirme a senha*</label>
       </div>
       <div className="btns-wizard">
         <button className="btn btn-primary me-2 col-6" onClick={previousStep}>

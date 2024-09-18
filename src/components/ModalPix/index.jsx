@@ -30,8 +30,6 @@ export default function ModalPix({ isShow, setIsShow }) {
       <Modal.Body
         className={`paddingModal d-flex flex-column align-items-center w-100`}
       >
-        <h1 className="modal-title">Status da compra</h1>
-        <hr className="w-100" />
         <p className="fs-5">Scannear QRcode</p>
         <QRCodeSVG size={280} value={qrCode} />
         <div className="row">
