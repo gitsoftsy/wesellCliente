@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@achmadk/react-loading-overlay": "^3.0.2",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "date-fns": "^3.6.0",

@@ -13,6 +13,7 @@ import formatCurrencyBR from "../../hooks/formatCurrency";
 import formatPriceBR from "../../hooks/formatPrice";
 import AvaliacaoFixa from "../../components/SectionAvaliation/AvaliacaoFixa";
 import ModalFrete from "../../components/ModalFrete";
+import { LoadingOverlay } from "@achmadk/react-loading-overlay";
 
 export default function DetalhesProduto() {
   const [produto, setProduto] = useState({});
@@ -22,6 +23,39 @@ export default function DetalhesProduto() {
   const [listImages, setListImages] = useState([]);
   const [maximoParcela, setMaximoParcela] = useState(false);
   const [calculaFrete, setCalculaFrete] = useState(true);
+  const [isActive, setActive] = useState(true);
+
+  const getLink = async (link) => {
+    let jsonDados = {
+      link: link,
+    };
+
+    await axios
+      .post(url_base + `/indicacoesVenda/link`, jsonDados, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((result) => {
+        if (result.data.length == 0) {
+          setActive(false);
+          toast.info("Link está inválido, pode ter expirado.");
+          navigate("/home");
+        } else {
+          setActive(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setActive(false);
+          toast.info("Link está inválido, pode ter expirado.");
+          navigate("/home");
+      });
+  };
+
+  useEffect(() => {
+    getLink(window.location.href );
+  });
 
   const avaliations = [
     { id: 1, star: 4, nome: "Wagner Moura" },
@@ -74,7 +108,7 @@ export default function DetalhesProduto() {
 
       localStorage.setItem("statusPage", JSON.stringify(jsonPage));
     }
-  }, []);
+  }, [path.pathname]);  
 
   async function getProdutosSimilares(produto) {
     if (produto.categorias) {
@@ -149,6 +183,7 @@ export default function DetalhesProduto() {
 
     window.scrollTo(0, 0);
     getProduto();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // let porcentagens = {
@@ -161,101 +196,140 @@ export default function DetalhesProduto() {
 
   return (
     <>
-      <section className={styles.areaCinza}>
-        <div className="container pt-5">
-          <section className={`${styles.areaProduto} rounded-4`}>
-            <div className={`${styles.areaImagens}`}>
-              <div className={styles.thumbnails_mainImage}>
-                <div className={styles.thumbnails}>
-                  {listImages?.map((image) => (
+      <LoadingOverlay
+        active={isActive}
+        spinner
+        text="Carregando seu conteúdo..."
+      >
+        <section className={styles.areaCinza}>
+          <div className="container pt-5">
+            <section className={`${styles.areaProduto} rounded-4`}>
+              <div className={`${styles.areaImagens}`}>
+                <div className={styles.thumbnails_mainImage}>
+                  <div className={styles.thumbnails}>
+                    {listImages?.map((image) => (
+                      <img
+                        key={image.idImagemProduto}
+                        src={`${url_img}${image.imagem.split("ROOT")[1]}`}
+                        alt={`Thumbnail`}
+                        className={styles.thumbnail}
+                        onMouseEnter={() =>
+                          handleThumbnailClick(
+                            `${url_img}${image.imagem.split("ROOT")[1]}`
+                          )
+                        }
+                      />
+                    ))}
+                  </div>
+                  <div className={styles.boxMainImage}>
                     <img
-                      key={image.idImagemProduto}
-                      src={`${url_img}${image.imagem.split("ROOT")[1]}`}
-                      alt={`Thumbnail`}
-                      className={styles.thumbnail}
-                      onMouseEnter={() =>
-                        handleThumbnailClick(
-                          `${url_img}${image.imagem.split("ROOT")[1]}`
-                        )
-                      }
+                      src={selectedImage}
+                      alt="Imagem principal"
+                      className={styles.mainImage}
                     />
-                  ))}
+                  </div>
                 </div>
-                <div className={styles.boxMainImage}>
-                  <img
-                    src={selectedImage}
-                    alt="Imagem principal"
-                    className={styles.mainImage}
-                  />
-                </div>
-              </div>
 
-              <div className={styles.desc}>
-                <div className={styles.description_stars}>
-                  <div className={styles.favoriteIcon}>
-                    <FavoriteIcon
-                      favoritado={isFavoritado}
-                      produto={produto}
-                      handleFavorite={setIsFavoritado}
-                    />
+                <div className={styles.desc}>
+                  <div className={styles.description_stars}>
+                    <div className={styles.favoriteIcon}>
+                      <FavoriteIcon
+                        favoritado={isFavoritado}
+                        produto={produto}
+                        handleFavorite={setIsFavoritado}
+                      />
+                    </div>
+                    <h6>{produto.nomeProduto}</h6>
+                    <div className={styles.stars}>
+                      <span className={styles.textStar}>4.3</span>
+                      <AvaliacaoFixa mediaAvaliacoes={4.3} heigth="18px" />
+                      <span className={styles.textStar}>(25)</span>
+                    </div>
                   </div>
-                  <h6>{produto.nomeProduto}</h6>
-                  <div className={styles.stars}>
-                    <span className={styles.textStar}>4.3</span>
-                    <AvaliacaoFixa mediaAvaliacoes={4.3} heigth="18px" />
-                    <span className={styles.textStar}>(25)</span>
-                  </div>
-                </div>
-                <div className={styles.soldPlus_console}>
-                  <span className={styles.soldPlus}>
-                    {produto.categorias ? produto.categorias.categoria : ""}
-                  </span>
-                </div>
-                <div>
-                  <div className={styles.values}>
-                    <hr />
-                    <h4>Valor produto:</h4>
-                    <span className={styles.values_liquid}>
-                      <s>{formatCurrencyBR(produto.precoVenda)}</s>
+                  <div className={styles.soldPlus_console}>
+                    <span className={styles.soldPlus}>
+                      {produto.categorias ? produto.categorias.categoria : ""}
                     </span>
-                    <h5 className={styles.values_deduction}>
-                      {formatCurrencyBR(produto.precoPromocional)}
-                    </h5>
                   </div>
-                  {maximoParcela && (
-                    <div>
-                      <span>em </span>
-                      <span className={styles.interestFree}>
-                        {`${maximoParcela}x de ${formatPriceBR(
-                          produto.precoPromocional / maximoParcela
-                        )} sem juros`}
+                  <div>
+                    <div className={styles.values}>
+                      <hr />
+                      <h4>Valor produto:</h4>
+                      <span className={styles.values_liquid}>
+                        <s>{formatCurrencyBR(produto.precoVenda)}</s>
                       </span>
+                      <h5 className={styles.values_deduction}>
+                        {formatCurrencyBR(produto.precoPromocional)}
+                      </h5>
                     </div>
-                  )}
+                    {maximoParcela && (
+                      <div>
+                        <span>em </span>
+                        <span className={styles.interestFree}>
+                          {`${maximoParcela}x de ${formatPriceBR(
+                            produto.precoPromocional / maximoParcela
+                          )} sem juros`}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className={`${styles.frete} ${!calculaFrete && 'justify-content-center'}`}>
-                {calculaFrete ? (
-                  <>
-                    <div className={styles.freeShipping_deadline_calculate}>
-                      <h5 className={styles.freeShipping}>Calcule o frete</h5>
-                      <span className={styles.deadline}>
-                        Saiba os prazos de entrega e as formas de envio.
-                      </span>
-                      <span
-                        className={styles.calculate}
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalFrete"
-                      >
-                        Calcular o prazo de entrega
-                      </span>
-                    </div>
-                    <div className={styles.stock_quantity_unit}>
-                      <span className={styles.stock}>Estoque disponível</span>
-                      <a href="#" className={styles.unit}>
-                        Consulte o regulamento
-                      </a>
-                    </div>
+                <div
+                  className={`${styles.frete} ${
+                    !calculaFrete && "justify-content-center"
+                  }`}
+                >
+                  {calculaFrete ? (
+                    <>
+                      <div className={styles.freeShipping_deadline_calculate}>
+                        <h5 className={styles.freeShipping}>Calcule o frete</h5>
+                        <span className={styles.deadline}>
+                          Saiba os prazos de entrega e as formas de envio.
+                        </span>
+                        <span
+                          className={styles.calculate}
+                          data-bs-toggle="modal"
+                          data-bs-target="#modalFrete"
+                        >
+                          Calcular o prazo de entrega
+                        </span>
+                      </div>
+                      <div className={styles.stock_quantity_unit}>
+                        <span className={styles.stock}>Estoque disponível</span>
+                        <a href="#" className={styles.unit}>
+                          Consulte o regulamento
+                        </a>
+                      </div>
+                      <div className={styles.purchase_addCart}>
+                        <button
+                          className={styles.purchase}
+                          onClick={() => {
+                            addToCart({
+                              ...produto,
+                              qtd: 1,
+                              imagem: selectedImage,
+                            });
+                            navigate("/carrinho");
+                          }}
+                        >
+                          Comprar
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.addCart}
+                          onClick={() => {
+                            addToCart({
+                              ...produto,
+                              qtd: 1,
+                              imagem: selectedImage,
+                            });
+                          }}
+                        >
+                          Adicionar ao carrinho
+                        </button>
+                      </div>
+                    </>
+                  ) : (
                     <div className={styles.purchase_addCart}>
                       <button
                         className={styles.purchase}
@@ -284,65 +358,38 @@ export default function DetalhesProduto() {
                         Adicionar ao carrinho
                       </button>
                     </div>
-                  </>
-                ) : (
-                  <div className={styles.purchase_addCart}>
-                    <button
-                      className={styles.purchase}
-                      onClick={() => {
-                        addToCart({
-                          ...produto,
-                          qtd: 1,
-                          imagem: selectedImage,
-                        });
-                        navigate("/carrinho");
-                      }}
-                    >
-                      Comprar
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.addCart}
-                      onClick={() => {
-                        addToCart({
-                          ...produto,
-                          qtd: 1,
-                          imagem: selectedImage,
-                        });
-                      }}
-                    >
-                      Adicionar ao carrinho
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          </section>
-          <section className={styles.descriptionProduct}>
-            <h2 className={styles.descriptionDetailed}>Descrição do Produto</h2>
-            {parse(produto.descrProduto ? produto.descrProduto : "")}
-          </section>
-        </div>
-      </section>
-      <section className={styles.areaBranca}>
-        <section className={`${styles.areaAvaliacoes} container rounded-4`}>
-          <SectionAvaliation
-            avaliacoes={avaliations}
-            total={avaliations.length}
-          />
+            </section>
+            <section className={styles.descriptionProduct}>
+              <h2 className={styles.descriptionDetailed}>
+                Descrição do Produto
+              </h2>
+              {parse(produto.descrProduto ? produto.descrProduto : "")}
+            </section>
+          </div>
         </section>
-        <section className={`${styles.areaProdutosSimilares} rounded-4`}>
-          {produtosSimilares.length > 0 && (
-            <GridProdutos
-              nomeSecao="PRODUTOS SIMILARES"
-              titleVisivel={true}
-              produtos={produtosSimilares}
-              qtdVisivel={4}
+        <section className={styles.areaBranca}>
+          <section className={`${styles.areaAvaliacoes} container rounded-4`}>
+            <SectionAvaliation
+              avaliacoes={avaliations}
+              total={avaliations.length}
             />
-          )}
+          </section>
+          <section className={`${styles.areaProdutosSimilares} rounded-4`}>
+            {produtosSimilares.length > 0 && (
+              <GridProdutos
+                nomeSecao="PRODUTOS SIMILARES"
+                titleVisivel={true}
+                produtos={produtosSimilares}
+                qtdVisivel={4}
+              />
+            )}
+          </section>
         </section>
-      </section>
-      <ModalFrete produto={produto} />
+        <ModalFrete produto={produto} />
+      </LoadingOverlay>
     </>
   );
 }

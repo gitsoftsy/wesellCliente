@@ -12,5 +12,5 @@ export default function Validation() {
         } else {
             navigate(statusPage.url)
         }
-    }, [])
+    }, [navigate])
 }
