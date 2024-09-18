@@ -43,11 +43,13 @@ export default function Login() {
         }
       })
       .catch((error) => {
+        console.log(error)
+        console.log(error.response.status)
         if (error.response.status == 403) {
           toast.error("Email ou senha inválidos.");
           setLoading(false);
         } else {
-          toast.error(error.message);
+          toast.error("Email ou senha inválidos.");
           setLoading(false);
         }
       });

@@ -227,7 +227,7 @@ export default function Endereco() {
       frete: parseFloat(14.9),
       resumo: {
         produtos: produtos,
-        total: total,
+        total: subtotal,
         frete: parseFloat(14.9),
         subtotal: subtotal,
         qtdProdutos: quantidadeTotalProdutos,
