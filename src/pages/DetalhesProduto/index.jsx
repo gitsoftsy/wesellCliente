@@ -27,7 +27,7 @@ export default function DetalhesProduto() {
 
   const getLink = async (link) => {
     let jsonDados = {
-      link: link,
+      link: link
     };
 
     if (path.pathname.includes("static")) {
@@ -39,26 +39,29 @@ export default function DetalhesProduto() {
         })
         .then((result) => {
           console.log(result);
+          console.log(window.location.href)
 
           if (result.data.length > 0) {
             if (result.data[0].dataCancelamento == null) {
               setActive(false);
             }else{
               setActive(false);
-              console.log("Link expirado");
+              console.log("Link expirado, cancelado");
               toast.info("Link está inválido, pode ter expirado.");
               navigate("/home");
             }
 
           } else {
             setActive(false);
-            console.log("Link expirado");
+            console.log("Link expirado, não existe");
             toast.info("Link está inválido, pode ter expirado.");
             navigate("/home");
           }
         })
         .catch((error) => {
           console.log(error);
+          console.log("Link expirado, error");
+
           setActive(false);
           toast.info("Link está inválido, pode ter expirado.");
           navigate("/home");
