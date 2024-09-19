@@ -43,11 +43,11 @@ export default function DetalhesProduto() {
           if (result.data.length > 0) {
             if (result.data[0].dataCancelamento == null) {
               setActive(false);
+            }else{
+              setActive(false);
               console.log("Link expirado");
               toast.info("Link está inválido, pode ter expirado.");
               navigate("/home");
-            }else{
-              setActive(false);
             }
 
           } else {
