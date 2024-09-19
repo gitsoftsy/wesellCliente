@@ -38,12 +38,23 @@ export default function DetalhesProduto() {
           },
         })
         .then((result) => {
-          if (result.data.length == 0) {
-            setActive(false);
-            toast.info("Link está inválido, pode ter expirado.");
-            navigate("/home");
+          console.log(result);
+
+          if (result.data.length > 0) {
+            if (result.data[0].dataCancelamento == null) {
+              setActive(false);
+              console.log("Link expirado");
+              toast.info("Link está inválido, pode ter expirado.");
+              navigate("/home");
+            }else{
+              setActive(false);
+            }
+
           } else {
             setActive(false);
+            console.log("Link expirado");
+            toast.info("Link está inválido, pode ter expirado.");
+            navigate("/home");
           }
         })
         .catch((error) => {
@@ -159,7 +170,6 @@ export default function DetalhesProduto() {
         let caminho = response.data[0].imagem.split("ROOT");
         setSelectedImage(`${url_img}${caminho[1]}`);
         setActive(false);
-
       })
       .catch((error) => {
         console.log(error.message);
