@@ -33,6 +33,7 @@ export default function FormasPagamento() {
     const products = JSON.parse(productsInCart) || [];
 
     setLojista(products[0].lojista);
+    console.log(products[0].lojista);
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -50,8 +51,11 @@ export default function FormasPagamento() {
     setFormaPagamento(e.target.id);
   };
 
-  const listMes = [1,2,3,4,5,6,7,8,9,10,11,12]
-  const listAno = [2024, 2025, 2026, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
+  const listMes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const listAno = [
+    2024, 2025, 2026, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
+    2035,
+  ];
 
   return (
     <div className={styles.containerCart}>
@@ -63,71 +67,77 @@ export default function FormasPagamento() {
                 <MdOutlinePayment size={25} /> Formas de pagamento
               </h5>
             </div>
-            <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "cartao" ? styles.radioSelected : ""
-              }`}
-            >
-              <div className="form-check d-flex align-items-center">
-                <input
-                  className="form-check-input mt-0"
-                  type="radio"
-                  name="formaPagamento"
-                  id="cartao"
-                  checked={formaPagamento === "cartao"}
-                  onChange={handleEnderecoChange}
-                />
-                <label
-                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                  htmlFor="cartao"
-                >
-                  <span>
-                    CARTÃO DE CRÉDITO
-                    <br />
-                    <span
-                      className={`${styles.textCard} fw-normal`}
-                      style={{ color: "#f49516" }}
-                    >
-                      {/* pegar numero de parcelas do produto */}
-                      Parcele em até {lojista.maximoParcelas}x sem juros
+
+            {lojista.aceitaCartao == "S" ? (
+              <div
+                className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                  formaPagamento === "cartao" ? styles.radioSelected : ""
+                }`}
+              >
+                <div className="form-check d-flex align-items-center">
+                  <input
+                    className="form-check-input mt-0"
+                    type="radio"
+                    name="formaPagamento"
+                    id="cartao"
+                    checked={formaPagamento === "cartao"}
+                    onChange={handleEnderecoChange}
+                  />
+                  <label
+                    className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                    htmlFor="cartao"
+                  >
+                    <span>
+                      CARTÃO DE CRÉDITO
+                      <br />
+                      {lojista.possuiParcelamento == "S" ? (
+                        <span
+                          className={`${styles.textCard} fw-normal`}
+                          style={{ color: "#f49516" }}
+                        >
+                          {/* pegar numero de parcelas do produto */}
+                          Parcele em até {lojista.maximoParcelas}x sem juros
+                        </span>
+                      ) : (
+                        ""
+                      )}
                     </span>
-                  </span>
-                  <FaCreditCard size={22} />
-                </label>
-              </div>
-              {formaPagamento === "cartao" && (
-                <form className="py-3">
-                  <div className="mb-3">
-                    <label htmlFor="cardNumber" className="form-label">
-                      Número do cartão
-                    </label>
-                    <ReactInputMask
-                      required
-                      type="tel"
-                      mask="9999 9999 9999 9999"
-                      maskChar=""
-                      className="form-control"
-                      id="cardNumber"
-                    />
-                  </div>
+                    <FaCreditCard size={22} />
+                  </label>
+                </div>
+                {formaPagamento === "cartao" && (
+                  <form className="py-3">
+                    <div className="mb-3">
+                      <label htmlFor="cardNumber" className="form-label">
+                        Número do cartão
+                      </label>
+                      <ReactInputMask
+                        required
+                        type="tel"
+                        mask="9999 9999 9999 9999"
+                        maskChar=""
+                        className="form-control"
+                        id="cardNumber"
+                      />
+                    </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="cardHolder" className="form-label">
-                      Nome do titular
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="form-control"
-                      autoComplete="off"
-                      id="cardHolder"
-                    />
-                  </div>
+                    <div className="mb-3">
+                      <label htmlFor="cardHolder" className="form-label">
+                        Nome do titular
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="form-control"
+                        autoComplete="off"
+                        id="cardHolder"
+                      />
+                    </div>
 
-                  <div className="row mb-3">
-                    <label htmlFor="expirationDate" className="form-label">
-                      Data de vencimento
-                    </label>
+                    <div className="row mb-3">
+                      <label htmlFor="expirationDate" className="form-label">
+                        Data de vencimento
+                      </label>
                       <div className="col-md-6">
                         <select className="form-select" name="mes" id="mes">
                           <option value="0" disabled selected>
@@ -151,122 +161,139 @@ export default function FormasPagamento() {
                             </option>
                           ))}
                         </select>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="row mb-3">
-                    <div className="col">
-                      <label htmlFor="cvv" className="form-label">
-                        Código de segurança
-                      </label>
-                      <ReactInputMask
-                        type="tel"
-                        required
-                        mask="999"
-                        maskChar=""
-                        className="form-control"
-                        id="cvv"
-                      />
+                    <div className="row mb-3">
+                      <div className="col">
+                        <label htmlFor="cvv" className="form-label">
+                          Código de segurança
+                        </label>
+                        <ReactInputMask
+                          type="tel"
+                          required
+                          mask="999"
+                          maskChar=""
+                          className="form-control"
+                          id="cvv"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-md-12">
-                      <label htmlFor="parcelas" className="form-label">
-                        Parcelas
-                      </label>
-                      <select
-                        className="form-select"
-                        name="parcelas"
-                        id="parcelas"
-                      >
-                        <option value="0" disabled selected>
-                          Selecione uma opção
-                        </option>
-                        {Array.from(
-                          { length: lojista.maximoParcelas },
-                          (_, index) => (
-                            <option key={index + 1} value={index + 1}>
-                              {index + 1} {index > 0 ? "Parcela(s)" : "Parcela"}
+                    {lojista.possuiParcelamento == "S" ? (
+                      <div className="row mb-3">
+                        <div className="col-md-12">
+                          <label htmlFor="parcelas" className="form-label">
+                            Parcelas
+                          </label>
+                          <select
+                            className="form-select"
+                            name="parcelas"
+                            id="parcelas"
+                          >
+                            <option value="0" disabled selected>
+                              Selecione uma opção
                             </option>
-                          )
-                        )}
-                      </select>
-                    </div>
-                  </div>
+                            {Array.from(
+                              { length: lojista.maximoParcelas },
+                              (_, index) => (
+                                <option key={index + 1} value={index + 1}>
+                                  {index + 1}{" "}
+                                  {index > 0 ? "Parcela(s)" : "Parcela"}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )}
 
-                  {/* colcoar loading nos botoes de fazer pagamento */}
-                  <span
-                    className="btn btn-primary px-4"
-                    onClick={() => setShowModal(true)}
+                    {/* colcoar loading nos botoes de fazer pagamento */}
+                    <span
+                      className="btn btn-primary px-4"
+                      onClick={() => setShowModal(true)}
+                    >
+                      Fazer pagamento
+                    </span>
+                  </form>
+                )}
+              </div>
+            ) : (
+              ""
+            )}
+            {lojista.aceitaPix == "S" ? (
+              <div
+                className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                  formaPagamento === "pix" ? styles.radioSelected : ""
+                }`}
+              >
+                <div className="form-check d-flex align-items-center">
+                  <input
+                    className="form-check-input mt-0"
+                    type="radio"
+                    name="formaPagamento"
+                    id="pix"
+                    checked={formaPagamento === "pix"}
+                    onChange={handleEnderecoChange}
+                  />
+                  <label
+                    className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                    htmlFor="pix"
                   >
-                    Fazer pagamento
-                  </span>
-                </form>
-              )}
-            </div>
-            <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "pix" ? styles.radioSelected : ""
-              }`}
-            >
-              <div className="form-check d-flex align-items-center">
-                <input
-                  className="form-check-input mt-0"
-                  type="radio"
-                  name="formaPagamento"
-                  id="pix"
-                  checked={formaPagamento === "pix"}
-                  onChange={handleEnderecoChange}
-                />
-                <label
-                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                  htmlFor="pix"
-                >
-                  <span>
-                    PAGAMENTO VIA PIX <br />
-                    <span
-                      className={`${styles.textCard} fw-normal`}
-                      style={{ color: "#f49516" }}
-                    >
-                      Aprovação imediata
+                    <span>
+                      PAGAMENTO VIA PIX <br />
+                      <span
+                        className={`${styles.textCard} fw-normal`}
+                        style={{ color: "#f49516" }}
+                      >
+                        Aprovação imediata
+                      </span>
                     </span>
-                  </span>
-                  <MdPix size={22} />
-                </label>
+                    <MdPix size={22} />
+                  </label>
+                </div>
               </div>
-            </div>
-            <div
-              className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                formaPagamento === "boleto" ? styles.radioSelected : ""
-              }`}
-            >
-              <div className="form-check d-flex align-items-center">
-                <input
-                  className="form-check-input mt-0"
-                  type="radio"
-                  name="formaPagamento"
-                  id="boleto"
-                  checked={formaPagamento === "boleto"}
-                  onChange={handleEnderecoChange}
-                />
-                <label
-                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                  htmlFor="boleto"
-                >
-                  <span>
-                    BOLETO
-                    <br />
-                    <span
-                      className={`${styles.textCard} fw-normal`}
-                      style={{ color: "#f49516" }}
-                    >
-                      Será aprovado em 1 ou 2 dias úteis.
+            ) : (
+              ""
+            )}
+
+            {lojista.aceitaBoleto == "S" ? (
+              <div
+                className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                  formaPagamento === "boleto" ? styles.radioSelected : ""
+                }`}
+              >
+                <div className="form-check d-flex align-items-center">
+                  <input
+                    className="form-check-input mt-0"
+                    type="radio"
+                    name="formaPagamento"
+                    id="boleto"
+                    checked={formaPagamento === "boleto"}
+                    onChange={handleEnderecoChange}
+                  />
+                  <label
+                    className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                    htmlFor="boleto"
+                  >
+                    <span>
+                      BOLETO
+                      <br />
+                      <span
+                        className={`${styles.textCard} fw-normal`}
+                        style={{ color: "#f49516" }}
+                      >
+                        Será aprovado em 1 ou 2 dias úteis.
+                      </span>
                     </span>
-                  </span>
-                  <FaBarcode size={22} />
-                </label>
+                    <FaBarcode size={22} />
+                  </label>
+                </div>
               </div>
-            </div>
+            ) : (
+              ""
+            )}
           </section>
           <Link to="/carrinho/endereco">
             <FiArrowLeft size={18} /> Voltar para endereço

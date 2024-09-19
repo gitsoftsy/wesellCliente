@@ -26,8 +26,10 @@ export default function DetalhesProduto() {
   const [isActive, setActive] = useState(true);
 
   const getLink = async (link) => {
+    const url = decodeURIComponent(link)
+
     let jsonDados = {
-      link: link
+      link: url
     };
 
     if (path.pathname.includes("static")) {
