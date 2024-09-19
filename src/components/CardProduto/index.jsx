@@ -16,7 +16,6 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(produto);
     if (produto?.lojista && produto?.lojista?.possuiParcelamento === "S") {
       let valor = produto.precoPromocional / produto.lojista.maximoParcelas;
       let valorFixado = Math.floor(valor * 100) / 100;
