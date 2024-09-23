@@ -14,6 +14,7 @@ import Pedidos from "../pages/Pedidos";
 import FormasPagamento from "../pages/FormasPagamento";
 import Avaliacao from "../pages/Avaliacao";
 import Favoritos from "../pages/Favoritos";
+import ProdutosOpiniaoPendentes from "../pages/ProdutosOpiniaoPendentes";
 
 const router = createBrowserRouter([
   {
@@ -27,12 +28,13 @@ const router = createBrowserRouter([
       { path: "c/:categoria", element: <Produtos /> },
       { path: "minha-conta", element: <DadosPessoais /> },
       { path: "minha-conta/pedidos", element: <Pedidos /> },
+      { path: "minha-conta/pedidos/avaliar", element: <ProdutosOpiniaoPendentes /> },
       { path: "carrinho", element: <Carrinho /> },
       { path: "signup", element: <CreateAccount /> },
       { path: "carrinho/endereco", element: <Endereco /> },
       { path: "carrinho/endereco/pagamentos", element: <FormasPagamento /> },
       { path: "favoritos", element: <Favoritos /> },
-      { path: "minha-conta/pedidos/avaliacao/:idProduto", element: <Avaliacao /> },
+      { path: "minha-conta/pedidos/avaliacao/:idVendaItem", element: <Avaliacao /> },
     ],
   },
   {

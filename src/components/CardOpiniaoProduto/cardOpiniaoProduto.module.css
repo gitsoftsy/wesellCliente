@@ -1,0 +1,59 @@
+.cardOpiniaoProduto{
+    display: flex;
+    border-radius: 6px;
+    padding: 12px;
+    height: max-content;
+    width: 100%;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.12));
+    background-color: #Fff !important; 
+
+    p{
+        margin-bottom: 0px !important;
+    }
+}
+
+.boxImg {
+    display: flex;
+    justify-content: center;
+    grid-column: 1;
+    padding: 18px 0px;
+}
+
+.boxImg span {
+    height: 80px;
+    width: 80px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+}
+
+.boxImg img {
+    height: 100%;
+    width: 100%;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+
+.dadosPedido{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    place-items: center;
+    padding: 0px 24px;
+
+    span{
+        color: rgba(0, 0, 0, 0.55);
+    }
+}
+
+@media (max-width: 860px){
+    .boxImg {
+        display: flex;
+        grid-column: 1;
+        padding: 0px 0px;
+    }
+    .dadosPedido{
+        display: grid;
+        grid-template-columns: 1fr; 
+        place-items: start;
+    }
+}

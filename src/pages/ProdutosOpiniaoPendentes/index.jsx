@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
+import CardOpiniaoProduto from "../../components/CardOpiniaoProduto";
+import styles from "./produtosOpiniaoPendentes.module.css";
 import { url_base } from "../../services/apis";
-import styles from "./pedidos.module.css";
 import axios from "axios";
-import CardCompra from "../../components/CardCompra";
 import { toast } from "react-toastify";
-import CardOpiniaoPendente from "../../components/CardOpiniaoPendente";
-
-export default function Pedidos() {
-  const [loading, setLoading] = useState(false);
+export default function ProdutosOpiniaoPendentes() {
   const [pedidos, setPedidos] = useState([]);
-  // const [avaliacaoPendente, setAvaliacaoPendente] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -34,16 +31,14 @@ export default function Pedidos() {
         });
     }
     getPedidos();
-  }, []);
-
+  }, [setPedidos]);
   return (
     <div className={styles.containerHistorico}>
       <section className={`${styles.containerCli} ${styles.contentHistorico}`}>
         <div className={styles.headHistorico}>
-          <h2>Pedidos</h2>
+          <h2>Opiniões</h2>
         </div>
         <div className={styles.cardsPedidos}>
-          <CardOpiniaoPendente quantidade={2} />
           {loading && (
             <>
               <div className="card placeholderWave" aria-hidden="true">
@@ -90,14 +85,15 @@ export default function Pedidos() {
               </div>
             </>
           )}
-
           {pedidos !=
           "Nenhum resultado encontrado para os parâmetros informados."
             ? pedidos.map((pedido) => (
-                <CardCompra
-                  key={pedido.idVendaItem}
-                  pedido={pedido}
-                  status="E"
+                <CardOpiniaoProduto 
+                key={pedido.idVendaItem}
+                imagemProduto={pedido.imagem}
+                nomeProduto={pedido.nomeProduto}
+                dataCompra={pedido.dataVenda}
+                idProduto={pedido.idProduto}
                 />
               ))
             : ""}
