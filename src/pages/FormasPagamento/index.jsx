@@ -33,7 +33,6 @@ export default function FormasPagamento() {
     const products = JSON.parse(productsInCart) || [];
 
     setLojista(products[0].lojista);
-    console.log(products[0].lojista);
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -68,7 +67,7 @@ export default function FormasPagamento() {
               </h5>
             </div>
 
-            {lojista.aceitaCartao == "S" ? (
+            {lojista.aceitaCartao == "S" && (
               <div
                 className={`${styles.cardEndereco} card rounded-1 px-3  ${
                   formaPagamento === "cartao" ? styles.radioSelected : ""
@@ -219,10 +218,8 @@ export default function FormasPagamento() {
                   </form>
                 )}
               </div>
-            ) : (
-              ""
             )}
-            {lojista.aceitaPix == "S" ? (
+            {lojista.aceitaPix == "S" && (
               <div
                 className={`${styles.cardEndereco} card rounded-1 px-3  ${
                   formaPagamento === "pix" ? styles.radioSelected : ""
@@ -254,11 +251,8 @@ export default function FormasPagamento() {
                   </label>
                 </div>
               </div>
-            ) : (
-              ""
             )}
-
-            {lojista.aceitaBoleto == "S" ? (
+            {lojista.aceitaBoleto == "S" && (
               <div
                 className={`${styles.cardEndereco} card rounded-1 px-3  ${
                   formaPagamento === "boleto" ? styles.radioSelected : ""
@@ -291,8 +285,6 @@ export default function FormasPagamento() {
                   </label>
                 </div>
               </div>
-            ) : (
-              ""
             )}
           </section>
           <Link to="/carrinho/endereco">
