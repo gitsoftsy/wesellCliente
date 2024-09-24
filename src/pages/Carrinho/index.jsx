@@ -249,6 +249,13 @@ export default function Carrinho() {
         </div>
         {produtosCarrinho.length > 0 ? (
           <ResumoPedido
+            dadosFrete={{
+              cepCd: produtosCarrinho[0].lojista.cepCd,
+              altura: produtosCarrinho[0].altura,
+              largura: produtosCarrinho[0].largura,
+              profundidade: produtosCarrinho[0].profundidade,
+              peso: produtosCarrinho[0].peso,
+            }}
             continuarCompra={continuarCompra}
             total={total}
             disabled={false}

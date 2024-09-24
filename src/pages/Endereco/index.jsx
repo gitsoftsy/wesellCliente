@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./endereco.module.css";
 import ReactInputMask from "react-input-mask";
 import {
   MdOutlineAddLocation,
   MdOutlineEditLocation,
-  // MdOutlineLocalShipping,
+  MdOutlineLocalShipping,
   MdOutlineLocationOn,
   MdSaveAlt,
 } from "react-icons/md";
@@ -12,10 +12,9 @@ import { FiArrowLeft } from "react-icons/fi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido";
-// import { apiFrete } from "../../services/apis";
-// import formatPriceBR from "../../hooks/formatPrice";
-import { url_base } from "../../services/apis";
+import { apiFrete, url_base } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
+import formatPriceBR from "../../hooks/formatPrice";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -23,8 +22,10 @@ export default function Endereco() {
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [total, setTotal] = useState(0);
+  const [frete, setFrete] = useState(null);
   const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(null);
+  const [valorFrete, setValorFrete] = useState(null);
   const [exibirFormulario, setExibirFormulario] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [produtos, setProdutos] = useState([]);
@@ -41,11 +42,58 @@ export default function Endereco() {
     municipio: "",
   });
 
+  const firtsRender = useRef(false);
+
   const { client } = useContexts();
   const navigate = useNavigate();
 
   function limparMascara(valor) {
     return valor ? valor.replace(/[^\d]+/g, "") : "";
+  }
+
+  async function calculaFrete(products, cep) {
+    let objetoApi = {
+      from: {
+        postal_code: products[0].lojista.cepCd,
+      },
+      to: {
+        postal_code: limparMascara(cep),
+      },
+      package: {
+        height: products[0].altura,
+        width: products[0].largura,
+        length: products[0].profundidade,
+        weight: products[0].peso,
+      },
+    };
+
+    try {
+      const response = await axios.post(apiFrete, objetoApi);
+
+      if (response.data.sucesso) {
+        const fretes = response.data.retorno;
+
+        const freteMaiorValor = fretes
+          .filter((item) => !item.error)
+          .reduce(
+            (maxFrete, currentFrete) => {
+              return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
+                ? currentFrete
+                : maxFrete;
+            },
+            { price: "0.00" }
+          );
+
+        setFrete(freteMaiorValor);
+        setValorFrete(freteMaiorValor.price);
+      } else {
+        console.error(response.data);
+        return null;
+      }
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   }
 
   useEffect(() => {
@@ -76,6 +124,8 @@ export default function Endereco() {
           setAddresses(response.data);
           setEnderecoSelecionado(response.data[0].idClienteEndereco);
           setEndereco(response.data[0]);
+
+          await calculaFrete(products, response.data[0].cep);
         } else {
           setExibirFormulario(true);
         }
@@ -89,9 +139,20 @@ export default function Endereco() {
     getAddress();
   }, []);
 
-  const handleEnderecoChange = (id, item) => {
+  useEffect(() => {
+    if (firtsRender.current) {
+      firtsRender.current = false;
+      return;
+    }
+
+    setTotal(subtotal + valorFrete);
+  }, [valorFrete]);
+
+  const handleEnderecoChange = async (id, item) => {
     setEnderecoSelecionado(id);
     setEndereco(item);
+
+    await calculaFrete(produtos, item.cep);
   };
 
   const handleSalvarEndereco = async (e) => {
@@ -570,7 +631,7 @@ export default function Endereco() {
               </>
             )}
           </section>
-          {/* {frete && (
+          {frete && (
             <section className={`${styles.cardItensCarrinho} card`}>
               <div className={styles.titleCarrinho}>
                 <h5 className="d-flex align-items-center gap-2">
@@ -595,60 +656,59 @@ export default function Endereco() {
                 </div>
               </div>
 
-              {frete && (
-                <div
-                  key={frete.id}
-                  className={`${styles.cardEndereco} card rounded-1 px-3 py-2 ${styles.radioSelected}`}
-                >
-                  <div className="form-check d-flex align-items-center py-3 mb-0">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name={frete.name}
-                      id={frete.name}
-                      checked={true}
-                    />
-                    <label
-                      className={`ms-2 pe-2 form-check-label col-12 d-flex justify-content-between`}
-                      htmlFor={frete.name}
-                    >
-                      <div className="col">
-                        <img
-                          src={frete?.company?.picture}
-                          alt={frete?.company?.name}
-                          className={styles.imgFrete}
-                        />
-                      </div>
+              <div
+                key={frete.id}
+                className={`${styles.cardEndereco} card rounded-1 px-3 py-2 ${styles.radioSelected}`}
+              >
+                <div className="form-check d-flex align-items-center py-3 mb-0">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name={frete.name}
+                    id={frete.name}
+                    checked={true}
+                  />
+                  <label
+                    className={`ms-2 pe-2 form-check-label col-12 d-flex justify-content-between`}
+                    htmlFor={frete.name}
+                  >
+                    <div className="col">
+                      <img
+                        src={frete?.company?.picture}
+                        alt={frete?.company?.name}
+                        className={styles.imgFrete}
+                      />
+                    </div>
 
-                      <div className="col">
-                        <p className="mb-0">{frete?.name}</p>
-                      </div>
+                    <div className="col">
+                      <p className="mb-0">{frete?.name}</p>
+                    </div>
 
-                      <div className="col">
-                        <p className="mb-0">
-                          {frete?.delivery_range?.min} -{" "}
-                          {frete?.delivery_range?.max} dias úteis
-                        </p>
-                      </div>
+                    <div className="col">
+                      <p className="mb-0">
+                        {frete?.delivery_range?.min} -{" "}
+                        {frete?.delivery_range?.max} dias úteis
+                      </p>
+                    </div>
 
-                      <div className="col text-end">
-                        <p className="fw-semibold mb-0">
-                          {formatPriceBR(frete?.price)}
-                        </p>
-                      </div>
-                    </label>
-                  </div>
+                    <div className="col text-end">
+                      <p className="fw-semibold mb-0">
+                        {formatPriceBR(frete?.price)}
+                      </p>
+                    </div>
+                  </label>
                 </div>
-              )}
+              </div>
             </section>
-          )} */}
+          )}
         </div>
         <ResumoPedido
+          showCalculaFrete={false}
           disabled={exibirFormulario}
           continuarCompra={irParaPagamento}
-          total={subtotal}
+          total={total || subtotal}
           subtotal={subtotal}
-          frete={null}
+          valorFrete={frete?.price ?? null}
           totalProdutos={quantidadeTotalProdutos}
         />
       </section>
