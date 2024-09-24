@@ -43,7 +43,11 @@ export default function Pedidos() {
           <h2>Pedidos</h2>
         </div>
         <div className={styles.cardsPedidos}>
-          <CardOpiniaoPendente quantidade={2} />
+          {pedidos.length > 0 && pedidos[pedidos.length - 1].totalAvaliacaoNull > 0 && (
+            <CardOpiniaoPendente
+              quantidade={pedidos[pedidos.length - 1].totalAvaliacaoNull}
+            />
+          )}
           {loading && (
             <>
               <div className="card placeholderWave" aria-hidden="true">
@@ -94,7 +98,7 @@ export default function Pedidos() {
           {pedidos !=
           "Nenhum resultado encontrado para os parâmetros informados."
             ? pedidos.map((pedido) => (
-                <CardCompra
+                pedido.idProduto != null && <CardCompra
                   key={pedido.idVendaItem}
                   pedido={pedido}
                   status="E"

@@ -26,7 +26,7 @@ export default function ProdutosOpiniaoPendentes() {
       // eslint-disable-next-line no-unused-vars
       const userJson = JSON.parse(userStorage);
       axios
-        .get(url_base + `/produtos/clientes?idCliente=` + userJson.id)
+        .get(url_base + `/produtos/semAvaliacao?idCliente=` + userJson.id)
         // .get(url_base + `/produtos/clientes?idCliente=` + 7)
         .then((response) => {
           const dados = response.data;
