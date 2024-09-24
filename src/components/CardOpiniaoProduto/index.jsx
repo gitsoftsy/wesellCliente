@@ -17,7 +17,14 @@ export default function CardOpiniaoProduto({
   const [estrelas, setEstrelas] = useState(0);
   const [image, setImage] = useState("https://api.we-sell.store/Imagens/uploads/produtos/18/imagemProduto_20240813192920316.png");
 
-  useEffect(() => {
+  function formatarData(dataISO) {
+    const data = new Date(dataISO);
+    const opcoes = { day: 'numeric', month: 'short' };
+    
+    // Formata a data para o estilo desejado
+    return new Intl.DateTimeFormat('pt-BR', opcoes).format(data);
+  }
+  useEffect(() => {    
     axios
       .get(url_base + `/imagens/produto/` + idProduto)
       .then((response) => {
@@ -58,7 +65,7 @@ export default function CardOpiniaoProduto({
           </span>
         </div>
       <div className={styles.dadosPedido}>
-        <p>Cabo Adaptador Displayport Vga Conversor Vídeo Para Dell Hp</p>
+        <p>{nomeProduto}</p>
         <StarsAvaliation
           font={40}
           color={"#f49516"}
@@ -66,7 +73,7 @@ export default function CardOpiniaoProduto({
           setEstrelas={(e) => setEstrelas(e)}
           onclick={() => handleAvaliation()}
         />
-        <span>Comprado em 24 de fev.</span>
+        <span>Comprado em {formatarData(dataCompra)}</span>
       </div>
     </div>
   );
