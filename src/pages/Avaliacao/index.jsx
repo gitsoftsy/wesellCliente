@@ -70,7 +70,7 @@ export default function Avaliacao() {
                 <span className={styles.txt}>Ruim</span>
                 <StarsAvaliation
                   font={32}
-                  color={"#3483FA"}
+                  color={"#f49516"}
                   estrelas={estrelas}
                   setEstrelas={(e) => setEstrelas(e)}
                 />

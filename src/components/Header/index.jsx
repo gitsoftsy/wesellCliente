@@ -10,9 +10,10 @@ import useContexts from "../../hooks/useContext";
 
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [nomeUsuario, setNomeUsuario] = useState("");
   const navigate = useNavigate();
-  const { setValueSearch, categoria, client,setClient, clientLogado } = useContexts();
+  const { setValueSearch, categoria, client, setClient, clientLogado } =
+    useContexts();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -28,10 +29,14 @@ export default function Header() {
   };
 
   useEffect(() => {
+    if(client){
+      setNomeUsuario(client.nomeSocial ? client.nomeSocial.split(' ')[0] : client.nomeCompleto.split(' ')[0])
+    }
+
     if (categoria) {
       setSearchTerm("");
     }
-  }, [categoria]);
+  }, [categoria, setNomeUsuario, client]);
 
   return (
     <header className={styles.header}>
@@ -54,7 +59,7 @@ export default function Header() {
 
           <span className={styles.areaIconCar}>
             <span className="dropdown-center">
-              <p>Olá, {client ? client.nomeSocial : "Bem vindo"}</p>
+              <p>Olá, {client ? nomeUsuario : "Bem vindo"}</p>
               <p
                 className={`${styles.dropdownToggle} dropdown-toggle`}
                 data-bs-auto-close="outside"

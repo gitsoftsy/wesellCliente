@@ -61,7 +61,7 @@ export default function CardOpiniaoProduto({
         <p>Cabo Adaptador Displayport Vga Conversor Vídeo Para Dell Hp</p>
         <StarsAvaliation
           font={40}
-          color={"#3483FA"}
+          color={"#f49516"}
           estrelas={estrelas}
           setEstrelas={(e) => setEstrelas(e)}
           onclick={() => handleAvaliation()}
