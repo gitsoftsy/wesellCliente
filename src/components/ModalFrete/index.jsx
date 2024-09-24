@@ -12,8 +12,6 @@ export default function ModalFrete({ produto }) {
   const [loading, setLoading] = useState(false);
   const [frete, setFrete] = useState(null);
   const [cep, setCep] = useState("");
-  const token =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWUzOGRjMzMzNDg4MmQxYzhjODM2OWE3ZjNjZDEyZmQ1N2M2OGIxYzQyYjE0ZDYyN2I1MDNmYTllZWZlN2ZjOTU0ZmQzODNkYWQ3ZGY4OTkiLCJpYXQiOjE3MjU5ODA5NDcuMDkzMjk1LCJuYmYiOjE3MjU5ODA5NDcuMDkzMjk3LCJleHAiOjE3NTc1MTY5NDcuMDc2NjIsInN1YiI6IjljODE2YzRiLTc4MTAtNDZhNi1iYjY0LTM1M2EzYmY4OGRiMiIsInNjb3BlcyI6WyJzaGlwcGluZy1jYWxjdWxhdGUiXX0.hkTp2oyptBC1jCxjl94vIOgxLiwa8Nk7VDBEfC-yVXzvgS7F17sP-DRt2lCosx8cYO2mkyS4_E9zUcBF_eY3Impp12Z8u4lBXusPeInnFRWDwOoYRj2g-nWGsNz48WjGOeC1IgRmOQBFPKwpBa9L5L_uMhot2NGL_HpBmGK0MY6lASEgxpF9koXfDnSfRniB0ryZ5vwVUAwvZwqklRnS03VFBKfQnHL7LXpV4dUGuNU-DWrmqQzmqzUPNZD8MjQtvfymPr2mjeTYdNv-WqnYGVoAC_nYEi-aUnq5OCNzJU4je8QSpa-Iu3e2J97LIW4chvW1Tc6jdjEaYHPON0q9M7RPP8Kb7H_ms20Z9x_CTnYR7_E3fK8m_5Xf6dFf8JYo3FPYOPiFCpkQlLh63ylvBgCZDRe84oiqOwG3Hq8JmbqYZeG1df8PyMcRUPESS1u6LjVqBgzaqYHeFjzmOivdttfxNJJWzioWa0KMxXVDg4uQ5ZKvI-oPtLeTVhKciP1KHufjDEQYS_vGOgliP0XdPl1t5Zl7Nj89_hq5XVZ_k6q-GB1qYdqx-Lt3DSHNd855JJUKyjXqLQgydJQ0Y906ufCzNMMgQixYjfM__BL4yTT079ypXBdx3DMbeyXH-Dmd1lai_t-prlyfU18Er7niTDvj-KlYRVC43cJbSobuSMY";
 
   function limparMascara(valor) {
     return valor ? valor.replace(/[^\d]+/g, "") : "";
@@ -52,33 +50,42 @@ export default function ModalFrete({ produto }) {
     };
 
     try {
-      const response = await axios.post(apiFrete, objetoApi, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(apiFrete, objetoApi);
 
-      const fretes = response.data;
+      if (response.data.sucesso) {
+        const fretes = response.data.retorno;
 
-      const freteMaiorValor = fretes
-        .filter((item) => !item.error)
-        .reduce(
-          (maxFrete, currentFrete) => {
-            return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
-              ? currentFrete
-              : maxFrete;
-          },
-          { price: "0.00" }
-        );
+        const freteMaiorValor = fretes
+          .filter((item) => !item.error)
+          .reduce(
+            (maxFrete, currentFrete) => {
+              return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
+                ? currentFrete
+                : maxFrete;
+            },
+            { price: "0.00" }
+          );
 
-      setFrete(freteMaiorValor);
-      setLoading(false);
+        setFrete(freteMaiorValor);
+        setLoading(false);
+        console.log(fretes);
+        console.log(freteMaiorValor);
+      } else {
+        setLoading(false);
+        console.error(response.data);
+        return null;
+      }
     } catch (error) {
       setLoading(false);
       console.error(error);
       return null;
     }
+  }
+
+  function resetAddress() {
+    setEndereco(null);
+    setFrete(null);
+    setCep("");
   }
 
   return (
@@ -103,8 +110,8 @@ export default function ModalFrete({ produto }) {
                     aria-label="Close"
                   ></button>
                 </span>
-                <p className="mt-4 fs-6 d-flex align-items-center justify-content-center">
-                  <MdOutlineLocationOn size={22} className="me-1" />
+                <p className="mt-4 fs-6 d-flex align-items-center">
+                  <MdOutlineLocationOn size={20} className="me-1" />
                   {endereco?.logradouro
                     ? `${endereco.logradouro}, ${endereco.bairro} -
                   ${endereco.localidade} - ${endereco.uf}`
@@ -164,7 +171,11 @@ export default function ModalFrete({ produto }) {
                   </div>
                 </div>
                 <div className="col text-center mt-4">
-                  <button type="button" className={styles.btnCalc}>
+                  <button
+                    type="button"
+                    onClick={resetAddress}
+                    className="btn btn-primary btn-sm"
+                  >
                     Calcular novamente
                   </button>
                 </div>
@@ -186,7 +197,7 @@ export default function ModalFrete({ produto }) {
                   Saiba os prazos de entrega e as formas de envio.
                 </p>
                 <form onSubmit={buscaCep}>
-                  <div className="row mt-4">
+                  <div className="col-12 row">
                     <div className="col-12 col-md-7 mb-3 mb-md-0">
                       <label htmlFor="cep" className="ps-1">
                         CEP
@@ -203,7 +214,7 @@ export default function ModalFrete({ produto }) {
                         required
                       />
                     </div>
-                    <div className="col-12 col-md-auto d-flex align-items-end">
+                    <div className="col-12 col-md-5 d-flex align-items-end">
                       {loading ? (
                         <button
                           className="col-12 btn btn-primary px-4"

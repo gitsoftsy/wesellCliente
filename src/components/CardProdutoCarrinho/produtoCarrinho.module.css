@@ -68,6 +68,7 @@
 @media (width < 768px) {
   .cardItemCarrinho {
     flex-wrap: wrap;
+    height: 170px;
     padding: 0;
   }
   .areaImg {

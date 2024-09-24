@@ -14,11 +14,17 @@
 }
 
 .infoResumo span {
+  min-height: 55px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 1.1em;
   padding: 0.8em 1.5em;
   border-bottom: 1px solid var(--cinza);
+}
+
+#calculaFrete {
+  width: 65%;
 }
 
 .infoResumo span p {
@@ -53,6 +59,9 @@
   }
 }
 @media (width < 768px) {
+  #calculaFrete {
+    width: 50%;
+  }
   .infoResumo span {
     padding: 0.8em 1.5em;
   }
