@@ -15,8 +15,8 @@ export default function ProdutosOpiniaoPendentes() {
       const userStorage = localStorage.getItem("wesell-user-comprador");
       const userJson = JSON.parse(userStorage);
       axios
-        .get(url_base + `/produtos/clientes?idCliente=` + userJson.id)
-        // .get(url_base + `/produtos/clientes?idCliente=` + 1)
+        .get(url_base + `/produtos/semAvaliacao?idCliente=` + userJson.id)
+        // .get(url_base + `/produtos/clientes?idCliente=` + 7)
         .then((response) => {
           const dados = response.data;
           setPedidos(dados);
@@ -31,7 +31,33 @@ export default function ProdutosOpiniaoPendentes() {
         });
     }
     getPedidos();
-  }, [setPedidos]);
+  }, [setPedidos, setLoading]);
+
+  const handleCard = () => {
+    async function getPedidos() {
+      setLoading(true);
+      const userStorage = localStorage.getItem("wesell-user-comprador");
+      const userJson = JSON.parse(userStorage);
+      axios
+        .get(url_base + `/produtos/semAvaliacao?idCliente=` + userJson.id)
+        // .get(url_base + `/produtos/clientes?idCliente=` + 7)
+        .then((response) => {
+          const dados = response.data;
+          setPedidos([])
+          setPedidos(dados);
+          console.log(dados);
+        })
+        .catch((error) => {
+          toast.error("Erro na requisição.");
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+    getPedidos();
+  };
+
   return (
     <div className={styles.containerHistorico}>
       <section className={`${styles.containerCli} ${styles.contentHistorico}`}>
@@ -88,12 +114,14 @@ export default function ProdutosOpiniaoPendentes() {
           {pedidos !=
           "Nenhum resultado encontrado para os parâmetros informados."
             ? pedidos.map((pedido) => (
-                <CardOpiniaoProduto 
-                key={pedido.idVendaItem}
-                imagemProduto={pedido.imagem}
-                nomeProduto={pedido.nomeProduto}
-                dataCompra={pedido.dataVenda}
-                idProduto={pedido.idProduto}
+                <CardOpiniaoProduto
+                  key={pedido.idVendaItem}
+                  imagemProduto={pedido.imagem}
+                  nomeProduto={pedido.nomeProduto}
+                  dataCompra={pedido.dataVenda}
+                  idProduto={pedido.idProduto}
+                  idVendaItem={pedido.idVendaItem}
+                  funcReload={handleCard}
                 />
               ))
             : ""}

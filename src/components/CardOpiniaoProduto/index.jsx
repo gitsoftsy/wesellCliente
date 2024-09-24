@@ -5,12 +5,14 @@ import styles from "./cardOpiniaoProduto.module.css";
 import StarsAvaliation from "../StarsAvaliation";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis";
+import { toast } from "react-toastify";
 
 export default function CardOpiniaoProduto({
   imagemProduto,
   nomeProduto,
   dataCompra,
   idProduto,
+  idVendaItem, funcReload
 }) {
   const [estrelas, setEstrelas] = useState(0);
   const [image, setImage] = useState("");
@@ -25,7 +27,28 @@ export default function CardOpiniaoProduto({
       .catch((error) => {
         console.log(error.message);
       });
-  });
+  }, [setImage, idProduto]);
+
+  const handleAvaliation = () => {
+    const objeto = {
+      idVendaItem: idVendaItem,
+      avaliacao: estrelas,
+      descricaoAvaliacao: '',
+    };
+    axios
+      .put(url_base + "/vendaItens/avaliacao/" + idVendaItem, objeto)
+      .then((response) => {
+        console.log("====================================");
+        console.log(response);
+        console.log("====================================");
+        toast.success(`Avaliado com sucesso!`);
+        funcReload()
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error.response.data.message);
+      });
+  };
 
   return (
     <div className={styles.cardOpiniaoProduto}>
@@ -41,6 +64,7 @@ export default function CardOpiniaoProduto({
           color={"#3483FA"}
           estrelas={estrelas}
           setEstrelas={(e) => setEstrelas(e)}
+          onclick={() => handleAvaliation()}
         />
         <span>Comprado em 24 de fev.</span>
       </div>

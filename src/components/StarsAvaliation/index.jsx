@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'; 
 import styles from './starsAvaliation.module.css';
 
-const StarsAvaliation = ({ color, font, setEstrelas, estrelas }) => {
+const StarsAvaliation = ({ color, font, setEstrelas, estrelas, onclick }) => {
   const styleCor = {
     color: color,
     fontSize: font,
@@ -13,6 +13,7 @@ const StarsAvaliation = ({ color, font, setEstrelas, estrelas }) => {
 
   const handleClick = (index) => {
     setEstrelas(index + 1);
+    onclick()
   };
 
   const listaEstrelas = [];
@@ -41,6 +42,7 @@ StarsAvaliation.propTypes = {
   font: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), 
   setEstrelas: PropTypes.func.isRequired,
   estrelas: PropTypes.number.isRequired, 
+  onclick: PropTypes.func
 };
 
 export default StarsAvaliation;
