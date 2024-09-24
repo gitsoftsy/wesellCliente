@@ -18,7 +18,7 @@ export default function Pedidos() {
       const userStorage = localStorage.getItem("wesell-user-comprador");
       const userJson = JSON.parse(userStorage);
       axios
-        .get(url_base + `/produtos/clientes?idCliente=` + userJson.id)
+        .get(url_base + `/produtos/clientes?idCliente=` + userJson.id ? userJson.id : userJson.idCliente)
         // .get(url_base + `/produtos/clientes?idCliente=` + 1)
         .then((response) => {
           const dados = response.data;
