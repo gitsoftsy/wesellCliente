@@ -164,8 +164,10 @@ export default function DadosPessoais() {
     await axios
       .put(url_base + `/clientes/${client.id ? client.id : client.idCliente}`, formDataLimpo)
       .then((response) => {
-        storageClient(response.data);
-        setClient(response.data);
+        let resData = response.data
+        resData.id = response.data.idCliente
+        storageClient(resData);
+        setClient(resData);
         toast.success("Atualizado com sucesso.");
       })
       .catch(() => {
