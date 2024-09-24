@@ -61,8 +61,10 @@ function WizardForm() {
     await axios
       .post(url_base + "/clientes", formDataLimpo)
       .then((response) => {
-        storageClient(response.data);
-        setClient(response.data);
+        let resData = response.data
+        resData.id = response.data.idCliente
+        storageClient(resData);
+        setClient(resData);
         setLoading(false);
         toast.success(`Cadastro realizado com sucesso!`);
         navigate("/");

@@ -17,13 +17,19 @@ export default function Pedidos() {
       setLoading(true);
       const userStorage = localStorage.getItem("wesell-user-comprador");
       const userJson = JSON.parse(userStorage);
-      axios
-        .get(url_base + `/produtos/clientes?idCliente=` + userJson.id ? userJson.id : userJson.idCliente)
+      let idSearch = userJson.id != undefined ? userJson.id : userJson.idCliente
+      await axios
+      ///produtos/clientes?idCliente=14
+        .get(url_base + `/produtos/clientes?idCliente=` + idSearch)
         // .get(url_base + `/produtos/clientes?idCliente=` + 1)
         .then((response) => {
           const dados = response.data;
           setPedidos(dados);
-          console.log(dados);
+          console.log(response);
+          console.log(response.data);
+          console.log( idSearch);
+          console.log( userJson.id);
+          console.log( userJson.idCliente);
         })
         .catch((error) => {
           toast.error("Erro na requisição.");
@@ -96,7 +102,7 @@ export default function Pedidos() {
           )}
 
           {pedidos !=
-          "Nenhum resultado encontrado para os parâmetros informados."
+          "Nenhum resultado encontrado para os parâmetros informados." && pedidos.length >0
             ? pedidos.map((pedido) => (
                 pedido.idProduto != null && <CardCompra
                   key={pedido.idVendaItem}

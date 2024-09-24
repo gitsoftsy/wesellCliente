@@ -45,7 +45,7 @@ export default function DadosPessoais() {
           const dados = response.data;
 
           setFormData({
-            idCliente: client.id,
+            idCliente: client.id ? client.id : client.idCliente,
             nomeCompleto: dados.nomeCompleto,
             nomeSocial: dados.nomeSocial,
             email: dados.email,
@@ -133,7 +133,7 @@ export default function DadosPessoais() {
     }
 
     await axios
-      .put(url_base + `/clientes/${client.id}`, formDataLimpo)
+      .put(url_base + `/clientes/${client.id ? client.id : client.idCliente}`, formDataLimpo)
       .then(() => {
         toast.success("Alterado com sucesso.");
       })
@@ -162,13 +162,15 @@ export default function DadosPessoais() {
       }
     }
     await axios
-      .put(url_base + `/clientes/${client.id}`, formDataLimpo)
+      .put(url_base + `/clientes/${client.id ? client.id : client.idCliente}`, formDataLimpo)
       .then((response) => {
         storageClient(response.data);
         setClient(response.data);
         toast.success("Atualizado com sucesso.");
       })
       .catch(() => {
+        console.log(formDataLimpo)
+        console.log(client.id ? client.id : client.idCliente)
         toast.error("Erro ao atualizar dados.");
       })
       .finally(() => {
