@@ -56,15 +56,15 @@ export default function CardCompra({ pedido, status }) {
   function formatarData(dataISO) {
     const data = new Date(dataISO);
     const hoje = new Date();
-    const options = { day: 'numeric', month: 'long' }; // Dia e mês por extenso
-  
-    let dataFormatada = new Intl.DateTimeFormat('pt-BR', options).format(data);
-  
+    const options = { day: "numeric", month: "long" }; // Dia e mês por extenso
+
+    let dataFormatada = new Intl.DateTimeFormat("pt-BR", options).format(data);
+
     // Verifica se o ano da data é diferente do ano atual
     if (data.getFullYear() < hoje.getFullYear()) {
       dataFormatada += ` de ${data.getFullYear()}`;
     }
-  
+
     return dataFormatada;
   }
 
@@ -87,7 +87,9 @@ export default function CardCompra({ pedido, status }) {
             <h2 className={styles.statusEntrega}>Chegou dia 15 de junho</h2>
             <span className={styles.nomeProduto}>{pedido.nomeProduto}</span>
             <span className={styles.quantidadeProduto}>
-              {pedido.quantidade} unidade
+              {pedido.quantidade > 1
+                ? `${pedido.quantidade} unidades`
+                : `1 unidade`}
             </span>
           </div>
           <div className={styles.boxVendedor}>
@@ -103,12 +105,15 @@ export default function CardCompra({ pedido, status }) {
           <Link to="" className={styles.btnCompra}>
             Ver produto
           </Link>
-          <Link
-            to={`/minha-conta/pedidos/avaliacao/${pedido.idVendaItem}`}
-            className={styles.comprarMais}
-          >
-            Avaliar
-          </Link>
+
+          {pedido.avaliacao == null && (
+            <Link
+              to={`/minha-conta/pedidos/avaliacao/${pedido.idVendaItem}`}
+              className={styles.comprarMais}
+            >
+              Avaliar
+            </Link>
+          )}
         </div>
       </div>
     </article>

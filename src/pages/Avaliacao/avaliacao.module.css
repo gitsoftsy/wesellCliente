@@ -33,9 +33,14 @@
     text-align: center;
 }
 
-.cardProduto img {
+.boxImg{
     border-radius: 100%;
+    height: auto;
     width: 160px;
+}
+
+.cardProduto img {
+    width: 100%;
 }
 
 .cardProduto span {

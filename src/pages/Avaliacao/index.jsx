@@ -63,7 +63,9 @@ export default function Avaliacao() {
         {produto != "" ? (
           <>
             <div className={`${styles.cardProduto}`}>
-              <img src={imgProduto} alt="Imagem do produto" />
+              <div className={`${styles.boxImg}`}>
+                <img src={imgProduto} alt="Imagem do produto" />
+              </div>
               <h1>O que você achou do produto?</h1>
               <span>{produto.nomeProduto}</span>
               <div className={`${styles.avaliacao}`}>

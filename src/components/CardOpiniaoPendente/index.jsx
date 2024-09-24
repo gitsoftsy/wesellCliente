@@ -10,7 +10,7 @@ export default function CardOpiniaoPendente({ quantidade }) {
         <div className={styles.iconStar}>
           <img src={starImg} alt="Imagem de estrelas" />
         </div>
-        <p className={styles.itensPendentes}>{quantidade} produtos esperam sua opinião</p>
+        <p className={styles.itensPendentes}>{quantidade == 1 ? `1 produto espera sua opinião` : `${quantidade} produtos esperam sua opinião`} </p>
       </div>
 
       <Link className={styles.opinar} to="/minha-conta/pedidos/avaliar">Opinar</Link>
