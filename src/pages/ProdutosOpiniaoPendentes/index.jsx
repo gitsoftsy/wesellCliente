@@ -25,12 +25,15 @@ export default function ProdutosOpiniaoPendentes() {
       const userStorage = localStorage.getItem("wesell-user-comprador");
       // eslint-disable-next-line no-unused-vars
       const userJson = JSON.parse(userStorage);
+      let idUser = userJson.id ? userJson.id : userJson.idCliente
       axios
-        .get(url_base + `/produtos/semAvaliacao?idCliente=` + userJson.id ? userJson.id : userJson.idCliente)
+        .get(url_base + `/produtos/semAvaliacao?idCliente=` + idUser)
         // .get(url_base + `/produtos/clientes?idCliente=` + 7)
         .then((response) => {
           const dados = response.data;
           setPedidos(dados);
+          console.log(dados);
+          
         })
         .catch((error) => {
           toast.error("Erro na requisição.");
@@ -69,7 +72,7 @@ export default function ProdutosOpiniaoPendentes() {
               {/* Placeholder loading cards */}
             </>
           )}
-          {pedidos != "Nenhum resultado encontrado para os parâmetros informados." 
+          {pedidos != "Nenhum resultado encontrado para os parâmetros informados." && pedidos.length > 0
             ? pedidos.slice(0, visibleCount).map((pedido) => (
                 <div
                   key={pedido.idVendaItem}

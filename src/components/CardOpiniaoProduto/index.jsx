@@ -15,7 +15,7 @@ export default function CardOpiniaoProduto({
   idVendaItem, funcReload
 }) {
   const [estrelas, setEstrelas] = useState(0);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState("https://api.we-sell.store/Imagens/uploads/produtos/18/imagemProduto_20240813192920316.png");
 
   useEffect(() => {
     axios
