@@ -100,7 +100,7 @@
     text-align: center;
     width: auto;
     -webkit-font-smoothing: antialiased;
-    background-color: #3483fa;
+    background-color: rgba(244, 149, 22, 1);
     border-color: transparent;
     color: #fff;
 }
@@ -108,14 +108,15 @@
 .containerAvaliacao .btnSave:focus,
 .containerAvaliacao .btnSave:link,
 .containerAvaliacao .btnSave:visited {
-    background-color: #3483fa;
+    background-color: rgba(244, 149, 22, 1);
     border-color: transparent;
     color: #fff;
 }
 
 .containerAvaliacao .btnSave:after,
 .containerAvaliacao .btnSave:hover {
-    background-color: #2968c8;
+    background-color: rgba(244, 149, 22, 1);
+    border-color: transparent;
     color: #fff;
 }
 
@@ -125,7 +126,7 @@
     text-align: center;
     width: auto;
     -webkit-font-smoothing: antialiased;
-    color: #3483fa;
+    color: rgba(244, 149, 22, 1);
 }
 
 .btns {
