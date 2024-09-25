@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./endereco.module.css";
 import ReactInputMask from "react-input-mask";
 import {
   MdOutlineAddLocation,
   MdOutlineEditLocation,
-  MdOutlineLocalShipping,
   MdOutlineLocationOn,
   MdSaveAlt,
 } from "react-icons/md";
@@ -14,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido";
 import { url_base } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
-import formatPriceBR from "../../hooks/formatPrice";
 import { calculaFrete } from "../../hooks/calculaFrete";
 
 export default function Endereco() {
@@ -23,7 +21,6 @@ export default function Endereco() {
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [frete, setFrete] = useState(null);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(null);
   const [valorFrete, setValorFrete] = useState(null);
@@ -44,8 +41,6 @@ export default function Endereco() {
     municipio: "",
   });
 
-  const firtsRender = useRef(false);
-
   const { client } = useContexts();
   const navigate = useNavigate();
 
@@ -58,54 +53,12 @@ export default function Endereco() {
       const response = await calculaFrete(produtos, cep);
 
       if (response && response.length > 0) {
-        const primeiroFrete = response[0];
-        const todasPropriedadesIguais = response.every((item) => {
-          return (
-            item.name === primeiroFrete.name &&
-            item.delivery_range?.min === primeiroFrete.delivery_range?.min &&
-            item.delivery_range?.max === primeiroFrete.delivery_range?.max &&
-            item.company?.name === primeiroFrete.company?.name
-          );
-        });
-
         const totalFreteCalculado = response.reduce(
           (acc, item) => acc + item.price,
           0
         );
-
-        if (todasPropriedadesIguais) {
-          setFrete({
-            id: primeiroFrete.id,
-            picture: primeiroFrete.company.picture,
-            alt: primeiroFrete.company.name,
-            name: primeiroFrete.name,
-            delivery_range: primeiroFrete.delivery_range,
-            price: totalFreteCalculado,
-          });
-          setValorFrete(totalFreteCalculado);
-          console.log(response);
-          console.log(todasPropriedadesIguais);
-          console.log({
-            id: primeiroFrete.id,
-            picture: primeiroFrete.company.picture,
-            alt: primeiroFrete.company.name,
-            name: primeiroFrete.name,
-            delivery_range: primeiroFrete.delivery_range,
-            price: totalFreteCalculado,
-          });
-        } else {
-          console.log(response);
-          console.log(todasPropriedadesIguais);
-          console.log({
-            id: primeiroFrete.id,
-            picture: primeiroFrete.company.picture,
-            alt: primeiroFrete.company.name,
-            name: primeiroFrete.name,
-            delivery_range: primeiroFrete.delivery_range,
-            price: totalFreteCalculado,
-          });
-          console.log("As propriedades dos fretes retornados são diferentes.");
-        }
+        setValorFrete(totalFreteCalculado);
+        console.log(response);
       }
     } catch (erro) {
       console.log(erro);
@@ -119,7 +72,6 @@ export default function Endereco() {
     const products = JSON.parse(productsInCart) || [];
     setProdutos(products);
     setProdutosComFrete(productsFreight);
-    console.log(products)
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -129,8 +81,9 @@ export default function Endereco() {
       (acc, produto) => acc + produto.qtd,
       0
     );
-    setSubtotal(subtotalCalculado);
     setQuantidadeTotalProdutos(quantidadeTotal);
+    setSubtotal(subtotalCalculado);
+    setTotal(subtotalCalculado);
 
     async function getAddress() {
       try {
@@ -159,20 +112,9 @@ export default function Endereco() {
     getAddress();
   }, []);
 
-  useEffect(() => {
-    if (firtsRender.current) {
-      firtsRender.current = false;
-      return;
-    }
-
-    setTotal(subtotal + valorFrete);
-  }, [valorFrete]);
-
   const handleEnderecoChange = async (id, item) => {
     setEnderecoSelecionado(id);
     setEndereco(item);
-
-    console.log("entrou");
 
     await handleCalculaFrete(produtosComFrete, item.cep);
   };
@@ -307,20 +249,19 @@ export default function Endereco() {
   };
 
   function irParaPagamento() {
-    const dadosPagamento = {
+    const data = {
       endereco: endereco,
-      frete: frete,
       lojista: produtos[0].lojista,
       resumo: {
-        produtos: produtos,
-        total: total,
-        valorFrete: valorFrete,
-        subtotal: subtotal,
         qtdProdutos: quantidadeTotalProdutos,
+        qtdFretes: produtosComFrete.length,
+        subtotal: subtotal,
+        valorFrete: valorFrete,
+        total: total + valorFrete,
       },
     };
 
-    localStorage.setItem("@wesellOrderData", JSON.stringify(dadosPagamento));
+    localStorage.setItem("@wesellOrderData", JSON.stringify(data));
     navigate("pagamentos");
   }
 
@@ -656,7 +597,7 @@ export default function Endereco() {
               </>
             )}
           </section>
-          {frete && (
+          {/* {frete && (
             <section className={`${styles.cardItensCarrinho} card`}>
               <div className={styles.titleCarrinho}>
                 <h5 className="d-flex align-items-center gap-2">
@@ -725,16 +666,16 @@ export default function Endereco() {
                 </div>
               </div>
             </section>
-          )}
+          )} */}
         </div>
         <ResumoPedido
-          showCalculaFrete={false}
           disabled={exibirFormulario}
           continuarCompra={irParaPagamento}
-          total={total || subtotal}
+          quantidadeItens={quantidadeTotalProdutos}
+          quantidadeFretes={produtosComFrete.length}
           subtotal={subtotal}
-          valorFrete={frete?.price ?? null}
-          totalProdutos={quantidadeTotalProdutos}
+          total={total}
+          showAreaFrete={true}
         />
       </section>
     </div>

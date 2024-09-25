@@ -106,11 +106,11 @@ export default function FormasPagamento() {
                       />
                     </div>
 
-                    <div className="row mb-3">
+                    <div className="row">
                       <label htmlFor="expirationDate" className="form-label">
                         Data de vencimento
                       </label>
-                      <div className="col-md-6">
+                      <div className="col-md-6 mb-3">
                         <select className="form-select" name="mes" id="mes">
                           <option value="0" disabled selected>
                             Mês
@@ -122,7 +122,7 @@ export default function FormasPagamento() {
                           ))}
                         </select>
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-6 mb-3">
                         <select className="form-select" name="ano" id="ano">
                           <option value="0" disabled selected>
                             Ano
@@ -262,7 +262,6 @@ export default function FormasPagamento() {
         </div>
 
         <ResumoPedido
-          showCalculaFrete={false}
           disabled={formaPagamento === "cartao"}
           continuarCompra={() => {
             formaPagamento === "pix" ? setShowPix(true) : setShowBoleto(true);
@@ -270,7 +269,9 @@ export default function FormasPagamento() {
           total={orderData?.resumo.total}
           subtotal={orderData?.resumo.subtotal}
           valorFrete={orderData?.resumo.valorFrete}
-          totalProdutos={orderData?.resumo.qtdProdutos}
+          quantidadeFretes={orderData?.resumo.qtdFretes}
+          showAreaFrete={true}
+          quantidadeItens={orderData?.resumo.qtdProdutos}
         />
       </section>
       <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal} />

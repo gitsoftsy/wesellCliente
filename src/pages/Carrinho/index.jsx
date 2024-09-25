@@ -12,7 +12,7 @@ export default function Carrinho() {
   const [produtosComFrete, setProdutosComFrete] = useState([]);
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
   const [produtosSalvos, setProdutosSalvos] = useState([]);
-  const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
+  const [quantidadeItens, setQuantidadeItens] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const { clientLogado } = useContexts();
@@ -28,7 +28,7 @@ export default function Carrinho() {
       (acc, produto) => acc + produto.qtd,
       0
     );
-    setQuantidadeTotalProdutos(quantidadeTotal);
+    setQuantidadeItens(quantidadeTotal);
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -93,7 +93,7 @@ export default function Carrinho() {
         (acc, produto) => acc + produto.qtd,
         0
       );
-      setQuantidadeTotalProdutos(quantidadeTotal);
+      setQuantidadeItens(quantidadeTotal);
 
       return produtosFiltrados;
     });
@@ -121,7 +121,7 @@ export default function Carrinho() {
         (acc, produto) => acc + produto.qtd,
         0
       );
-      setQuantidadeTotalProdutos(quantidadeTotal);
+      setQuantidadeItens(quantidadeTotal);
 
       return novoCarrinho;
     });
@@ -152,7 +152,7 @@ export default function Carrinho() {
       (acc, produto) => acc + produto.qtd,
       0
     );
-    setQuantidadeTotalProdutos(quantidadeTotal);
+    setQuantidadeItens(quantidadeTotal);
   }
 
   function saveItem(produto) {
@@ -192,7 +192,7 @@ export default function Carrinho() {
         (acc, produto) => acc + produto.qtd,
         0
       );
-      setQuantidadeTotalProdutos(quantidadeTotal);
+      setQuantidadeItens(quantidadeTotal);
 
       return produtosFiltrados;
     });
@@ -214,7 +214,7 @@ export default function Carrinho() {
       }
     });
 
-    console.log(modeloProdutos)
+    console.log(modeloProdutos);
     setProdutosComFrete(modeloProdutos);
   }
 
@@ -296,12 +296,12 @@ export default function Carrinho() {
         </div>
         {produtosCarrinho.length > 0 ? (
           <ResumoPedido
-            produtosComFrete={produtosComFrete}
-            continuarCompra={continuarCompra}
-            total={total}
             disabled={false}
-            totalProdutos={quantidadeTotalProdutos}
+            quantidadeFretes={produtosComFrete.length}
+            quantidadeItens={quantidadeItens}
             subtotal={subtotal}
+            total={total}
+            continuarCompra={continuarCompra}
           />
         ) : (
           <div className={`${styles.cardResumo2} card`}>
