@@ -55,21 +55,31 @@ export default function ModalFrete({ produto }) {
       if (response.data.sucesso) {
         const fretes = response.data.retorno;
 
-        const freteMaiorValor = fretes
-          .filter((item) => !item.error)
-          .reduce(
-            (maxFrete, currentFrete) => {
-              return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
-                ? currentFrete
-                : maxFrete;
-            },
-            { price: "0.00" }
-          );
+        // Verifica se todos os fretes têm erro
+        const allErrors = fretes.every(
+          (item) => item.error !== null && item.error !== undefined
+        );
 
-        setFrete(freteMaiorValor);
+        if (allErrors) {
+          setFrete({ error: true });
+        } else {
+          const freteMaiorValor = fretes
+            .filter((item) => !item.error)
+            .reduce(
+              (maxFrete, currentFrete) => {
+                return parseFloat(currentFrete.price) >
+                  parseFloat(maxFrete.price)
+                  ? currentFrete
+                  : maxFrete;
+              },
+              { price: "0.00" }
+            );
+
+          setFrete(freteMaiorValor);
+        }
+
         setLoading(false);
         console.log(fretes);
-        console.log(freteMaiorValor);
       } else {
         setLoading(false);
         console.error(response.data);
@@ -110,75 +120,86 @@ export default function ModalFrete({ produto }) {
                     aria-label="Close"
                   ></button>
                 </span>
-                <p className="mt-4 fs-6 d-flex align-items-center">
-                  <MdOutlineLocationOn size={20} className="me-1" />
-                  {endereco?.logradouro
-                    ? `${endereco.logradouro}, ${endereco.bairro} -
-                  ${endereco.localidade} - ${endereco.uf}`
-                    : ""}
-                </p>
-                <div className="d-flex px-3" id={styles.headerFretes}>
-                  <div className="col">
-                    <p>Transportadora</p>
-                  </div>
 
-                  <div className="col">
-                    <p>Modalidade</p>
-                  </div>
-
-                  <div className="col">
-                    <p>Prazo Estimado</p>
-                  </div>
-
-                  <div className="col text-end">
-                    <p>Preço</p>
-                  </div>
-                </div>
-                <div
-                  key={frete.id}
-                  className={`${styles.cardEndereco} mb-1 card rounded-1 py-2 ${styles.cardModalEndereco} ${styles.radioSelected}`}
-                >
-                  <div className="d-flex align-items-center px-3 py-2">
-                    <label
-                      className={`form-check-label col-12 d-flex justify-content-between`}
-                      htmlFor={frete.name}
-                    >
+                {frete?.error ? (
+                  <h5 className="pt-5 pb-3 text-danger text-center">
+                    Ops, não é possível calcular o frete. <br />
+                    As dimensões deste produto ultrapassam o limite da
+                    transportadora!
+                  </h5>
+                ) : (
+                  <>
+                    <p className="mt-4 fs-6 d-flex align-items-center">
+                      <MdOutlineLocationOn size={20} className="me-1" />
+                      {endereco?.logradouro
+                        ? `${endereco.logradouro}, ${endereco.bairro} -
+            ${endereco.localidade} - ${endereco.uf}`
+                        : ""}
+                    </p>
+                    <div className="d-flex px-3" id={styles.headerFretes}>
                       <div className="col">
-                        <img
-                          src={frete?.company?.picture}
-                          alt={frete?.company?.name}
-                          className={styles.imgFrete}
-                        />
+                        <p>Transportadora</p>
                       </div>
 
                       <div className="col">
-                        <p>{frete?.name}</p>
+                        <p>Modalidade</p>
                       </div>
 
                       <div className="col">
-                        <p>
-                          {frete?.delivery_range?.min} -{" "}
-                          {frete?.delivery_range?.max} dias úteis
-                        </p>
+                        <p>Prazo Estimado</p>
                       </div>
 
                       <div className="col text-end">
-                        <p className="fw-semibold">
-                          {formatPriceBR(frete?.price)}
-                        </p>
+                        <p>Preço</p>
                       </div>
-                    </label>
-                  </div>
-                </div>
-                <div className="col text-center mt-4">
-                  <button
-                    type="button"
-                    onClick={resetAddress}
-                    className="btn btn-primary btn-sm"
-                  >
-                    Calcular novamente
-                  </button>
-                </div>
+                    </div>
+                    <div
+                      key={frete.id}
+                      className={`${styles.cardEndereco} mb-1 card rounded-1 py-2 ${styles.cardModalEndereco} ${styles.radioSelected}`}
+                    >
+                      <div className="d-flex align-items-center px-3 py-2">
+                        <label
+                          className={`form-check-label col-12 d-flex justify-content-between`}
+                          htmlFor={frete.name}
+                        >
+                          <div className="col">
+                            <img
+                              src={frete?.company?.picture}
+                              alt={frete?.company?.name}
+                              className={styles.imgFrete}
+                            />
+                          </div>
+
+                          <div className="col">
+                            <p>{frete?.name}</p>
+                          </div>
+
+                          <div className="col">
+                            <p>
+                              {frete?.delivery_range?.min} -{" "}
+                              {frete?.delivery_range?.max} dias úteis
+                            </p>
+                          </div>
+
+                          <div className="col text-end">
+                            <p className="fw-semibold">
+                              {formatPriceBR(frete?.price)}
+                            </p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col text-center mt-4">
+                      <button
+                        type="button"
+                        onClick={resetAddress}
+                        className="btn btn-primary btn-sm"
+                      >
+                        Calcular novamente
+                      </button>
+                    </div>
+                  </>
+                )}
               </>
             ) : (
               <>

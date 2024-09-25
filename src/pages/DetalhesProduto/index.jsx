@@ -205,14 +205,6 @@ export default function DetalhesProduto() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  // let porcentagens = {
-  //   cinco: 85,
-  //   quatro: 5,
-  //   tres: 6,
-  //   dois: 4,
-  //   um: 0,
-  // };
-
   return (
     <>
       <LoadingOverlay

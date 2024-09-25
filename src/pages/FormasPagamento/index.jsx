@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styles from "./pagamentos.module.css";
-import formatCurrencyBR from "../../hooks/formatCurrency";
 import { MdOutlinePayment, MdPix } from "react-icons/md";
 import ReactInputMask from "react-input-mask";
 import { FaBarcode, FaCreditCard } from "react-icons/fa6";
@@ -9,41 +8,17 @@ import { FiArrowLeft } from "react-icons/fi";
 import ModalCompra from "../../components/ModalCompra";
 import ModalPix from "../../components/ModalPix";
 import ModalBoleto from "../../components/ModalBoleto";
+import ResumoPedido from "../../components/ResumoPedido";
 
 export default function FormasPagamento() {
   const [formaPagamento, setFormaPagamento] = useState("cartao");
-  const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [lojista, setLojista] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showPix, setShowPix] = useState(false);
   const [showBoleto, setShowBoleto] = useState(false);
-  // Dados fictícios para simular um QR Code de Pix
-  // const fakePixData = {
-  //   chave: "00000000000",
-  //   nome: "Fulano de Tal",
-  //   valor: "10.00",
-  //   cidade: "São Paulo",
-  // };
-
-  // Formato de exemplo para um QR Code de Pix
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
-    const productsInCart = localStorage.getItem("wesell-items-in-cart");
-    const products = JSON.parse(productsInCart) || [];
-
-    setLojista(products[0].lojista);
-
-    const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
-      0
-    );
-    const quantidadeTotal = products.reduce(
-      (acc, produto) => acc + produto.qtd,
-      0
-    );
-    setQuantidadeTotalProdutos(quantidadeTotal);
-    setTotal(subtotalCalculado);
+    setOrderData(JSON.parse(localStorage.getItem("@wesellOrderData")));
   }, []);
 
   const handleEnderecoChange = (e) => {
@@ -67,10 +42,10 @@ export default function FormasPagamento() {
               </h5>
             </div>
 
-            {lojista.aceitaCartao == "S" && (
+            {orderData?.lojista.aceitaCartao == "S" && (
               <div
                 className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                  formaPagamento === "cartao" ? styles.radioSelected : ""
+                  formaPagamento === "cartao" && styles.radioSelected
                 }`}
               >
                 <div className="form-check d-flex align-items-center">
@@ -89,16 +64,14 @@ export default function FormasPagamento() {
                     <span>
                       CARTÃO DE CRÉDITO
                       <br />
-                      {lojista.possuiParcelamento == "S" ? (
+                      {orderData?.lojista.possuiParcelamento == "S" && (
                         <span
                           className={`${styles.textCard} fw-normal`}
                           style={{ color: "#f49516" }}
                         >
                           {/* pegar numero de parcelas do produto */}
-                          Parcele em até {lojista.maximoParcelas}x sem juros
+                          Parcele em até {orderData?.lojista.maximoParcelas}x sem juros
                         </span>
-                      ) : (
-                        ""
                       )}
                     </span>
                     <FaCreditCard size={22} />
@@ -178,7 +151,7 @@ export default function FormasPagamento() {
                         />
                       </div>
                     </div>
-                    {lojista.possuiParcelamento == "S" ? (
+                    {orderData?.lojista.possuiParcelamento == "S" && (
                       <div className="row mb-3">
                         <div className="col-md-12">
                           <label htmlFor="parcelas" className="form-label">
@@ -193,7 +166,7 @@ export default function FormasPagamento() {
                               Selecione uma opção
                             </option>
                             {Array.from(
-                              { length: lojista.maximoParcelas },
+                              { length: orderData?.lojista.maximoParcelas },
                               (_, index) => (
                                 <option key={index + 1} value={index + 1}>
                                   {index + 1}{" "}
@@ -204,11 +177,7 @@ export default function FormasPagamento() {
                           </select>
                         </div>
                       </div>
-                    ) : (
-                      ""
                     )}
-
-                    {/* colcoar loading nos botoes de fazer pagamento */}
                     <span
                       className="btn btn-primary px-4"
                       onClick={() => setShowModal(true)}
@@ -219,10 +188,10 @@ export default function FormasPagamento() {
                 )}
               </div>
             )}
-            {lojista.aceitaPix == "S" && (
+            {orderData?.lojista.aceitaPix == "S" && (
               <div
                 className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                  formaPagamento === "pix" ? styles.radioSelected : ""
+                  formaPagamento === "pix" && styles.radioSelected
                 }`}
               >
                 <div className="form-check d-flex align-items-center">
@@ -252,10 +221,10 @@ export default function FormasPagamento() {
                 </div>
               </div>
             )}
-            {lojista.aceitaBoleto == "S" && (
+            {orderData?.lojista.aceitaBoleto == "S" && (
               <div
                 className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                  formaPagamento === "boleto" ? styles.radioSelected : ""
+                  formaPagamento === "boleto" && styles.radioSelected
                 }`}
               >
                 <div className="form-check d-flex align-items-center">
@@ -292,41 +261,18 @@ export default function FormasPagamento() {
           </Link>
         </div>
 
-        <div className={`${styles.cardResumo} card`}>
-          <div className={styles.titleResumo}>
-            <h5>Resumo da compra</h5>
-          </div>
-          <div className={styles.infoResumo}>
-            <span>
-              <p>Produtos ({quantidadeTotalProdutos})</p>{" "}
-              <p>{formatCurrencyBR(total)}</p>
-            </span>
-            <span>
-              <p>Frete</p>
-              <p>R$ 25,37</p>
-            </span>
-            <span className={styles.spanTotal}>
-              <p>Total</p> <p>{formatCurrencyBR(total + 25.37)}</p>
-            </span>
-          </div>
-          {formaPagamento !== "cartao" && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => {
-                formaPagamento === "pix"
-                  ? setShowPix(true)
-                  : setShowBoleto(true);
-              }}
-              // chamar funcao que verifia qual a forma de pagamento e identifica qual modal deve ser exibido (pix ou boleto)
-            >
-              Fazer pagamento
-            </button>
-          )}
-        </div>
+        <ResumoPedido
+          showCalculaFrete={false}
+          disabled={formaPagamento === "cartao"}
+          continuarCompra={() => {
+            formaPagamento === "pix" ? setShowPix(true) : setShowBoleto(true);
+          }}
+          total={orderData?.resumo.total}
+          subtotal={orderData?.resumo.subtotal}
+          valorFrete={orderData?.resumo.valorFrete}
+          totalProdutos={orderData?.resumo.qtdProdutos}
+        />
       </section>
-      {/* deve ser colocado dentro de um modal e o modal ser exibido ao clicar no botao */}
-      {/* <QRCodeSVG size={280}  value={qrCode} /> */}
       <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal} />
       <ModalPix isShow={showPix} setIsShow={setShowPix} />
       <ModalBoleto isShow={showBoleto} setIsShow={setShowBoleto} />

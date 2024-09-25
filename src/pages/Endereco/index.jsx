@@ -12,9 +12,10 @@ import { FiArrowLeft } from "react-icons/fi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido";
-import { apiFrete, url_base } from "../../services/apis";
+import { url_base } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import formatPriceBR from "../../hooks/formatPrice";
+import { calculaFrete } from "../../hooks/calculaFrete";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -29,6 +30,7 @@ export default function Endereco() {
   const [exibirFormulario, setExibirFormulario] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [produtos, setProdutos] = useState([]);
+  const [produtosComFrete, setProdutosComFrete] = useState([]);
 
   const [editandoEndereco, setEditandoEndereco] = useState(false);
   const [valoresFormulario, setValoresFormulario] = useState({
@@ -51,55 +53,73 @@ export default function Endereco() {
     return valor ? valor.replace(/[^\d]+/g, "") : "";
   }
 
-  async function calculaFrete(products, cep) {
-    let objetoApi = {
-      from: {
-        postal_code: products[0].lojista.cepCd,
-      },
-      to: {
-        postal_code: limparMascara(cep),
-      },
-      package: {
-        height: products[0].altura,
-        width: products[0].largura,
-        length: products[0].profundidade,
-        weight: products[0].peso,
-      },
-    };
-
+  async function handleCalculaFrete(produtos, cep) {
     try {
-      const response = await axios.post(apiFrete, objetoApi);
+      const response = await calculaFrete(produtos, cep);
 
-      if (response.data.sucesso) {
-        const fretes = response.data.retorno;
-
-        const freteMaiorValor = fretes
-          .filter((item) => !item.error)
-          .reduce(
-            (maxFrete, currentFrete) => {
-              return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
-                ? currentFrete
-                : maxFrete;
-            },
-            { price: "0.00" }
+      if (response && response.length > 0) {
+        const primeiroFrete = response[0];
+        const todasPropriedadesIguais = response.every((item) => {
+          return (
+            item.name === primeiroFrete.name &&
+            item.delivery_range?.min === primeiroFrete.delivery_range?.min &&
+            item.delivery_range?.max === primeiroFrete.delivery_range?.max &&
+            item.company?.name === primeiroFrete.company?.name
           );
+        });
 
-        setFrete(freteMaiorValor);
-        setValorFrete(freteMaiorValor.price);
-      } else {
-        console.error(response.data);
-        return null;
+        const totalFreteCalculado = response.reduce(
+          (acc, item) => acc + item.price,
+          0
+        );
+
+        if (todasPropriedadesIguais) {
+          setFrete({
+            id: primeiroFrete.id,
+            picture: primeiroFrete.company.picture,
+            alt: primeiroFrete.company.name,
+            name: primeiroFrete.name,
+            delivery_range: primeiroFrete.delivery_range,
+            price: totalFreteCalculado,
+          });
+          setValorFrete(totalFreteCalculado);
+          console.log(response);
+          console.log(todasPropriedadesIguais);
+          console.log({
+            id: primeiroFrete.id,
+            picture: primeiroFrete.company.picture,
+            alt: primeiroFrete.company.name,
+            name: primeiroFrete.name,
+            delivery_range: primeiroFrete.delivery_range,
+            price: totalFreteCalculado,
+          });
+        } else {
+          console.log(response);
+          console.log(todasPropriedadesIguais);
+          console.log({
+            id: primeiroFrete.id,
+            picture: primeiroFrete.company.picture,
+            alt: primeiroFrete.company.name,
+            name: primeiroFrete.name,
+            delivery_range: primeiroFrete.delivery_range,
+            price: totalFreteCalculado,
+          });
+          console.log("As propriedades dos fretes retornados são diferentes.");
+        }
       }
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (erro) {
+      console.log(erro);
     }
   }
 
   useEffect(() => {
-    const productsInCart = localStorage.getItem("wesell-items-in-cart");
+    const productsInCart = localStorage.getItem("@wesellItemsInCart");
+    const productsFreight =
+      JSON.parse(localStorage.getItem("@wesellItemsFreight")) || [];
     const products = JSON.parse(productsInCart) || [];
     setProdutos(products);
+    setProdutosComFrete(productsFreight);
+    console.log(products)
 
     const subtotalCalculado = products.reduce(
       (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -125,7 +145,7 @@ export default function Endereco() {
           setEnderecoSelecionado(response.data[0].idClienteEndereco);
           setEndereco(response.data[0]);
 
-          await calculaFrete(products, response.data[0].cep);
+          await handleCalculaFrete(productsFreight, response.data[0].cep);
         } else {
           setExibirFormulario(true);
         }
@@ -152,7 +172,9 @@ export default function Endereco() {
     setEnderecoSelecionado(id);
     setEndereco(item);
 
-    await calculaFrete(produtos, item.cep);
+    console.log("entrou");
+
+    await handleCalculaFrete(produtosComFrete, item.cep);
   };
 
   const handleSalvarEndereco = async (e) => {
@@ -175,6 +197,7 @@ export default function Endereco() {
       setAddresses((prevAddresses) => [...prevAddresses, response.data]);
       setEnderecoSelecionado(response.data.idClienteEndereco);
       setEndereco(response.data);
+      await handleCalculaFrete(produtosComFrete, valoresFormulario.cep);
       setExibirFormulario(false);
     } catch (error) {
       console.error("Erro ao salvar o endereço:", error);
@@ -243,6 +266,7 @@ export default function Endereco() {
       );
       setEnderecoSelecionado(response.data.idClienteEndereco);
       setEndereco(response.data);
+      await handleCalculaFrete(produtosComFrete, valoresFormulario.cep);
       setExibirFormulario(false);
       setEditandoEndereco(false);
     } catch (error) {
@@ -285,17 +309,18 @@ export default function Endereco() {
   function irParaPagamento() {
     const dadosPagamento = {
       endereco: endereco,
-      frete: parseFloat(14.9),
+      frete: frete,
+      lojista: produtos[0].lojista,
       resumo: {
         produtos: produtos,
-        total: subtotal,
-        frete: parseFloat(14.9),
+        total: total,
+        valorFrete: valorFrete,
         subtotal: subtotal,
         qtdProdutos: quantidadeTotalProdutos,
       },
     };
 
-    localStorage.setItem("@wesell-orderData", JSON.stringify(dadosPagamento));
+    localStorage.setItem("@wesellOrderData", JSON.stringify(dadosPagamento));
     navigate("pagamentos");
   }
 
@@ -674,8 +699,8 @@ export default function Endereco() {
                   >
                     <div className="col">
                       <img
-                        src={frete?.company?.picture}
-                        alt={frete?.company?.name}
+                        src={frete?.picture}
+                        alt={frete?.alt}
                         className={styles.imgFrete}
                       />
                     </div>

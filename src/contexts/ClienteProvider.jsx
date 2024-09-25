@@ -15,8 +15,12 @@ export default function ClienteProvider({ children }) {
   const [client, setClient] = useState(
     JSON.parse(localStorage.getItem("wesell-user-comprador"))
   );
-  const [valueSearch, setSearch] = useState(JSON.parse(localStorage.getItem("@wesell-search-value")) ?? null)
-  const [categoria, setCategoriaId] = useState(JSON.parse(localStorage.getItem("@wesell-category-id")) ?? null)
+  const [valueSearch, setSearch] = useState(
+    JSON.parse(localStorage.getItem("@wesell-search-value")) ?? null
+  );
+  const [categoria, setCategoriaId] = useState(
+    JSON.parse(localStorage.getItem("@wesell-category-id")) ?? null
+  );
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   function storageClient(data) {
@@ -24,8 +28,8 @@ export default function ClienteProvider({ children }) {
   }
 
   useEffect(() => {
-    localStorage.setItem("@wesellRouteOnCar", false)
-    
+    localStorage.setItem("@wesellRouteOnCar", false);
+
     async function getCategorias() {
       await axios
         .get(url_base + "/categorias/ativos")
@@ -50,17 +54,17 @@ export default function ClienteProvider({ children }) {
   }, []);
 
   const setCategoria = (categoria) => {
-    setCategoriaId(categoria)
+    setCategoriaId(categoria);
     localStorage.setItem("@wesell-category-id", JSON.stringify(categoria));
   };
 
   const setValueSearch = (value) => {
-    setSearch(value)
+    setSearch(value);
     localStorage.setItem("@wesell-search-value", JSON.stringify(value));
   };
 
   function addToCart(product) {
-    const carrinho = localStorage.getItem("wesell-items-in-cart");
+    const carrinho = localStorage.getItem("@wesellItemsInCart");
 
     let productsInCart = JSON.parse(carrinho) || [];
 
@@ -74,10 +78,7 @@ export default function ClienteProvider({ children }) {
     }
 
     productsInCart.push(product);
-    localStorage.setItem(
-      "wesell-items-in-cart",
-      JSON.stringify(productsInCart)
-    );
+    localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
     toast.success("Adicionado com sucesso!");
   }
 

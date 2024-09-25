@@ -9,6 +9,7 @@ import ResumoPedido from "../../components/ResumoPedido/index.jsx";
 import useContexts from "../../hooks/useContext.js";
 
 export default function Carrinho() {
+  const [produtosComFrete, setProdutosComFrete] = useState([]);
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
   const [produtosSalvos, setProdutosSalvos] = useState([]);
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
@@ -19,7 +20,7 @@ export default function Carrinho() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const productsInCart = localStorage.getItem("wesell-items-in-cart");
+    const productsInCart = localStorage.getItem("@wesellItemsInCart");
     const products = JSON.parse(productsInCart) || [];
     const savedProducts = localStorage.getItem("wesell-saved-items");
     const productsInListSave = JSON.parse(savedProducts) || [];
@@ -37,6 +38,20 @@ export default function Carrinho() {
     setSubtotal(subtotalCalculado);
     setProdutosSalvos(productsInListSave);
     setProdutosCarrinho(products);
+    const productsFilter = products.filter((item) => item.freteGratis === "N");
+    let modeloProdutos = [];
+
+    productsFilter.map((item) => {
+      modeloProdutos.push({
+        cepCd: item.lojista.cepCd,
+        altura: item.altura,
+        largura: item.largura,
+        profundidade: item.profundidade,
+        peso: item.peso,
+      });
+    });
+
+    setProdutosComFrete(modeloProdutos);
   }, []);
 
   function removeProductSave(id) {
@@ -60,9 +75,11 @@ export default function Carrinho() {
       );
 
       localStorage.setItem(
-        "wesell-items-in-cart",
+        "@wesellItemsInCart",
         JSON.stringify(produtosFiltrados)
       );
+
+      atualizarProdutosComFrete(produtosFiltrados);
 
       const subtotalCalculado = produtosFiltrados.reduce(
         (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -90,6 +107,8 @@ export default function Carrinho() {
           : produto
       );
 
+      atualizarProdutosComFrete(novoCarrinho);
+
       const subtotalCalculado = novoCarrinho.reduce(
         (acc, produto) => acc + produto.precoPromocional * produto.qtd,
         0
@@ -107,18 +126,20 @@ export default function Carrinho() {
       return novoCarrinho;
     });
   }
+
   function addToCart(product) {
-    const carrinho = localStorage.getItem("wesell-items-in-cart");
+    const carrinho = localStorage.getItem("@wesellItemsInCart");
 
     let productsInCart = JSON.parse(carrinho) || [];
 
     productsInCart.push(product);
-    localStorage.setItem(
-      "wesell-items-in-cart",
-      JSON.stringify(productsInCart)
-    );
+    localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
 
-    setProdutosCarrinho((produtosAntigos) => [...produtosAntigos, product]);
+    setProdutosCarrinho((produtosAntigos) => {
+      const novoCarrinho = [...produtosAntigos, product];
+      atualizarProdutosComFrete(novoCarrinho);
+      return novoCarrinho;
+    });
 
     const subtotalCalculado = productsInCart.reduce(
       (acc, produto) => acc + produto.precoPromocional * produto.qtd,
@@ -146,8 +167,10 @@ export default function Carrinho() {
         (item) => item.idProduto !== produto.idProduto
       );
 
+      atualizarProdutosComFrete(produtosFiltrados);
+
       localStorage.setItem(
-        "wesell-items-in-cart",
+        "@wesellItemsInCart",
         JSON.stringify(produtosFiltrados)
       );
 
@@ -175,11 +198,35 @@ export default function Carrinho() {
     });
   }
 
+  function atualizarProdutosComFrete(produtos) {
+    const productsFilter = produtos.filter((item) => item.freteGratis === "N");
+    let modeloProdutos = [];
+
+    productsFilter.forEach((item) => {
+      for (let i = 0; i < item.qtd; i++) {
+        modeloProdutos.push({
+          cepCd: item.lojista.cepCd,
+          altura: item.altura,
+          largura: item.largura,
+          profundidade: item.profundidade,
+          peso: item.peso,
+        });
+      }
+    });
+
+    console.log(modeloProdutos)
+    setProdutosComFrete(modeloProdutos);
+  }
+
   function continuarCompra() {
     if (clientLogado) {
       localStorage.setItem(
-        "wesell-items-in-cart",
+        "@wesellItemsInCart",
         JSON.stringify(produtosCarrinho)
+      );
+      localStorage.setItem(
+        "@wesellItemsFreight",
+        JSON.stringify(produtosComFrete)
       );
       navigate("endereco");
     } else {
@@ -249,13 +296,7 @@ export default function Carrinho() {
         </div>
         {produtosCarrinho.length > 0 ? (
           <ResumoPedido
-            dadosFrete={{
-              cepCd: produtosCarrinho[0].lojista.cepCd,
-              altura: produtosCarrinho[0].altura,
-              largura: produtosCarrinho[0].largura,
-              profundidade: produtosCarrinho[0].profundidade,
-              peso: produtosCarrinho[0].peso,
-            }}
+            produtosComFrete={produtosComFrete}
             continuarCompra={continuarCompra}
             total={total}
             disabled={false}

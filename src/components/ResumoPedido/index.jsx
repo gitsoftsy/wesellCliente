@@ -5,14 +5,14 @@ import formatCurrencyBR from "../../hooks/formatCurrency.js";
 import styles from "./resumo.module.css";
 import { useState } from "react";
 import formatPriceBR from "../../hooks/formatPrice.js";
-import axios from "axios";
-import { apiFrete } from "../../services/apis.js";
+import { calculaFrete } from "../../hooks/calculaFrete.js";
+import { useEffect } from "react";
 
 export default function ResumoPedido({
   totalProdutos,
   disabled,
   total,
-  dadosFrete,
+  produtosComFrete,
   valorFrete,
   continuarCompra,
   subtotal,
@@ -21,55 +21,53 @@ export default function ResumoPedido({
   const [cep, setCep] = useState("");
   const [frete, setFrete] = useState(null);
 
-  function limparMascara(valor) {
-    return valor ? valor.replace(/[^\d]+/g, "") : "";
-  }
-
-  async function calculaFrete() {
-    let objetoApi = {
-      from: {
-        postal_code: dadosFrete.cepCd,
-      },
-      to: {
-        postal_code: limparMascara(cep),
-      },
-      package: {
-        height: dadosFrete.altura,
-        width: dadosFrete.largura,
-        length: dadosFrete.profundidade,
-        weight: dadosFrete.peso,
-      },
-    };
-
+  async function handleCalculaFrete() {
     try {
-      const response = await axios.post(apiFrete, objetoApi);
+      const response = await calculaFrete(produtosComFrete, cep);
 
-      if (response.data.sucesso) {
-        const fretes = response.data.retorno;
-
-        const freteMaiorValor = fretes
-          .filter((item) => !item.error)
-          .reduce(
-            (maxFrete, currentFrete) => {
-              return parseFloat(currentFrete.price) > parseFloat(maxFrete.price)
-                ? currentFrete
-                : maxFrete;
-            },
-            { price: "0.00" }
+      if (response && response.length > 0) {
+        const primeiroFrete = response[0];
+        const todasPropriedadesIguais = response.every((item) => {
+          return (
+            item.name === primeiroFrete.name &&
+            item.delivery_range?.min === primeiroFrete.delivery_range?.min &&
+            item.delivery_range?.max === primeiroFrete.delivery_range?.max &&
+            item.company?.name === primeiroFrete.company?.name
           );
+        });
 
-        setFrete(freteMaiorValor);
-        console.log(fretes);
-        console.log(freteMaiorValor);
-      } else {
-        console.error(response.data);
-        return null;
+        const totalFreteCalculado = response.reduce(
+          (acc, item) => acc + item.price,
+          0
+        );
+
+        if (todasPropriedadesIguais) {
+          setFrete({
+            name: primeiroFrete.name,
+            delivery_range: primeiroFrete.delivery_range,
+            price: totalFreteCalculado,
+          });
+          console.log(response);
+          console.log(todasPropriedadesIguais);
+          console.log({
+            name: primeiroFrete.name,
+            delivery_range: primeiroFrete.delivery_range,
+            price: totalFreteCalculado,
+          });
+        } else {
+          console.log("As propriedades dos fretes retornados são diferentes.");
+        }
       }
-    } catch (error) {
-      console.error(error);
-      return null;
+    } catch (erro) {
+      console.log(erro);
     }
   }
+
+  useEffect(() => {
+    if (frete !== null && produtosComFrete.length > 0) {
+      handleCalculaFrete();
+    }
+  }, [produtosComFrete]);
 
   return (
     <div className={`${styles.cardResumo} card`}>
@@ -105,7 +103,7 @@ export default function ResumoPedido({
                     />
                     <button
                       type="button"
-                      onClick={calculaFrete}
+                      onClick={handleCalculaFrete}
                       className="input-group-text m-0"
                       id="inputCep"
                     >
@@ -144,9 +142,15 @@ export default function ResumoPedido({
             )}
           </section>
         </span>
-        <span className={styles.spanTotal}>
+        {frete ? (
+          <span className={styles.spanTotal}>
+          <p>Total</p> <p>{formatCurrencyBR(total + frete?.price)}</p>
+        </span>
+        ) :  (
+          <span className={styles.spanTotal}>
           <p>Total</p> <p>{formatCurrencyBR(total)}</p>
         </span>
+        )}
       </div>
       <div id={styles.areaBtn}>
         <button

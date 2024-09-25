@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import styles from './cardPedido.module.css'
 import formatCurrencyBR from '../../hooks/formatCurrency';
