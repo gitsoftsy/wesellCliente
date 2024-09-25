@@ -60,6 +60,7 @@ export default function Endereco() {
 
         // response traz todos os fretes - vc pode pegar o valor referente ao produto e exibir no card
         console.log(response);
+        console.log(enderecoSelecionado);
 
         // aqui ele soma o valor de todos os fretes - esse cara vc vai exibir no resumo do pedido
         // no card vc vai pegar um frete de cada e exibir no produto correspondente - pode pegar como base o layout da shopee e inserir uma coluna de frete e colocar o preco do frete. 
@@ -93,7 +94,6 @@ export default function Endereco() {
     setQuantidadeTotalProdutos(quantidadeTotal);
     setSubtotal(subtotalCalculado);
     setTotal(subtotalCalculado);
-
     async function getAddress() {
       try {
         const response = await axios.get(
@@ -340,6 +340,8 @@ export default function Endereco() {
                             {`${item.logradouro}, ${item.bairro}, ${item.numero}, ${item.cep}`}
                             <br />
                             {item.municipio} - {item.uf}
+                            <br />
+                            {enderecoSelecionado == item.idClienteEndereco && `Valor do frete: ${valorFrete}`}
                           </label>
                           <span
                             className="ms-auto text-primary fw-medium"
@@ -685,6 +687,7 @@ export default function Endereco() {
           subtotal={subtotal}
           total={total}
           showAreaFrete={true}
+          valorFrete={valorFrete}
         />
       </section>
     </div>
