@@ -57,8 +57,17 @@ export default function Endereco() {
           (acc, item) => acc + item.price,
           0
         );
-        setValorFrete(totalFreteCalculado);
+
+        // response traz todos os fretes - vc pode pegar o valor referente ao produto e exibir no card
         console.log(response);
+
+        // aqui ele soma o valor de todos os fretes - esse cara vc vai exibir no resumo do pedido
+        // no card vc vai pegar um frete de cada e exibir no produto correspondente - pode pegar como base o layout da shopee e inserir uma coluna de frete e colocar o preco do frete. 
+        // abaixo do produto exibir as informacoes do frete igual exibia antes nas formas de envio (deixei essa tela de backup, ai vc volta ela e ver quais eram as informações.)
+        // caso precise acessar a funcao que calcula o frete pra ver os objetos retornados, fica em hooks
+        setValorFrete(totalFreteCalculado);
+
+        
       }
     } catch (erro) {
       console.log(erro);
