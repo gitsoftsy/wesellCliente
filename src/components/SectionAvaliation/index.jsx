@@ -16,14 +16,14 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
   };
 
   avaliacoes.forEach((avaliacao) => {
-    const star = avaliacao.star.toString();
+    const star = avaliacao.avaliacao.toString();
     if (countStars.hasOwnProperty(star)) {
       countStars[star]++;
     }
   });
 
   const somaEstrelas = avaliacoes.reduce(
-    (acc, avaliacao) => acc + avaliacao.star,
+    (acc, avaliacao) => acc + avaliacao.avaliacao,
     0
   );
   let media = total > 0 ? somaEstrelas / total : 0;
@@ -79,8 +79,16 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
         {/* {props.avaliacaoCliente ? (
           <> */}
         <h1>Avaliações em destaque</h1>
-        <Avaliation numeroAvaliacoes={2} />
-        <Avaliation numeroAvaliacoes={5} />
+        {avaliacoes.map((avaliacao, index )=> (
+          avaliacao.descricaoAvaliacao != '' &&
+          <Avaliation
+            key={index}
+            nomeUsuario={avaliacao.nomeCompleto}
+            comentario={avaliacao.descricaoAvaliacao}
+            numeroAvaliacoes={avaliacao.avaliacao}
+            // dataAvaliacao={avaliacao.dataAvaliacao}
+          />
+        ))}
         {/* </>
         ) : (
           <h6>Nenhuma avaliação de cliente</h6>

@@ -5,11 +5,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { url_base, url_img } from "../../services/apis";
 import { toast } from "react-toastify";
 import StarsAvaliation from "../../components/StarsAvaliation";
+import ImageDefault from "../../assets/imageDefault.png";
+
 
 export default function Avaliacao() {
   const navigate = useNavigate();
   const [produto, setProduto] = useState("");
-  const [imgProduto, setImgProduto] = useState("");
+  const [imgProduto, setImgProduto] = useState(ImageDefault);
   const { idVendaItem } = useParams();
   const [descricao, setDescricao] = useState("");
   const [estrelas, setEstrelas] = useState(0);

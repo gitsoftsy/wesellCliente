@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import formatCurrencyBR from "../../hooks/formatCurrency";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis";
+import ImageDefault from "../../assets/imageDefault.png";
 
 export default function CardCompra({ pedido, status }) {
   const [classeSt, setClasseSt] = useState(null);
   const [st, setSt] = useState(null);
   const [formaPagamento, setFormaPagamento] = useState("");
-  const [imagemProduto, setImagemProduto] = useState("");
+  const [imagemProduto, setImagemProduto] = useState(ImageDefault);
 
   useEffect(() => {
     if (pedido.formaPagamento == "C") {
@@ -67,6 +68,14 @@ export default function CardCompra({ pedido, status }) {
 
     return dataFormatada;
   }
+  const encodeCustom = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  const produtoNome = encodeCustom(pedido.nomeProduto)
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/\//g, "-");
 
   return (
     <article className={styles.containerCompra}>
@@ -102,7 +111,7 @@ export default function CardCompra({ pedido, status }) {
           </div>
         </div>
         <div className={styles.boxBtn}>
-          <Link to="" className={styles.btnCompra}>
+          <Link to={`/produto/${pedido.idProduto}/${produtoNome}`} className={styles.btnCompra}>
             Ver produto
           </Link>
 

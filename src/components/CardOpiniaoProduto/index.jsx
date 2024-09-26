@@ -6,6 +6,7 @@ import StarsAvaliation from "../StarsAvaliation";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis";
 import { toast } from "react-toastify";
+import ImageDefault from "../../assets/imageDefault.png";
 
 export default function CardOpiniaoProduto({
   imagemProduto,
@@ -15,7 +16,7 @@ export default function CardOpiniaoProduto({
   idVendaItem, funcReload
 }) {
   const [estrelas, setEstrelas] = useState(0);
-  const [image, setImage] = useState("https://api.we-sell.store/Imagens/uploads/produtos/18/imagemProduto_20240813192920316.png");
+  const [image, setImage] = useState(ImageDefault);
 
   function formatarData(dataISO) {
     const data = new Date(dataISO);

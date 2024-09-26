@@ -36,9 +36,13 @@
 
 .dadosPedido{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-columns: 30vw 1fr 1fr; 
     place-items: center;
     padding: 0px 24px;
+    
+    p{
+        width: 100%;
+    }
 
     span{
         color: rgba(0, 0, 0, 0.55);

@@ -24,12 +24,13 @@ export default function DetalhesProduto() {
   const [maximoParcela, setMaximoParcela] = useState(false);
   const [calculaFrete, setCalculaFrete] = useState(true);
   const [isActive, setActive] = useState(true);
+  const [avaliationsProduct, setAvaliationsProduct] = useState([]);
 
   const getLink = async (link) => {
-    const url = decodeURIComponent(link)
+    const url = decodeURIComponent(link);
 
     let jsonDados = {
-      link: url
+      link: url,
     };
 
     if (path.pathname.includes("static")) {
@@ -41,18 +42,17 @@ export default function DetalhesProduto() {
         })
         .then((result) => {
           console.log(result);
-          console.log(window.location.href)
+          console.log(window.location.href);
 
           if (result.data.length > 0) {
             if (result.data[0].dataCancelamento == null) {
               setActive(false);
-            }else{
+            } else {
               setActive(false);
               console.log("Link expirado, cancelado");
               toast.info("Link está inválido, pode ter expirado.");
               navigate("/home");
             }
-
           } else {
             setActive(false);
             console.log("Link expirado, não existe");
@@ -75,33 +75,33 @@ export default function DetalhesProduto() {
     getLink(window.location.href);
   });
 
-  const avaliations = [
-    { id: 1, star: 4, nome: "Wagner Moura" },
-    { id: 2, star: 3, nome: "Wagner Moura" },
-    { id: 3, star: 5, nome: "Wagner Moura" },
-    { id: 4, star: 5, nome: "Wagner Moura" },
-    { id: 5, star: 5, nome: "Wagner Moura" },
-    { id: 6, star: 3, nome: "Wagner Moura" },
-    { id: 7, star: 2, nome: "Wagner Moura" },
-    { id: 8, star: 5, nome: "Wagner Moura" },
-    { id: 9, star: 5, nome: "Wagner Moura" },
-    { id: 10, star: 5, nome: "Wagner Moura" },
-    { id: 11, star: 5, nome: "Wagner Moura" },
-    { id: 12, star: 4, nome: "Wagner Moura" },
-    { id: 13, star: 4, nome: "Wagner Moura" },
-    { id: 14, star: 4, nome: "Wagner Moura" },
-    { id: 15, star: 4, nome: "Wagner Moura" },
-    { id: 16, star: 5, nome: "Wagner Moura" },
-    { id: 17, star: 3, nome: "Wagner Moura" },
-    { id: 18, star: 3, nome: "Wagner Moura" },
-    { id: 19, star: 4, nome: "Wagner Moura" },
-    { id: 20, star: 4, nome: "Wagner Moura" },
-    { id: 21, star: 5, nome: "Wagner Moura" },
-    { id: 22, star: 5, nome: "Wagner Moura" },
-    { id: 23, star: 5, nome: "Wagner Moura" },
-    { id: 24, star: 5, nome: "Wagner Moura" },
-    { id: 25, star: 5, nome: "Wagner Moura" },
-  ];
+  // const avaliations = [
+  //   { id: 1, star: 4, nome: "Wagner Moura" },
+  //   { id: 2, star: 3, nome: "Wagner Moura" },
+  //   { id: 3, star: 5, nome: "Wagner Moura" },
+  //   { id: 4, star: 5, nome: "Wagner Moura" },
+  //   { id: 5, star: 5, nome: "Wagner Moura" },
+  //   { id: 6, star: 3, nome: "Wagner Moura" },
+  //   { id: 7, star: 2, nome: "Wagner Moura" },
+  //   { id: 8, star: 5, nome: "Wagner Moura" },
+  //   { id: 9, star: 5, nome: "Wagner Moura" },
+  //   { id: 10, star: 5, nome: "Wagner Moura" },
+  //   { id: 11, star: 5, nome: "Wagner Moura" },
+  //   { id: 12, star: 4, nome: "Wagner Moura" },
+  //   { id: 13, star: 4, nome: "Wagner Moura" },
+  //   { id: 14, star: 4, nome: "Wagner Moura" },
+  //   { id: 15, star: 4, nome: "Wagner Moura" },
+  //   { id: 16, star: 5, nome: "Wagner Moura" },
+  //   { id: 17, star: 3, nome: "Wagner Moura" },
+  //   { id: 18, star: 3, nome: "Wagner Moura" },
+  //   { id: 19, star: 4, nome: "Wagner Moura" },
+  //   { id: 20, star: 4, nome: "Wagner Moura" },
+  //   { id: 21, star: 5, nome: "Wagner Moura" },
+  //   { id: 22, star: 5, nome: "Wagner Moura" },
+  //   { id: 23, star: 5, nome: "Wagner Moura" },
+  //   { id: 24, star: 5, nome: "Wagner Moura" },
+  //   { id: 25, star: 5, nome: "Wagner Moura" },
+  // ];
 
   const path = useLocation();
 
@@ -148,11 +148,21 @@ export default function DetalhesProduto() {
   async function getProduto() {
     await axios
       .get(url_base + `/produtos/${id}`)
-      .then((response) => {
+      .then( async (response) => {
         const data = response.data;
         console.log(data);
         setProduto(data);
         getProdutosSimilares(data);
+
+         await axios
+          .get(url_base + `/produtos/avaliacoes?idProduto=${id}`)
+          .then((response) => {
+            setAvaliationsProduct(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+            //toast.error(error.message);
+          });
 
         data.freteGratis === "S"
           ? setCalculaFrete(false)
@@ -384,8 +394,8 @@ export default function DetalhesProduto() {
         <section className={styles.areaBranca}>
           <section className={`${styles.areaAvaliacoes} container rounded-4`}>
             <SectionAvaliation
-              avaliacoes={avaliations}
-              total={avaliations.length}
+              avaliacoes={avaliationsProduct}
+              total={avaliationsProduct.length}
             />
           </section>
           <section className={`${styles.areaProdutosSimilares} rounded-4`}>
