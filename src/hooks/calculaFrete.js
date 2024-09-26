@@ -39,7 +39,7 @@ async function calculaFrete(produtos, cep) {
             { price: "0.00" }
           );
 
-        return freteMaiorValor;
+        return { item: item.idProduto, frete: freteMaiorValor };
       } else {
         console.error(response.data);
         return null;

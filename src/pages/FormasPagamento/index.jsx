@@ -9,6 +9,10 @@ import ModalCompra from "../../components/ModalCompra";
 import ModalPix from "../../components/ModalPix";
 import ModalBoleto from "../../components/ModalBoleto";
 import ResumoPedido from "../../components/ResumoPedido";
+import { toast } from "react-toastify";
+import { apiFinanceiro } from "../../services/apis";
+import axios from "axios";
+import useContexts from "../../hooks/useContext";
 
 export default function FormasPagamento() {
   const [formaPagamento, setFormaPagamento] = useState("cartao");
@@ -16,20 +20,140 @@ export default function FormasPagamento() {
   const [showPix, setShowPix] = useState(false);
   const [showBoleto, setShowBoleto] = useState(false);
   const [orderData, setOrderData] = useState(null);
+  const [dataCart, setDataCart] = useState({
+    numeroCartao: "",
+    nomeCartao: "",
+    cpfTitular: "",
+    mesVencimento: "0",
+    anoVencimento: "0",
+    cvv: "",
+  });
+  const [numParcelas, setParcelas] = useState("0");
+  const [loading, setLoading] = useState(false);
+  const [statusCompra, setStatusCompra] = useState(false);
+  const [msgModal, setMsgModal] = useState("");
 
-  useEffect(() => {
-    setOrderData(JSON.parse(localStorage.getItem("@wesellOrderData")));
-  }, []);
-
-  const handleEnderecoChange = (e) => {
-    setFormaPagamento(e.target.id);
-  };
+  const { client } = useContexts();
 
   const listMes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const listAno = [
     2024, 2025, 2026, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034,
     2035,
   ];
+
+  useEffect(() => {
+    setOrderData(JSON.parse(localStorage.getItem("@wesellOrderData")));
+  }, []);
+
+  const handleChangePagamento = (e) => {
+    setFormaPagamento(e.target.id);
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setDataCart((prevDataCart) => ({
+      ...prevDataCart,
+      [id]: value,
+    }));
+  };
+
+  const handlePagamento = () => {
+    const {
+      numeroCartao,
+      cpfTitular,
+      nomeCartao,
+      mesVencimento,
+      anoVencimento,
+      cvv,
+    } = dataCart;
+
+    if (formaPagamento === "cartao") {
+      if (
+        !numeroCartao ||
+        !nomeCartao ||
+        !cpfTitular ||
+        mesVencimento === "0" ||
+        anoVencimento === "0" ||
+        !cvv
+      ) {
+        toast.warn("Preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      if (
+        orderData?.lojista.possuiParcelamento === "S" &&
+        (!numParcelas || numParcelas === "0")
+      ) {
+        toast.warn("Por favor, selecione o número de parcelas.");
+        return;
+      }
+
+      processarPagamentoCartao();
+      return;
+    } else if (formaPagamento === "pix") {
+      setShowPix(true);
+    } else {
+      setShowBoleto(true);
+    }
+  };
+
+  function limparMascara(valor) {
+    return valor ? valor.replace(/[^\d]+/g, "") : "";
+  }
+
+  async function processarPagamentoCartao() {
+    setLoading(true);
+    const {
+      numeroCartao,
+      nomeCartao,
+      mesVencimento,
+      anoVencimento,
+      cpfTitular,
+      cvv,
+    } = dataCart;
+
+    const possuiParcelamento = orderData?.lojista.possuiParcelamento === "S";
+
+    const objeto = {
+      idCliente: client.id,
+      idEnderecoEntrega: orderData.enderecoId,
+      // verificar se o produto esta sendo comprado por um link de influencer e pegar o id dele
+      idVendedor: null,
+      formaPagamento: "CARTAO_CREDITO",
+      itens: orderData.itens,
+      cartaoCredito: {
+        numeroCartao: limparMascara(numeroCartao),
+        nomeCartao,
+        cvv,
+        cpfTitular: limparMascara(cpfTitular),
+        mesVencimento,
+        anoVencimento,
+        numParcelas: possuiParcelamento ? numParcelas : null,
+      },
+    };
+    await axios.post(apiFinanceiro + `/venda`, objeto).then((response) => {
+      const data = response.data;
+      if (data.sucesso) {
+        if (data.retorno.status === "PAGO") {
+          setLoading(false);
+          console.log(data.retorno);
+          setStatusCompra(true);
+          setShowModal(true);
+        } else {
+          setStatusCompra(false);
+          setMsgModal(data.retorno.mensagemErro);
+          setShowModal(true);
+          console.log(data.retorno.codigoErro);
+        }
+      } else {
+        setLoading(false);
+        console.log(response.data);
+        setStatusCompra(false);
+        setMsgModal(data.retorno.status);
+        setShowModal(true);
+      }
+    });
+  }
 
   return (
     <div className={styles.containerCart}>
@@ -55,7 +179,7 @@ export default function FormasPagamento() {
                     name="formaPagamento"
                     id="cartao"
                     checked={formaPagamento === "cartao"}
-                    onChange={handleEnderecoChange}
+                    onChange={handleChangePagamento}
                   />
                   <label
                     className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
@@ -69,8 +193,8 @@ export default function FormasPagamento() {
                           className={`${styles.textCard} fw-normal`}
                           style={{ color: "#f49516" }}
                         >
-                          {/* pegar numero de parcelas do produto */}
-                          Parcele em até {orderData?.lojista.maximoParcelas}x sem juros
+                          Parcele em até {orderData?.lojista.maximoParcelas}x
+                          sem juros
                         </span>
                       )}
                     </span>
@@ -79,40 +203,69 @@ export default function FormasPagamento() {
                 </div>
                 {formaPagamento === "cartao" && (
                   <form className="py-3">
-                    <div className="mb-3">
-                      <label htmlFor="cardNumber" className="form-label">
-                        Número do cartão
-                      </label>
-                      <ReactInputMask
-                        required
-                        type="tel"
-                        mask="9999 9999 9999 9999"
-                        maskChar=""
-                        className="form-control"
-                        id="cardNumber"
-                      />
-                    </div>
-
-                    <div className="mb-3">
-                      <label htmlFor="cardHolder" className="form-label">
-                        Nome do titular
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className="form-control"
-                        autoComplete="off"
-                        id="cardHolder"
-                      />
+                    <div className="row">
+                      <div className="mb-3 col-12 col-sm-6">
+                        <label htmlFor="cpfTitular" className="form-label">
+                          CPF do titular
+                          <span className="text-danger">*</span>
+                        </label>
+                        <ReactInputMask
+                          type="tel"
+                          required
+                          mask="999.999.999-99"
+                          maskChar=""
+                          className="form-control"
+                          id="cpfTitular"
+                          value={dataCart.cpfTitular}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="mb-3 col-12 col-sm-6">
+                        <label htmlFor="nomeCartao" className="form-label">
+                          Nome do titular<span className="text-danger">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          className="form-control"
+                          autoComplete="off"
+                          id="nomeCartao"
+                          value={dataCart.nomeCartao}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
 
                     <div className="row">
-                      <label htmlFor="expirationDate" className="form-label">
-                        Data de vencimento
-                      </label>
-                      <div className="col-md-6 mb-3">
-                        <select className="form-select" name="mes" id="mes">
-                          <option value="0" disabled selected>
+                      <div className="mb-3 col-12 col-sm-6">
+                        <label htmlFor="numeroCartao" className="form-label">
+                          Número do cartão<span className="text-danger">*</span>
+                        </label>
+                        <ReactInputMask
+                          required
+                          type="tel"
+                          mask="9999 9999 9999 9999"
+                          maskChar=""
+                          className="form-control"
+                          id="numeroCartao"
+                          value={dataCart.numeroCartao}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+
+                      <div className="mb-3 col-12 col-sm-6">
+                        <label htmlFor="mesVencimento" className="form-label">
+                          Mês de vencimento
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-select"
+                          name="mesVencimento"
+                          id="mesVencimento"
+                          value={dataCart.mesVencimento}
+                          onChange={handleInputChange}
+                        >
+                          <option value="0" disabled>
                             Mês
                           </option>
                           {listMes.map((mes) => (
@@ -122,9 +275,22 @@ export default function FormasPagamento() {
                           ))}
                         </select>
                       </div>
-                      <div className="col-md-6 mb-3">
-                        <select className="form-select" name="ano" id="ano">
-                          <option value="0" disabled selected>
+                    </div>
+
+                    <div className="row">
+                      <div className="mb-3 col-12 col-sm-6">
+                        <label htmlFor="anoVencimento" className="form-label">
+                          Ano de vencimento
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-select"
+                          name="anoVencimento"
+                          id="anoVencimento"
+                          value={dataCart.anoVencimento}
+                          onChange={handleInputChange}
+                        >
+                          <option value="0" disabled>
                             Ano
                           </option>
                           {listAno.map((ano) => (
@@ -134,12 +300,10 @@ export default function FormasPagamento() {
                           ))}
                         </select>
                       </div>
-                    </div>
-
-                    <div className="row mb-3">
-                      <div className="col">
+                      <div className="mb-3 col-12 col-sm-6">
                         <label htmlFor="cvv" className="form-label">
                           Código de segurança
+                          <span className="text-danger">*</span>
                         </label>
                         <ReactInputMask
                           type="tel"
@@ -148,21 +312,24 @@ export default function FormasPagamento() {
                           maskChar=""
                           className="form-control"
                           id="cvv"
+                          value={dataCart.cvv}
+                          onChange={handleInputChange}
                         />
                       </div>
-                    </div>
-                    {orderData?.lojista.possuiParcelamento == "S" && (
-                      <div className="row mb-3">
-                        <div className="col-md-12">
-                          <label htmlFor="parcelas" className="form-label">
-                            Parcelas
+                      {orderData?.lojista.possuiParcelamento === "S" && (
+                        <div className="mb-3 col-12 col-sm-6">
+                          <label htmlFor="numParcelas" className="form-label">
+                            Número de parcelas
+                            <span className="text-danger">*</span>
                           </label>
                           <select
                             className="form-select"
-                            name="parcelas"
-                            id="parcelas"
+                            name="numParcelas"
+                            id="numParcelas"
+                            value={numParcelas}
+                            onChange={(e) => setParcelas(e.target.value)}
                           >
-                            <option value="0" disabled selected>
+                            <option value="0" disabled>
                               Selecione uma opção
                             </option>
                             {Array.from(
@@ -170,20 +337,14 @@ export default function FormasPagamento() {
                               (_, index) => (
                                 <option key={index + 1} value={index + 1}>
                                   {index + 1}{" "}
-                                  {index > 0 ? "Parcela(s)" : "Parcela"}
+                                  {index > 0 ? "Parcelas" : "Parcela"}
                                 </option>
                               )
                             )}
                           </select>
                         </div>
-                      </div>
-                    )}
-                    <span
-                      className="btn btn-primary px-4"
-                      onClick={() => setShowModal(true)}
-                    >
-                      Fazer pagamento
-                    </span>
+                      )}
+                    </div>
                   </form>
                 )}
               </div>
@@ -201,7 +362,7 @@ export default function FormasPagamento() {
                     name="formaPagamento"
                     id="pix"
                     checked={formaPagamento === "pix"}
-                    onChange={handleEnderecoChange}
+                    onChange={handleChangePagamento}
                   />
                   <label
                     className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
@@ -234,7 +395,7 @@ export default function FormasPagamento() {
                     name="formaPagamento"
                     id="boleto"
                     checked={formaPagamento === "boleto"}
-                    onChange={handleEnderecoChange}
+                    onChange={handleChangePagamento}
                   />
                   <label
                     className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
@@ -262,10 +423,9 @@ export default function FormasPagamento() {
         </div>
 
         <ResumoPedido
-          disabled={formaPagamento === "cartao"}
-          continuarCompra={() => {
-            formaPagamento === "pix" ? setShowPix(true) : setShowBoleto(true);
-          }}
+          textButon="Realizar pagamento"
+          loading={loading}
+          continuarCompra={handlePagamento}
           total={orderData?.resumo.total}
           subtotal={orderData?.resumo.subtotal}
           valorFrete={orderData?.resumo.valorFrete}
@@ -274,7 +434,12 @@ export default function FormasPagamento() {
           quantidadeItens={orderData?.resumo.qtdProdutos}
         />
       </section>
-      <ModalCompra status={true} isShow={showModal} setIsShow={setShowModal} />
+      <ModalCompra
+        textoModal={msgModal}
+        status={statusCompra}
+        isShow={showModal}
+        setIsShow={setShowModal}
+      />
       <ModalPix isShow={showPix} setIsShow={setShowPix} />
       <ModalBoleto isShow={showBoleto} setIsShow={setShowBoleto} />
     </div>

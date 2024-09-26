@@ -1,36 +1,27 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 import { GoCheckCircle, GoXCircle } from "react-icons/go";
 import { Modal, Button } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from "./modalCompra.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function ModalCompra({ status, isShow, setIsShow }) {
+export default function ModalCompra({ textoModal, status, isShow, setIsShow }) {
   const navigate = useNavigate();
-  useEffect(() => {
-    // Não é mais necessário gerenciar manualmente a exibição da modal
-    // O react-bootstrap lida com isso através do state `show`
-    return () => {
-      // Qualquer limpeza necessária pode ser feita aqui
-    };
-  }, []);
 
   return (
     <Modal
       show={isShow}
       onHide={!isShow}
-      backdrop="static" // Impede o fechamento ao clicar fora da modal
-      keyboard={false} // Impede o fechamento ao pressionar a tecla Esc
-      dialogClassName="modal-dialog-centered modal-dialog-scrollable" // Adiciona classes ao dialog
+      backdrop="static" 
+      keyboard={false} 
+      dialogClassName="modal-dialog-centered modal-dialog-scrollable"
     >
-      <Modal.Body className={`paddingModal d-flex flex-column align-items-center w-100 ${styles.modalBody}`}>
+      <Modal.Body className={`py-4 d-flex flex-column align-items-center w-100`}>
         {status ? (
           <>
-            <h1 className="modal-title">Status da compra</h1>
-            <hr className="w-100" />
-            <p className="fs-5">Compra realizada com sucesso</p>
-            <GoCheckCircle className={styles.iconModalSuccess} />
+            <h2 className="m-0">Status da compra</h2>
+            <hr className="w-100 mt-2 mb-5" />
+            <GoCheckCircle size={90} color="#A5DC86" />
+            <p className="fs-3 mb-4">Compra realizada com sucesso</p>
             <Button
               variant="primary"
               className="mt-4 px-5"
@@ -41,13 +32,13 @@ export default function ModalCompra({ status, isShow, setIsShow }) {
           </>
         ) : (
           <>
-            <h1 className="modal-title">Status da compra</h1>
-            <hr className="w-100" />
-            <p className="fs-5">Transição não aprovada</p>
-            <GoXCircle className={styles.iconModalError} />
+            <h2 className="m-0">Status da compra</h2>
+            <hr className="w-100 mt-2 mb-5" />
+            <GoXCircle size={90} color="#F27474" />
+            <p className="fs-3 mb-4">{textoModal}</p>
             <Button
               variant="primary"
-              className="mt-4 px-5"
+              className="px-5 btn-sm"
               onClick={() => setIsShow(false)}
             >
               Fechar

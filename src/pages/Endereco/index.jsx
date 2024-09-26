@@ -27,6 +27,7 @@ export default function Endereco() {
   const [exibirFormulario, setExibirFormulario] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [produtos, setProdutos] = useState([]);
+  const [fretes, setFretes] = useState([]);
   const [produtosComFrete, setProdutosComFrete] = useState([]);
 
   const [editandoEndereco, setEditandoEndereco] = useState(false);
@@ -54,21 +55,12 @@ export default function Endereco() {
 
       if (response && response.length > 0) {
         const totalFreteCalculado = response.reduce(
-          (acc, item) => acc + item.price,
+          (acc, item) => acc + parseFloat(item.frete.price),
           0
         );
 
-        // response traz todos os fretes - vc pode pegar o valor referente ao produto e exibir no card
-        console.log(response);
-        console.log(enderecoSelecionado);
-
-        // aqui ele soma o valor de todos os fretes - esse cara vc vai exibir no resumo do pedido
-        // no card vc vai pegar um frete de cada e exibir no produto correspondente - pode pegar como base o layout da shopee e inserir uma coluna de frete e colocar o preco do frete. 
-        // abaixo do produto exibir as informacoes do frete igual exibia antes nas formas de envio (deixei essa tela de backup, ai vc volta ela e ver quais eram as informações.)
-        // caso precise acessar a funcao que calcula o frete pra ver os objetos retornados, fica em hooks
+        setFretes(response);
         setValorFrete(totalFreteCalculado);
-
-        
       }
     } catch (erro) {
       console.log(erro);
@@ -257,10 +249,38 @@ export default function Endereco() {
     }
   };
 
+  function montarItensComFrete(produtos, listaFretes) {
+    return produtos.map((produto) => {
+      if (produto.freteGratis === "S") {
+        return {
+          idProduto: produto.idProduto,
+          quantidade: produto.qtd,
+          vlFrete: null,
+        };
+      } else {
+        const fretesDoProduto = listaFretes.filter(
+          (frete) => frete.item === produto.idProduto
+        );
+
+        const totalFrete = fretesDoProduto.reduce((acc, frete) => {
+          return acc + parseFloat(frete.frete.price);
+        }, 0);
+
+        return {
+          idProduto: produto.idProduto,
+          quantidade: produto.qtd,
+          vlFrete: totalFrete.toFixed(2),
+        };
+      }
+    });
+  }
+
   function irParaPagamento() {
+    const itensComFrete = montarItensComFrete(produtos, fretes);
     const data = {
-      endereco: endereco,
+      enderecoId: enderecoSelecionado,
       lojista: produtos[0].lojista,
+      itens: itensComFrete,
       resumo: {
         qtdProdutos: quantidadeTotalProdutos,
         qtdFretes: produtosComFrete.length,
@@ -340,7 +360,6 @@ export default function Endereco() {
                             {`${item.logradouro}, ${item.bairro}, ${item.numero}, ${item.cep}`}
                             <br />
                             {item.municipio} - {item.uf}
-                            
                           </label>
                           <span
                             className="ms-auto text-primary fw-medium"

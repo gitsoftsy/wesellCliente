@@ -17,19 +17,16 @@ export default function Pedidos() {
       setLoading(true);
       const userStorage = localStorage.getItem("wesell-user-comprador");
       const userJson = JSON.parse(userStorage);
-      let idSearch = userJson.id != undefined ? userJson.id : userJson.idCliente
+      let idSearch =
+        userJson.id != undefined ? userJson.id : userJson.idCliente;
       await axios
-      ///produtos/clientes?idCliente=14
+        ///produtos/clientes?idCliente=14
         .get(url_base + `/produtos/clientes?idCliente=` + idSearch)
         // .get(url_base + `/produtos/clientes?idCliente=` + 1)
         .then((response) => {
           const dados = response.data;
+          console.log(dados, idSearch);
           setPedidos(dados);
-          console.log(response);
-          console.log(response.data);
-          console.log( idSearch);
-          console.log( userJson.id);
-          console.log( userJson.idCliente);
         })
         .catch((error) => {
           toast.error("Erro na requisição.");
@@ -49,11 +46,12 @@ export default function Pedidos() {
           <h2>Pedidos</h2>
         </div>
         <div className={styles.cardsPedidos}>
-          {pedidos.length > 0 && pedidos[pedidos.length - 1].totalAvaliacaoNull > 0 && (
-            <CardOpiniaoPendente
-              quantidade={pedidos[pedidos.length - 1].totalAvaliacaoNull}
-            />
-          )}
+          {pedidos.length > 0 &&
+            pedidos[pedidos.length - 1].totalAvaliacaoNull > 0 && (
+              <CardOpiniaoPendente
+                quantidade={pedidos[pedidos.length - 1].totalAvaliacaoNull}
+              />
+            )}
           {loading && (
             <>
               <div className="card placeholderWave" aria-hidden="true">
@@ -102,14 +100,18 @@ export default function Pedidos() {
           )}
 
           {pedidos !=
-          "Nenhum resultado encontrado para os parâmetros informados." && pedidos.length >0
-            ? pedidos.map((pedido) => (
-                pedido.idProduto != null && <CardCompra
-                  key={pedido.idVendaItem}
-                  pedido={pedido}
-                  status="E"
-                />
-              ))
+            "Nenhum resultado encontrado para os parâmetros informados." &&
+          pedidos.length > 0
+            ? pedidos.map(
+                (pedido) =>
+                  pedido.idProduto != null && (
+                    <CardCompra
+                      key={pedido.idVendaItem}
+                      pedido={pedido}
+                      status="E"
+                    />
+                  )
+              )
             : ""}
         </div>
       </section>

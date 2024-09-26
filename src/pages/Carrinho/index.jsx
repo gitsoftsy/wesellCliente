@@ -42,7 +42,9 @@ export default function Carrinho() {
     let modeloProdutos = [];
 
     productsFilter.map((item) => {
+      console.log(item)
       modeloProdutos.push({
+        idProduto: item.idProduto,
         cepCd: item.lojista.cepCd,
         altura: item.altura,
         largura: item.largura,
@@ -205,6 +207,7 @@ export default function Carrinho() {
     productsFilter.forEach((item) => {
       for (let i = 0; i < item.qtd; i++) {
         modeloProdutos.push({
+          idProduto: item.idProduto,
           cepCd: item.lojista.cepCd,
           altura: item.altura,
           largura: item.largura,
@@ -213,8 +216,6 @@ export default function Carrinho() {
         });
       }
     });
-
-    console.log(modeloProdutos);
     setProdutosComFrete(modeloProdutos);
   }
 
