@@ -340,8 +340,7 @@ export default function Endereco() {
                             {`${item.logradouro}, ${item.bairro}, ${item.numero}, ${item.cep}`}
                             <br />
                             {item.municipio} - {item.uf}
-                            <br />
-                            {enderecoSelecionado == item.idClienteEndereco && `Valor do frete: ${valorFrete}`}
+                            
                           </label>
                           <span
                             className="ms-auto text-primary fw-medium"
