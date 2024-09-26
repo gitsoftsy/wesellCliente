@@ -37,12 +37,13 @@ export default function CardOpiniaoProduto({
       });
   }, [setImage, idProduto]);
 
-  const handleAvaliation = () => {
+  const handleAvaliation = (estrelasAvaliacao) => {
     const objeto = {
       idVendaItem: idVendaItem,
-      avaliacao: estrelas,
+      avaliacao: estrelasAvaliacao,
       descricaoAvaliacao: '',
     };
+    
     axios
       .put(url_base + "/vendaItens/avaliacao/" + idVendaItem, objeto)
       .then((response) => {
@@ -71,8 +72,12 @@ export default function CardOpiniaoProduto({
           font={40}
           color={"#f49516"}
           estrelas={estrelas}
-          setEstrelas={(e) => setEstrelas(e)}
-          onclick={() => handleAvaliation()}
+          setEstrelas={(e) => {
+            console.log(e)
+            setEstrelas(e);
+            handleAvaliation(e)
+          }}
+          onclick={() => {}}
         />
         <span>Comprado em {formatarData(dataCompra)}</span>
       </div>
