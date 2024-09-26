@@ -703,7 +703,7 @@ export default function Endereco() {
           quantidadeItens={quantidadeTotalProdutos}
           quantidadeFretes={produtosComFrete.length}
           subtotal={subtotal}
-          total={total}
+          total={total+valorFrete}
           showAreaFrete={true}
           valorFrete={valorFrete}
         />
