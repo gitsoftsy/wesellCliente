@@ -157,7 +157,8 @@ export default function DetalhesProduto() {
          await axios
           .get(url_base + `/produtos/avaliacoes?idProduto=${id}`)
           .then((response) => {
-            setAvaliationsProduct(response.data);
+            console.log(response.data)
+            setAvaliationsProduct(response.data != 'Nenhum resultado encontrado para os parâmetros informados.' && response.data);
           })
           .catch((error) => {
             console.log(error);

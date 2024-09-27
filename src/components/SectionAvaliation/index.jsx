@@ -15,14 +15,14 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
     5: 0,
   };
 
-  avaliacoes.forEach((avaliacao) => {
+  avaliacoes.length > 0 && avaliacoes.forEach((avaliacao) => {
     const star = avaliacao.avaliacao.toString();
     if (countStars.hasOwnProperty(star)) {
       countStars[star]++;
     }
   });
 
-  const somaEstrelas = avaliacoes.reduce(
+  const somaEstrelas = avaliacoes.length > 0 && avaliacoes.reduce(
     (acc, avaliacao) => acc + avaliacao.avaliacao,
     0
   );
@@ -33,16 +33,24 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
   const porcentagens = {};
   for (let key in countStars) {
     if (Object.prototype.hasOwnProperty.call(countStars, key)) {
-      porcentagens[key] = Math.round((countStars[key] / total) * 100);
+      if(countStars[key] > 0){
+        porcentagens[key] = Math.round((countStars[key] / total) * 100);
+      }else{
+        porcentagens[key] = 0;
+      }
     }
   }
 
-  const porcentagemBom = Math.round(
+  const porcentagemBom = isNaN(Math.round(
     ((countStars["4"] + countStars["5"]) / total) * 100
-  );
-  const porcentagemRuim = Math.round(
+  )) ? 0 : Math.round(
+    ((countStars["4"] + countStars["5"]) / total) * 100
+  )
+  const porcentagemRuim =isNaN( Math.round(
     ((countStars["1"] + countStars["2"] + countStars["3"]) / total) * 100
-  );
+  )) ? 0 : Math.round(
+    ((countStars["1"] + countStars["2"] + countStars["3"]) / total) * 100
+  )
 
   return (
     <>
@@ -53,7 +61,7 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
             <p>{media}</p>
             <div className="pt-1">
               <AvaliacaoFixa mediaAvaliacoes={media} heigth="26px" />
-              <p className="mt-1">({total}) Avaliações de clientes</p>
+              <p className="mt-1">({total > 0 ? total : 0}) Avaliações de clientes</p>
             </div>
           </span>
         </div>
@@ -79,7 +87,7 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
         {/* {props.avaliacaoCliente ? (
           <> */}
         <h1>Avaliações em destaque</h1>
-        {avaliacoes.map((avaliacao, index )=> (
+        {avaliacoes.length > 0 && avaliacoes.map((avaliacao, index )=> (
           avaliacao.descricaoAvaliacao != '' &&
           <Avaliation
             key={index}
