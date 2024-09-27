@@ -42,14 +42,13 @@ export default function Carrinho() {
     let modeloProdutos = [];
 
     productsFilter.map((item) => {
-      console.log(item)
       modeloProdutos.push({
         idProduto: item.idProduto,
-        cepCd: item.lojista.cepCd,
-        altura: item.altura,
-        largura: item.largura,
-        profundidade: item.profundidade,
-        peso: item.peso,
+        cepCd: item?.lojista?.cepCd,
+        altura: item?.altura,
+        largura: item?.largura,
+        profundidade: item?.profundidade,
+        peso: item?.peso,
       });
     });
 

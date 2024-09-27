@@ -16,6 +16,7 @@ import { url_base } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import { calculaFrete } from "../../hooks/calculaFrete";
 import CardProdutoFrete from "../../components/CardProdutoFrete";
+import CardProdutoFreteMobile from "../../components/CardProdutoFrete/CardProdutoFreteMobile";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -47,7 +48,7 @@ export default function Endereco() {
 
   const firtsRender = useRef(true);
 
-  const { client } = useContexts();
+  const { client, isMobile } = useContexts();
   const navigate = useNavigate();
 
   function limparMascara(valor) {
@@ -655,14 +656,23 @@ export default function Endereco() {
                 <h5 className="d-flex align-items-center gap-2 col-6 me-2">
                   <MdOutlineShoppingCart size={25} /> Produtos
                 </h5>
-                <span className="col text-center">Preço unitário</span>
-                <span className="col text-center">Quantia</span>
-                <span className="col text-center">Subtotal</span>
-                <span className="col text-center">Frete</span>
+                {!isMobile && (
+                  <>
+                    
+                    <span className="col text-center">Preço unitário</span>
+                    <span className="col text-center">Quantia</span>
+                    <span className="col text-center">Subtotal</span>
+                    <span className="col text-center">Frete</span>
+                  </>
+                )}
               </div>
-              {itensComFrete.map((item) => (
-                <CardProdutoFrete key={item.idProduto} item={item} />
-              ))}
+              {itensComFrete.map((item) =>
+                isMobile ? (
+                  <CardProdutoFreteMobile key={item.idProduto} item={item} />
+                ) : (
+                  <CardProdutoFrete key={item.idProduto} item={item} />
+                )
+              )}
             </section>
           )}
         </div>

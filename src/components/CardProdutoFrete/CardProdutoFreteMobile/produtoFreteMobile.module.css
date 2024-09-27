@@ -1,0 +1,54 @@
+.cardItemCarrinho {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.cardItemCarrinho:not(:last-child) {
+  border-bottom: 1px solid var(--cinza);
+}
+.sectionImg {
+  color: var(--cinza-secundario);
+  width: 100%;
+  height: 73px;
+  display: flex;
+  align-items: center;
+}
+
+.areaImg {
+  width: 18%; 
+  height: 100%;
+}
+
+.areaImg img {
+  max-width: 100%; 
+  max-height: 100%; 
+}
+
+.colNomeProduto {
+  width: 80%;
+}
+
+#nomeProduto {
+  width: 100%;
+  margin-bottom: 5px;
+  color: var(--preto);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nomeLojista {
+  margin-bottom: 5px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.nomeLojista p {
+  margin-bottom: 0;
+}
+
+@media (width < 768px) {
+
+ 
+}

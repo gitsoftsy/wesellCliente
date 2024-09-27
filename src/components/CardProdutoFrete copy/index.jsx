@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
-import formatCurrencyBR from "../../hooks/formatCurrency";
+import formatCurrencyBR from "../../../hooks/formatCurrency";
 import styles from "./produtoFrete.module.css";
 
 export default function CardProdutoFrete({ item }) {
   return (
     <div className={styles.cardItemCarrinho} key={item.idProduto}>
       <div className={`${styles.areaImg} col-1 me-2`}>
-        <img
-          src={item.imagem}
-          alt={item.nomeProduto}
-        />
+        <img src={item.imagem} alt={item.nomeProduto} />
       </div>
       <div className={`${styles.colNomeProduto} col-5 text-start`}>
         <p id={styles.nomeProduto}>{item.nomeProduto}</p>
