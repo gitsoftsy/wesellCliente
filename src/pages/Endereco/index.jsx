@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./endereco.module.css";
 import ReactInputMask from "react-input-mask";
 import {
   MdOutlineAddLocation,
   MdOutlineEditLocation,
   MdOutlineLocationOn,
+  MdOutlineShoppingCart,
   MdSaveAlt,
 } from "react-icons/md";
 import { FiArrowLeft } from "react-icons/fi";
@@ -14,6 +15,7 @@ import ResumoPedido from "../../components/ResumoPedido";
 import { url_base } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import { calculaFrete } from "../../hooks/calculaFrete";
+import CardProdutoFrete from "../../components/CardProdutoFrete";
 
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
@@ -21,6 +23,7 @@ export default function Endereco() {
   const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingFrete, setLoadingFrete] = useState(false);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(null);
   const [valorFrete, setValorFrete] = useState(null);
@@ -28,8 +31,8 @@ export default function Endereco() {
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [produtos, setProdutos] = useState([]);
   const [fretes, setFretes] = useState([]);
+  const [itensComFrete, setItensComFrete] = useState([]);
   const [produtosComFrete, setProdutosComFrete] = useState([]);
-
   const [editandoEndereco, setEditandoEndereco] = useState(false);
   const [valoresFormulario, setValoresFormulario] = useState({
     nomeEndereco: "",
@@ -42,6 +45,8 @@ export default function Endereco() {
     municipio: "",
   });
 
+  const firtsRender = useRef(true);
+
   const { client } = useContexts();
   const navigate = useNavigate();
 
@@ -49,9 +54,10 @@ export default function Endereco() {
     return valor ? valor.replace(/[^\d]+/g, "") : "";
   }
 
-  async function handleCalculaFrete(produtos, cep) {
+  async function handleCalculaFrete(itens, cep) {
+    setLoadingFrete(true);
     try {
-      const response = await calculaFrete(produtos, cep);
+      const response = await calculaFrete(itens, cep);
 
       if (response && response.length > 0) {
         const totalFreteCalculado = response.reduce(
@@ -64,6 +70,8 @@ export default function Endereco() {
       }
     } catch (erro) {
       console.log(erro);
+    } finally {
+      setLoadingFrete(false);
     }
   }
 
@@ -112,6 +120,15 @@ export default function Endereco() {
 
     getAddress();
   }, []);
+
+  useEffect(() => {
+    if (firtsRender.current) {
+      firtsRender.current = false;
+      return;
+    }
+
+    montarItensComFrete(produtos, fretes);
+  }, [fretes]);
 
   const handleEnderecoChange = async (id, item) => {
     setEnderecoSelecionado(id);
@@ -250,29 +267,36 @@ export default function Endereco() {
   };
 
   function montarItensComFrete(produtos, listaFretes) {
-    return produtos.map((produto) => {
+    const itens = produtos.map((produto) => {
+      let frete = null;
+
       if (produto.freteGratis === "S") {
-        return {
-          idProduto: produto.idProduto,
-          quantidade: produto.qtd,
-          vlFrete: null,
-        };
+        frete = null;
       } else {
         const fretesDoProduto = listaFretes.filter(
           (frete) => frete.item === produto.idProduto
         );
 
-        const totalFrete = fretesDoProduto.reduce((acc, frete) => {
-          return acc + parseFloat(frete.frete.price);
-        }, 0);
-
-        return {
-          idProduto: produto.idProduto,
-          quantidade: produto.qtd,
-          vlFrete: totalFrete.toFixed(2),
-        };
+        if (fretesDoProduto.length > 0) {
+          frete = fretesDoProduto.reduce((acc, frete) => {
+            return acc + parseFloat(frete.frete.price);
+          }, 0);
+        }
       }
+
+      return {
+        ...produto,
+        vlFrete: frete !== null ? frete.toFixed(2) : null,
+      };
     });
+
+    setItensComFrete(itens);
+
+    return itens.map((item) => ({
+      idProduto: item.idProduto,
+      quantidade: item.qtd,
+      vlFrete: item.vlFrete,
+    }));
   }
 
   function irParaPagamento() {
@@ -626,84 +650,30 @@ export default function Endereco() {
               </>
             )}
           </section>
-          {/* {frete && (
-            <section className={`${styles.cardItensCarrinho} card`}>
-              <div className={styles.titleCarrinho}>
-                <h5 className="d-flex align-items-center gap-2">
-                  <MdOutlineLocalShipping size={25} /> Formas de envio
+          {itensComFrete.length > 0 && (
+            <section className={`${styles.cardItensCarrinho} gap-0 card`}>
+              <div className={`${styles.titleCarrinho} mb-2`}>
+                <h5 className="d-flex align-items-center gap-2 col-6 me-2">
+                  <MdOutlineShoppingCart size={25} /> Produtos
                 </h5>
+                <span className="col text-center">Preço unitário</span>
+                <span className="col text-center">Quantia</span>
+                <span className="col text-center">Subtotal</span>
+                <span className="col text-center">Frete</span>
               </div>
-              <div className="d-flex px-4" id={styles.headerFretes}>
-                <div className="col">
-                  <p className="mb-0">Transportadora</p>
-                </div>
-
-                <div className="col">
-                  <p className="mb-0">Modalidade</p>
-                </div>
-
-                <div className="col">
-                  <p className="mb-0">Prazo Estimado</p>
-                </div>
-
-                <div className="col text-end">
-                  <p className="mb-0">Preço</p>
-                </div>
-              </div>
-
-              <div
-                key={frete.id}
-                className={`${styles.cardEndereco} card rounded-1 px-3 py-2 ${styles.radioSelected}`}
-              >
-                <div className="form-check d-flex align-items-center py-3 mb-0">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name={frete.name}
-                    id={frete.name}
-                    checked={true}
-                  />
-                  <label
-                    className={`ms-2 pe-2 form-check-label col-12 d-flex justify-content-between`}
-                    htmlFor={frete.name}
-                  >
-                    <div className="col">
-                      <img
-                        src={frete?.picture}
-                        alt={frete?.alt}
-                        className={styles.imgFrete}
-                      />
-                    </div>
-
-                    <div className="col">
-                      <p className="mb-0">{frete?.name}</p>
-                    </div>
-
-                    <div className="col">
-                      <p className="mb-0">
-                        {frete?.delivery_range?.min} -{" "}
-                        {frete?.delivery_range?.max} dias úteis
-                      </p>
-                    </div>
-
-                    <div className="col text-end">
-                      <p className="fw-semibold mb-0">
-                        {formatPriceBR(frete?.price)}
-                      </p>
-                    </div>
-                  </label>
-                </div>
-              </div>
+              {itensComFrete.map((item) => (
+                <CardProdutoFrete key={item.idProduto} item={item} />
+              ))}
             </section>
-          )} */}
+          )}
         </div>
         <ResumoPedido
-          disabled={exibirFormulario}
+          disabled={exibirFormulario || loadingFrete}
           continuarCompra={irParaPagamento}
           quantidadeItens={quantidadeTotalProdutos}
           quantidadeFretes={produtosComFrete.length}
           subtotal={subtotal}
-          total={total+valorFrete}
+          total={total + valorFrete}
           showAreaFrete={true}
           valorFrete={valorFrete}
         />
