@@ -303,7 +303,6 @@ export default function Endereco() {
     const itensComFrete = montarItensComFrete(produtos, fretes);
     const data = {
       enderecoId: enderecoSelecionado,
-      lojista: produtos[0].lojista,
       itens: itensComFrete,
       resumo: {
         qtdProdutos: quantidadeTotalProdutos,

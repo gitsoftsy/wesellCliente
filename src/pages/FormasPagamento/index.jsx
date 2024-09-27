@@ -166,256 +166,251 @@ export default function FormasPagamento() {
               </h5>
             </div>
 
-            {orderData?.lojista.aceitaCartao == "S" && (
-              <div
-                className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                  formaPagamento === "cartao" && styles.radioSelected
-                }`}
-              >
-                <div className="form-check d-flex align-items-center">
-                  <input
-                    className="form-check-input mt-0"
-                    type="radio"
-                    name="formaPagamento"
-                    id="cartao"
-                    checked={formaPagamento === "cartao"}
-                    onChange={handleChangePagamento}
-                  />
-                  <label
-                    className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                    htmlFor="cartao"
-                  >
-                    <span>
-                      CARTÃO DE CRÉDITO
-                      <br />
-                      {orderData?.lojista.possuiParcelamento == "S" && (
-                        <span
-                          className={`${styles.textCard} fw-normal`}
-                          style={{ color: "#f49516" }}
-                        >
-                          Parcele em até {orderData?.lojista.maximoParcelas}x
-                          sem juros
-                        </span>
-                      )}
-                    </span>
-                    <FaCreditCard size={22} />
-                  </label>
-                </div>
-                {formaPagamento === "cartao" && (
-                  <form className="py-3">
-                    <div className="row">
-                      <div className="mb-3 col-12 col-sm-6">
-                        <label htmlFor="cpfTitular" className="form-label">
-                          CPF do titular
-                          <span className="text-danger">*</span>
-                        </label>
-                        <ReactInputMask
-                          type="tel"
-                          required
-                          mask="999.999.999-99"
-                          maskChar=""
-                          className="form-control"
-                          id="cpfTitular"
-                          value={dataCart.cpfTitular}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="mb-3 col-12 col-sm-6">
-                        <label htmlFor="nomeCartao" className="form-label">
-                          Nome do titular<span className="text-danger">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          className="form-control"
-                          autoComplete="off"
-                          id="nomeCartao"
-                          value={dataCart.nomeCartao}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="mb-3 col-12 col-sm-6">
-                        <label htmlFor="numeroCartao" className="form-label">
-                          Número do cartão<span className="text-danger">*</span>
-                        </label>
-                        <ReactInputMask
-                          required
-                          type="tel"
-                          mask="9999 9999 9999 9999"
-                          maskChar=""
-                          className="form-control"
-                          id="numeroCartao"
-                          value={dataCart.numeroCartao}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-
-                      <div className="mb-3 col-12 col-sm-6">
-                        <label htmlFor="mesVencimento" className="form-label">
-                          Mês de vencimento
-                          <span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-select"
-                          name="mesVencimento"
-                          id="mesVencimento"
-                          value={dataCart.mesVencimento}
-                          onChange={handleInputChange}
-                        >
-                          <option value="0" disabled>
-                            Mês
-                          </option>
-                          {listMes.map((mes) => (
-                            <option key={mes} value={mes}>
-                              {mes}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="mb-3 col-12 col-sm-6">
-                        <label htmlFor="anoVencimento" className="form-label">
-                          Ano de vencimento
-                          <span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-select"
-                          name="anoVencimento"
-                          id="anoVencimento"
-                          value={dataCart.anoVencimento}
-                          onChange={handleInputChange}
-                        >
-                          <option value="0" disabled>
-                            Ano
-                          </option>
-                          {listAno.map((ano) => (
-                            <option key={ano} value={ano}>
-                              {ano}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="mb-3 col-12 col-sm-6">
-                        <label htmlFor="cvv" className="form-label">
-                          Código de segurança
-                          <span className="text-danger">*</span>
-                        </label>
-                        <ReactInputMask
-                          type="tel"
-                          required
-                          mask="999"
-                          maskChar=""
-                          className="form-control"
-                          id="cvv"
-                          value={dataCart.cvv}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      {orderData?.lojista.possuiParcelamento === "S" && (
-                        <div className="mb-3 col-12 col-sm-6">
-                          <label htmlFor="numParcelas" className="form-label">
-                            Número de parcelas
-                            <span className="text-danger">*</span>
-                          </label>
-                          <select
-                            className="form-select"
-                            name="numParcelas"
-                            id="numParcelas"
-                            value={numParcelas}
-                            onChange={(e) => setParcelas(e.target.value)}
-                          >
-                            <option value="0" disabled>
-                              Selecione uma opção
-                            </option>
-                            {Array.from(
-                              { length: orderData?.lojista.maximoParcelas },
-                              (_, index) => (
-                                <option key={index + 1} value={index + 1}>
-                                  {index + 1}{" "}
-                                  {index > 0 ? "Parcelas" : "Parcela"}
-                                </option>
-                              )
-                            )}
-                          </select>
-                        </div>
-                      )}
-                    </div>
-                  </form>
-                )}
-              </div>
-            )}
-            {orderData?.lojista.aceitaPix == "S" && (
-              <div
-                className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                  formaPagamento === "pix" && styles.radioSelected
-                }`}
-              >
-                <div className="form-check d-flex align-items-center">
-                  <input
-                    className="form-check-input mt-0"
-                    type="radio"
-                    name="formaPagamento"
-                    id="pix"
-                    checked={formaPagamento === "pix"}
-                    onChange={handleChangePagamento}
-                  />
-                  <label
-                    className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                    htmlFor="pix"
-                  >
-                    <span>
-                      PAGAMENTO VIA PIX <br />
+            <div
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                formaPagamento === "cartao" && styles.radioSelected
+              }`}
+            >
+              <div className="form-check d-flex align-items-center">
+                <input
+                  className="form-check-input mt-0"
+                  type="radio"
+                  name="formaPagamento"
+                  id="cartao"
+                  checked={formaPagamento === "cartao"}
+                  onChange={handleChangePagamento}
+                />
+                <label
+                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                  htmlFor="cartao"
+                >
+                  <span>
+                    CARTÃO DE CRÉDITO
+                    <br />
+                    {orderData?.lojista.possuiParcelamento == "S" && (
                       <span
                         className={`${styles.textCard} fw-normal`}
                         style={{ color: "#f49516" }}
                       >
-                        Aprovação imediata
+                        Parcele em até {orderData?.lojista.maximoParcelas}x sem
+                        juros
                       </span>
-                    </span>
-                    <MdPix size={22} />
-                  </label>
-                </div>
+                    )}
+                  </span>
+                  <FaCreditCard size={22} />
+                </label>
               </div>
-            )}
-            {orderData?.lojista.aceitaBoleto == "S" && (
-              <div
-                className={`${styles.cardEndereco} card rounded-1 px-3  ${
-                  formaPagamento === "boleto" && styles.radioSelected
-                }`}
-              >
-                <div className="form-check d-flex align-items-center">
-                  <input
-                    className="form-check-input mt-0"
-                    type="radio"
-                    name="formaPagamento"
-                    id="boleto"
-                    checked={formaPagamento === "boleto"}
-                    onChange={handleChangePagamento}
-                  />
-                  <label
-                    className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
-                    htmlFor="boleto"
-                  >
-                    <span>
-                      BOLETO
-                      <br />
-                      <span
-                        className={`${styles.textCard} fw-normal`}
-                        style={{ color: "#f49516" }}
+              {formaPagamento === "cartao" && (
+                <form className="py-3">
+                  <div className="row">
+                    <div className="mb-3 col-12 col-sm-6">
+                      <label htmlFor="cpfTitular" className="form-label">
+                        CPF do titular
+                        <span className="text-danger">*</span>
+                      </label>
+                      <ReactInputMask
+                        type="tel"
+                        required
+                        mask="999.999.999-99"
+                        maskChar=""
+                        className="form-control"
+                        id="cpfTitular"
+                        value={dataCart.cpfTitular}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="mb-3 col-12 col-sm-6">
+                      <label htmlFor="nomeCartao" className="form-label">
+                        Nome do titular<span className="text-danger">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        className="form-control"
+                        autoComplete="off"
+                        id="nomeCartao"
+                        value={dataCart.nomeCartao}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="mb-3 col-12 col-sm-6">
+                      <label htmlFor="numeroCartao" className="form-label">
+                        Número do cartão<span className="text-danger">*</span>
+                      </label>
+                      <ReactInputMask
+                        required
+                        type="tel"
+                        mask="9999 9999 9999 9999"
+                        maskChar=""
+                        className="form-control"
+                        id="numeroCartao"
+                        value={dataCart.numeroCartao}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+
+                    <div className="mb-3 col-12 col-sm-6">
+                      <label htmlFor="mesVencimento" className="form-label">
+                        Mês de vencimento
+                        <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-select"
+                        name="mesVencimento"
+                        id="mesVencimento"
+                        value={dataCart.mesVencimento}
+                        onChange={handleInputChange}
                       >
-                        Será aprovado em 1 ou 2 dias úteis.
-                      </span>
+                        <option value="0" disabled>
+                          Mês
+                        </option>
+                        {listMes.map((mes) => (
+                          <option key={mes} value={mes}>
+                            {mes}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="mb-3 col-12 col-sm-6">
+                      <label htmlFor="anoVencimento" className="form-label">
+                        Ano de vencimento
+                        <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-select"
+                        name="anoVencimento"
+                        id="anoVencimento"
+                        value={dataCart.anoVencimento}
+                        onChange={handleInputChange}
+                      >
+                        <option value="0" disabled>
+                          Ano
+                        </option>
+                        {listAno.map((ano) => (
+                          <option key={ano} value={ano}>
+                            {ano}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="mb-3 col-12 col-sm-6">
+                      <label htmlFor="cvv" className="form-label">
+                        Código de segurança
+                        <span className="text-danger">*</span>
+                      </label>
+                      <ReactInputMask
+                        type="tel"
+                        required
+                        mask="999"
+                        maskChar=""
+                        className="form-control"
+                        id="cvv"
+                        value={dataCart.cvv}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    {orderData?.lojista.possuiParcelamento === "S" && (
+                      <div className="mb-3 col-12 col-sm-6">
+                        <label htmlFor="numParcelas" className="form-label">
+                          Número de parcelas
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select
+                          className="form-select"
+                          name="numParcelas"
+                          id="numParcelas"
+                          value={numParcelas}
+                          onChange={(e) => setParcelas(e.target.value)}
+                        >
+                          <option value="0" disabled>
+                            Selecione uma opção
+                          </option>
+                          {Array.from(
+                            { length: orderData?.lojista.maximoParcelas },
+                            (_, index) => (
+                              <option key={index + 1} value={index + 1}>
+                                {index + 1} {index > 0 ? "Parcelas" : "Parcela"}
+                              </option>
+                            )
+                          )}
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </form>
+              )}
+            </div>
+
+            <div
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                formaPagamento === "pix" && styles.radioSelected
+              }`}
+            >
+              <div className="form-check d-flex align-items-center">
+                <input
+                  className="form-check-input mt-0"
+                  type="radio"
+                  name="formaPagamento"
+                  id="pix"
+                  checked={formaPagamento === "pix"}
+                  onChange={handleChangePagamento}
+                />
+                <label
+                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                  htmlFor="pix"
+                >
+                  <span>
+                    PAGAMENTO VIA PIX <br />
+                    <span
+                      className={`${styles.textCard} fw-normal`}
+                      style={{ color: "#f49516" }}
+                    >
+                      Aprovação imediata
                     </span>
-                    <FaBarcode size={22} />
-                  </label>
-                </div>
+                  </span>
+                  <MdPix size={22} />
+                </label>
               </div>
-            )}
+            </div>
+
+            <div
+              className={`${styles.cardEndereco} card rounded-1 px-3  ${
+                formaPagamento === "boleto" && styles.radioSelected
+              }`}
+            >
+              <div className="form-check d-flex align-items-center">
+                <input
+                  className="form-check-input mt-0"
+                  type="radio"
+                  name="formaPagamento"
+                  id="boleto"
+                  checked={formaPagamento === "boleto"}
+                  onChange={handleChangePagamento}
+                />
+                <label
+                  className="ms-3 pe-2 form-check-label col-12 d-flex justify-content-between"
+                  htmlFor="boleto"
+                >
+                  <span>
+                    BOLETO
+                    <br />
+                    <span
+                      className={`${styles.textCard} fw-normal`}
+                      style={{ color: "#f49516" }}
+                    >
+                      Será aprovado em 1 ou 2 dias úteis.
+                    </span>
+                  </span>
+                  <FaBarcode size={22} />
+                </label>
+              </div>
+            </div>
           </section>
           <Link to="/carrinho/endereco">
             <FiArrowLeft size={18} /> Voltar para endereço
