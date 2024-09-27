@@ -151,8 +151,8 @@ export default function DetalhesProduto() {
       .then( async (response) => {
         const data = response.data;
         console.log(data);
-        setProduto(data.produto);
-        getProdutosSimilares(data.produto);
+        setProduto(data);
+        getProdutosSimilares(data);
 
          await axios
           .get(url_base + `/produtos/avaliacoes?idProduto=${id}`)
