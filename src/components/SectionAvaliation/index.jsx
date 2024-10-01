@@ -52,6 +52,15 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
     ((countStars["1"] + countStars["2"]) / total) * 100
   )
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <>
       <div className={styles.infoAvaliation}>
@@ -94,7 +103,7 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
             nomeUsuario={avaliacao.nomeCompleto}
             comentario={avaliacao.descricaoAvaliacao}
             numeroAvaliacoes={avaliacao.avaliacao}
-            // dataAvaliacao={avaliacao.dataAvaliacao}
+            dataAvaliacao={formatDate(avaliacao.dataAvaliacao)}
           />
         ))}
         {/* </>
