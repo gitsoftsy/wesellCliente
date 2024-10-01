@@ -42,14 +42,14 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
   }
 
   const porcentagemBom = isNaN(Math.round(
-    ((countStars["4"] + countStars["5"]) / total) * 100
+    ((countStars["4"] + countStars["5"]) + countStars["3"] / total) * 100
   )) ? 0 : Math.round(
-    ((countStars["4"] + countStars["5"]) / total) * 100
+    ((countStars["4"] + countStars["5"]) + countStars["3"] / total) * 100
   )
   const porcentagemRuim =isNaN( Math.round(
-    ((countStars["1"] + countStars["2"] + countStars["3"]) / total) * 100
+    ((countStars["1"] + countStars["2"]) / total) * 100
   )) ? 0 : Math.round(
-    ((countStars["1"] + countStars["2"] + countStars["3"]) / total) * 100
+    ((countStars["1"] + countStars["2"]) / total) * 100
   )
 
   return (
