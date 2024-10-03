@@ -96,7 +96,7 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
         {/* {props.avaliacaoCliente ? (
           <> */}
         <h1>Avaliações em destaque</h1>
-        {avaliacoes.length > 0 && avaliacoes.map((avaliacao, index )=> (
+        {avaliacoes.length > 0 ? avaliacoes.map((avaliacao, index )=> (
           avaliacao.descricaoAvaliacao != '' &&
           <Avaliation
             key={index}
@@ -105,7 +105,9 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
             numeroAvaliacoes={avaliacao.avaliacao}
             dataAvaliacao={formatDate(avaliacao.dataAvaliacao)}
           />
-        ))}
+        )):
+        <p>Não fizeram nenhuma avaliação ainda. Faça a primeira!</p>
+        }
         {/* </>
         ) : (
           <h6>Nenhuma avaliação de cliente</h6>
