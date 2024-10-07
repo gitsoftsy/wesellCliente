@@ -147,18 +147,22 @@ export default function DetalhesProduto() {
 
   async function getProduto() {
     await axios
-      .get(url_base + `/produtos/${id}`)
-      .then( async (response) => {
+      .get(url_base + `/produtos/transacoes/${id}`)
+      .then(async (response) => {
         const data = response.data;
         console.log(data);
         setProduto(data);
         getProdutosSimilares(data);
 
-         await axios
+        await axios
           .get(url_base + `/produtos/avaliacoes?idProduto=${id}`)
           .then((response) => {
-            console.log(response.data)
-            setAvaliationsProduct(response.data != 'Nenhum resultado encontrado para os parâmetros informados.' && response.data);
+            console.log(response.data);
+            setAvaliationsProduct(
+              response.data !=
+                "Nenhum resultado encontrado para os parâmetros informados." &&
+                response.data
+            );
           })
           .catch((error) => {
             console.log(error);
