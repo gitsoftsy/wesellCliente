@@ -4,15 +4,15 @@ import AvaliacaoFixa from "../SectionAvaliation/AvaliacaoFixa";
 
 const Avaliation = ({ numeroAvaliacoes, nomeUsuario, comentario, dataAvaliacao}) => {
   return (
-    <div className={styles.boxAvaliation}>
+    <div className={`${styles.boxAvaliation} border-bottom`}>
       <div className={styles.lineAvaliation}>
-        <h6 className="my-0">
+        <h6 className="mt-0">
           {nomeUsuario}
-          <span className="text-secondary text-end ms-1">(dataAvaliacao)</span>
         </h6>
         <AvaliacaoFixa heigth="1.4em" mediaAvaliacoes={numeroAvaliacoes} />
       </div>
-      <p>{comentario}</p>
+      <p className={!comentario && 'text-secondary'}>{comentario ? comentario : 'Avaliação sem descrição.'}</p>
+      <p className="text-secondary">Em {dataAvaliacao}</p>
     </div>
   );
 };
