@@ -32,6 +32,8 @@ export default function FormasPagamento() {
   const [loading, setLoading] = useState(false);
   const [statusCompra, setStatusCompra] = useState(false);
   const [msgModal, setMsgModal] = useState("");
+  const [imgQrCode, setImgQrCode] = useState("");
+  const [qrCode, setQrCode] = useState("");
 
   const { client } = useContexts();
 
@@ -81,7 +83,7 @@ export default function FormasPagamento() {
       }
 
       if (
-        orderData?.lojista.possuiParcelamento === "S" &&
+        orderData?.lojista?.possuiParcelamento === "S" &&
         (!numParcelas || numParcelas === "0")
       ) {
         toast.warn("Por favor, selecione o número de parcelas.");
@@ -91,7 +93,7 @@ export default function FormasPagamento() {
       processarPagamentoCartao();
       return;
     } else if (formaPagamento === "pix") {
-      setShowPix(true);
+      gerarQrCode();
     } else {
       setShowBoleto(true);
     }
@@ -112,7 +114,7 @@ export default function FormasPagamento() {
       cvv,
     } = dataCart;
 
-    const possuiParcelamento = orderData?.lojista.possuiParcelamento === "S";
+    const possuiParcelamento = orderData?.lojista?.possuiParcelamento === "S";
 
     const objeto = {
       idCliente: client.id,
@@ -145,6 +147,54 @@ export default function FormasPagamento() {
           setShowModal(true);
           console.log(data.retorno.codigoErro);
         }
+      } else {
+        setLoading(false);
+        console.log(response.data);
+        setStatusCompra(false);
+        setMsgModal(data.retorno.status);
+        setShowModal(true);
+      }
+    });
+  }
+  async function gerarQrCode() {
+    setLoading(true);
+
+    const objeto = {
+      idCliente: client.id,
+      idEnderecoEntrega: orderData.enderecoId,
+      idVendedor: null,
+      formaPagamento: "PIX",
+      itens: orderData.itens,
+    };
+    await axios.post(apiFinanceiro + `/venda`, objeto).then((response) => {
+      const data = response.data;
+      if (data.sucesso) {
+        setImgQrCode(data.retorno.qrCodeUrl);
+        setQrCode(data.retorno.qrCode);
+        setShowPix(true);
+        setLoading(false);
+
+        const checkPaymentStatus = async () => {
+          try {
+            const response = await axios.get(
+              apiFinanceiro + `/venda/status?idVenda=${data.retorno.idVenda}`
+            );
+
+            if (response.data.sucesso && response.data.retorno === "PAGO") {
+              setShowPix(false);
+              setStatusCompra(true);
+              setShowModal(true);
+            } else {
+              setTimeout(checkPaymentStatus, 1000);
+            }
+          } catch (error) {
+            setMsgModal(data.retorno.mensagem);
+            setShowModal(true);
+            console.log(error);
+          }
+        };
+
+        setTimeout(checkPaymentStatus, 1000);
       } else {
         setLoading(false);
         console.log(response.data);
@@ -187,7 +237,7 @@ export default function FormasPagamento() {
                   <span>
                     CARTÃO DE CRÉDITO
                     <br />
-                    {orderData?.lojista.possuiParcelamento == "S" && (
+                    {orderData?.lojista?.possuiParcelamento == "S" && (
                       <span
                         className={`${styles.textCard} fw-normal`}
                         style={{ color: "#f49516" }}
@@ -315,7 +365,7 @@ export default function FormasPagamento() {
                         onChange={handleInputChange}
                       />
                     </div>
-                    {orderData?.lojista.possuiParcelamento === "S" && (
+                    {orderData?.lojista?.possuiParcelamento === "S" && (
                       <div className="mb-3 col-12 col-sm-6">
                         <label htmlFor="numParcelas" className="form-label">
                           Número de parcelas
@@ -435,7 +485,12 @@ export default function FormasPagamento() {
         isShow={showModal}
         setIsShow={setShowModal}
       />
-      <ModalPix isShow={showPix} setIsShow={setShowPix} />
+      <ModalPix
+        isShow={showPix}
+        setIsShow={setShowPix}
+        imgQrCode={imgQrCode}
+        qrCode={qrCode}
+      />
       <ModalBoleto isShow={showBoleto} setIsShow={setShowBoleto} />
     </div>
   );

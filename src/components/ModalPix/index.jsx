@@ -6,18 +6,15 @@ import { QRCodeSVG } from "qrcode.react";
 import { MdContentCopy } from "react-icons/md";
 import { toast } from "react-toastify";
 
-export default function ModalPix({ isShow, setIsShow }) {
+export default function ModalPix({ isShow, qrCode, imgQrCode, setIsShow }) {
   const navigate = useNavigate();
-  const numeroDoBoleto = "0123456789012345678901234567890123456789";
 
   function copiarPix() {
-    navigator.clipboard.writeText(numeroDoBoleto).then(() => {
+    navigator.clipboard.writeText(qrCode).then(() => {
       toast.success("Código pix copiado!");
     });
   }
 
-  const qrCode =
-    "https://images.tcdn.com.br/img/img_prod/691184/teste_213_1_20200528133119.png";
 
   return (
     <Modal
@@ -31,7 +28,7 @@ export default function ModalPix({ isShow, setIsShow }) {
         className={`paddingModal d-flex flex-column align-items-center w-100`}
       >
         <p className="fs-5">Scannear QRcode</p>
-        <QRCodeSVG size={280} value={qrCode} />
+        <QRCodeSVG size={280} value={imgQrCode} />
         <div className="row">
           <Button
             variant="primary"
@@ -41,7 +38,7 @@ export default function ModalPix({ isShow, setIsShow }) {
             Concluir
           </Button>
           <button className="btn btn-secondary me-3 mt-3" onClick={copiarPix}>
-            <MdContentCopy size={22} className="me-2" /> Código copia e cola
+            <MdContentCopy size={22} className="me-2" /> Copiar código pix
           </button>
           <Button
             variant="danger"
