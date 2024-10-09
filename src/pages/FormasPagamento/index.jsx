@@ -176,11 +176,12 @@ export default function FormasPagamento() {
 
         const checkPaymentStatus = async () => {
           try {
-            const response = await axios.get(
+            const responseStatus = await axios.get(
               apiFinanceiro + `/venda/status?idVenda=${data.retorno.idVenda}`
             );
 
-            if (response.data.sucesso && response.data.retorno === "PAGO") {
+
+            if (responseStatus.data.sucesso && responseStatus.data.retorno === "PAGO") {
               setShowPix(false);
               setStatusCompra(true);
               setShowModal(true);
