@@ -116,6 +116,9 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
         {avaliacoesComDescricao.length > 0 ? (
           <>
             {avaliacoesComDescricao
+              .sort(
+                (a, b) => new Date(b.dataAvaliacao) - new Date(a.dataAvaliacao)
+              ) 
               .slice(0, visibleAvaliacoes)
               .map((avaliacao, index) => (
                 <Avaliation

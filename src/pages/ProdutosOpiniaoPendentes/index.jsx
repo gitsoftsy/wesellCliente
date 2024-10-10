@@ -28,7 +28,6 @@ export default function ProdutosOpiniaoPendentes() {
       let idUser = userJson.id ? userJson.id : userJson.idCliente
       axios
         .get(url_base + `/produtos/semAvaliacao?idCliente=` + idUser)
-        // .get(url_base + `/produtos/clientes?idCliente=` + 7)
         .then((response) => {
           const dados = response.data;
           setPedidos(dados);

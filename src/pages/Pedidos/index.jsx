@@ -25,7 +25,6 @@ export default function Pedidos() {
         // .get(url_base + `/produtos/clientes?idCliente=` + 1)
         .then((response) => {
           const dados = response.data;
-          console.log(dados, idSearch);
           setPedidos(dados);
         })
         .catch((error) => {
