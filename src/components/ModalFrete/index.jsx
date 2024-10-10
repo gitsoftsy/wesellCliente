@@ -7,7 +7,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import { apiFrete } from "../../services/apis";
 import formatPriceBR from "../../hooks/formatPrice";
 
-export default function ModalFrete({ produto }) {
+export default function ModalFrete({ produto, freteGratis }) {
   const [endereco, setEndereco] = useState(null);
   const [loading, setLoading] = useState(false);
   const [frete, setFrete] = useState(null);
@@ -55,7 +55,6 @@ export default function ModalFrete({ produto }) {
       if (response.data.sucesso) {
         const fretes = response.data.retorno;
 
-        // Verifica se todos os fretes têm erro
         const allErrors = fretes.every(
           (item) => item.error !== null && item.error !== undefined
         );
@@ -79,7 +78,6 @@ export default function ModalFrete({ produto }) {
         }
 
         setLoading(false);
-        console.log(fretes);
       } else {
         setLoading(false);
         console.error(response.data);
@@ -183,7 +181,9 @@ export default function ModalFrete({ produto }) {
 
                           <div className="col text-end">
                             <p className="fw-semibold">
-                              {formatPriceBR(frete?.price)}
+                              {freteGratis
+                                ? "FRETE GRÁTIS"
+                                : formatPriceBR(frete?.price)}
                             </p>
                           </div>
                         </label>

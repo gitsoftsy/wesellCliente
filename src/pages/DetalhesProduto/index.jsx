@@ -23,6 +23,7 @@ export default function DetalhesProduto() {
   const [listImages, setListImages] = useState([]);
   const [maximoParcela, setMaximoParcela] = useState(false);
   const [calculaFrete, setCalculaFrete] = useState(true);
+  const [freteGratis, setFreteGratis] = useState(false);
   const [isActive, setActive] = useState(true);
   const [avaliationsProduct, setAvaliationsProduct] = useState([]);
 
@@ -41,9 +42,6 @@ export default function DetalhesProduto() {
           },
         })
         .then((result) => {
-          console.log(result);
-          console.log(window.location.href);
-
           if (result.data.length > 0) {
             if (result.data[0].dataCancelamento == null) {
               setActive(false);
@@ -74,34 +72,6 @@ export default function DetalhesProduto() {
   useEffect(() => {
     getLink(window.location.href);
   });
-
-  // const avaliations = [
-  //   { id: 1, star: 4, nome: "Wagner Moura" },
-  //   { id: 2, star: 3, nome: "Wagner Moura" },
-  //   { id: 3, star: 5, nome: "Wagner Moura" },
-  //   { id: 4, star: 5, nome: "Wagner Moura" },
-  //   { id: 5, star: 5, nome: "Wagner Moura" },
-  //   { id: 6, star: 3, nome: "Wagner Moura" },
-  //   { id: 7, star: 2, nome: "Wagner Moura" },
-  //   { id: 8, star: 5, nome: "Wagner Moura" },
-  //   { id: 9, star: 5, nome: "Wagner Moura" },
-  //   { id: 10, star: 5, nome: "Wagner Moura" },
-  //   { id: 11, star: 5, nome: "Wagner Moura" },
-  //   { id: 12, star: 4, nome: "Wagner Moura" },
-  //   { id: 13, star: 4, nome: "Wagner Moura" },
-  //   { id: 14, star: 4, nome: "Wagner Moura" },
-  //   { id: 15, star: 4, nome: "Wagner Moura" },
-  //   { id: 16, star: 5, nome: "Wagner Moura" },
-  //   { id: 17, star: 3, nome: "Wagner Moura" },
-  //   { id: 18, star: 3, nome: "Wagner Moura" },
-  //   { id: 19, star: 4, nome: "Wagner Moura" },
-  //   { id: 20, star: 4, nome: "Wagner Moura" },
-  //   { id: 21, star: 5, nome: "Wagner Moura" },
-  //   { id: 22, star: 5, nome: "Wagner Moura" },
-  //   { id: 23, star: 5, nome: "Wagner Moura" },
-  //   { id: 24, star: 5, nome: "Wagner Moura" },
-  //   { id: 25, star: 5, nome: "Wagner Moura" },
-  // ];
 
   const path = useLocation();
 
@@ -169,9 +139,17 @@ export default function DetalhesProduto() {
             //toast.error(error.message);
           });
 
-        data.freteGratis === "S"
-          ? setCalculaFrete(false)
-          : setCalculaFrete(true);
+        if (data.altura && data.altura > 0) {
+          setCalculaFrete(true);
+
+          if (data.freteGratis === "S") {
+            setFreteGratis(true);
+          } else {
+            setFreteGratis(false);
+          }
+        } else {
+          setCalculaFrete(false);
+        }
 
         if (data.lojista.possuiParcelamento === "S") {
           setMaximoParcela(data.lojista.maximoParcelas);
@@ -414,7 +392,7 @@ export default function DetalhesProduto() {
             )}
           </section>
         </section>
-        <ModalFrete produto={produto} />
+        <ModalFrete produto={produto} freteGratis={freteGratis} />
       </LoadingOverlay>
     </>
   );
