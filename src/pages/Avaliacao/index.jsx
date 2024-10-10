@@ -46,12 +46,9 @@ export default function Avaliacao() {
     };
     axios
       .put(url_base + "/vendaItens/avaliacao/" + idVendaItem, objeto)
-      .then((response) => {
-        console.log("====================================");
-        console.log(response);
-        console.log("====================================");
+      .then(() => {
         toast.success(`Avaliado com sucesso!`);
-        navigate("/");
+        navigate("/minha-conta/pedidos");
       })
       .catch((error) => {
         console.log(error);
