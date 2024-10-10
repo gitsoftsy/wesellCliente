@@ -12,9 +12,9 @@ const SectionAvaliation = ({ total, avaliacoes }) => {
   const [avaliacoesComDescricao, setAvaliacoesComDescricao] = useState([]);
 
   useEffect(() => {
-    const filtradas = avaliacoes.filter(
-      (avaliacao) => avaliacao.descricaoAvaliacao
-    );
+    const filtradas = avaliacoes.length > 0 ? avaliacoes.filter(
+      (avaliacao) => avaliacao.descricaoAvaliacao 
+    ): []
     setAvaliacoesComDescricao(filtradas);
   }, [avaliacoes]);
 
