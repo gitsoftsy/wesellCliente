@@ -63,13 +63,13 @@ export default function ClienteProvider({ children }) {
     localStorage.setItem("@wesell-search-value", JSON.stringify(value));
   };
 
-  function addToCart(product) {
+  function addToCart(id) {
     const carrinho = localStorage.getItem("@wesellItemsInCart");
 
     let productsInCart = JSON.parse(carrinho) || [];
 
     const hasCurso = productsInCart.some(
-      (productInCart) => productInCart.idProduto === product.idProduto
+      (idInCart) => idInCart == id
     );
 
     if (hasCurso) {
@@ -77,7 +77,7 @@ export default function ClienteProvider({ children }) {
       return;
     }
 
-    productsInCart.push(product);
+    productsInCart.push(id);
     localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
     toast.success("Adicionado com sucesso!");
   }

@@ -26,7 +26,7 @@ export default function CardProdutoCarrinho({
     <div className={styles.cardItemCarrinho} key={item.idProduto}>
       <div className={styles.areaImg}>
         <img
-          src={item.imagem ? item.imagem : item.imagens[0]}
+          src={item.imagem}
           alt={item.nomeProduto}
         />
       </div>

@@ -77,7 +77,7 @@ export default function Endereco() {
   }
 
   useEffect(() => {
-    const productsInCart = localStorage.getItem("@wesellItemsInCart");
+    const productsInCart = localStorage.getItem("@wesellItemsCheckout");
     const productsFreight =
       JSON.parse(localStorage.getItem("@wesellItemsFreight")) || [];
     const products = JSON.parse(productsInCart) || [];

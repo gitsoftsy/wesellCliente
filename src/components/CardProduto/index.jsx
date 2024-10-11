@@ -96,7 +96,7 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
             className={styles.btnBuy}
             type="button"
             onClick={() => {
-              addToCart({ ...produto, qtd: 1, imagem: srcImage }),
+              addToCart(produto.idProduto),
                 navigate("/carrinho");
             }}
           >

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import CardProdutoCarrinho from "../../components/CardProdutoCarrinho";
 import { useEffect, useState } from "react";
 
@@ -7,8 +8,12 @@ import { MdOutlineRemoveShoppingCart } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido/index.jsx";
 import useContexts from "../../hooks/useContext.js";
+import axios from "axios";
+import { url_base, url_img } from "../../services/apis.js";
 
 export default function Carrinho() {
+  const [idsProductsCart, setIdsProductsCart] = useState([]);
+  const [idsProductsSave, setIdsProductsSave] = useState([]);
   const [produtosComFrete, setProdutosComFrete] = useState([]);
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
   const [produtosSalvos, setProdutosSalvos] = useState([]);
@@ -20,64 +25,152 @@ export default function Carrinho() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const productsInCart = localStorage.getItem("@wesellItemsInCart");
-    const products = JSON.parse(productsInCart) || [];
-    const savedProducts = localStorage.getItem("wesell-saved-items");
-    const productsInListSave = JSON.parse(savedProducts) || [];
-    const quantidadeTotal = products.reduce(
-      (acc, produto) => acc + produto.qtd,
-      0
+    const idsInCart = JSON.parse(localStorage.getItem("@wesellItemsInCart"));
+    const idsInListSave = JSON.parse(
+      localStorage.getItem("wesell-saved-items")
     );
-    setQuantidadeItens(quantidadeTotal);
 
-    const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
-      0
-    );
-    setTotal(subtotalCalculado);
-    setSubtotal(subtotalCalculado);
-    setProdutosSalvos(productsInListSave);
-    setProdutosCarrinho(products);
-    const productsFilter = products.filter((item) => item.freteGratis === "N");
-    let modeloProdutos = [];
+    if (idsInCart) {
+      getProducts(idsInCart);
+    }
 
-    productsFilter.map((item) => {
-      modeloProdutos.push({
+    if (idsInListSave) {
+      getProductsSave(idsInListSave);
+    }
+  }, []);
+
+  async function getImagensProduto(idProduto) {
+    try {
+      const response = await axios.get(
+        url_base + `/imagens/produto/${idProduto}`
+      );
+      if (response.data.length > 0) {
+        let caminho = response.data[0].imagem.split("ROOT");
+        return `${url_img}${caminho[1]}`;
+      }
+      return null;
+    } catch (error) {
+      console.log(error);
+      console.log(error.message);
+      return null;
+    }
+  }
+
+  async function getProducts(listaIds) {
+    try {
+      const response = await axios.post(url_base + "/produtos/recentes", {
+        ids: listaIds,
+      });
+
+      const data = response.data;
+      setIdsProductsCart(listaIds);
+
+      let listaProdutos = await Promise.all(
+        data.map(async (item) => {
+          const imagemProduto = await getImagensProduto(item.idProduto);
+
+          return {
+            idProduto: item.idProduto,
+            nomeProduto: item.nomeProduto,
+            imagem: imagemProduto,
+            precoPromocional: item.precoPromocional,
+            freteGratis: item.freteGratis,
+            lojista: item.lojista,
+            altura: item.altura,
+            largura: item.largura,
+            profundidade: item.profundidade,
+            peso: item.peso,
+            qtd: 1,
+          };
+        })
+      );
+
+      setProdutosCarrinho(listaProdutos);
+
+      const { quantidadeTotal, subtotalCalculado } = listaProdutos.reduce(
+        (acc, produto) => {
+          acc.quantidadeTotal += produto.qtd;
+          acc.subtotalCalculado += produto.precoPromocional * produto.qtd;
+          return acc;
+        },
+        { quantidadeTotal: 0, subtotalCalculado: 0 }
+      );
+
+      setQuantidadeItens(quantidadeTotal);
+      setTotal(subtotalCalculado);
+      setSubtotal(subtotalCalculado);
+
+      const productsFilter = listaProdutos.filter(
+        (item) => item.freteGratis === "N"
+      );
+      let modeloProdutos = productsFilter.map((item) => ({
         idProduto: item.idProduto,
         cepCd: item?.lojista?.cepCd,
         altura: item?.altura,
         largura: item?.largura,
         profundidade: item?.profundidade,
         peso: item?.peso,
-      });
-    });
+      }));
 
-    setProdutosComFrete(modeloProdutos);
-  }, []);
+      setProdutosComFrete(modeloProdutos);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getProductsSave(listaIds) {
+    try {
+      const response = await axios.post(url_base + "/produtos/recentes", {
+        ids: listaIds,
+      });
+
+      const data = response.data;
+      setIdsProductsSave(listaIds);
+
+      let listaProdutos = await Promise.all(
+        data.map(async (item) => {
+          const imagemProduto = await getImagensProduto(item.idProduto);
+
+          return {
+            idProduto: item.idProduto,
+            nomeProduto: item.nomeProduto,
+            imagem: imagemProduto,
+            precoPromocional: item.precoPromocional,
+            freteGratis: item.freteGratis,
+            lojista: item.lojista,
+            altura: item.altura,
+            largura: item.largura,
+            profundidade: item.profundidade,
+            peso: item.peso,
+            qtd: 1,
+          };
+        })
+      );
+
+      setProdutosSalvos(listaProdutos);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function removeProductSave(id) {
-    setProdutosSalvos((produtosAntigos) => {
-      const produtosFiltrados = produtosAntigos.filter(
-        (item) => item.idProduto !== id
-      );
+    setIdsProductsSave((idsAtuais) => {
+      const idsFiltrados = idsAtuais.filter((item) => item !== id);
 
-      localStorage.setItem(
-        "wesell-saved-items",
-        JSON.stringify(produtosFiltrados)
-      );
+      localStorage.setItem("wesell-saved-items", JSON.stringify(idsFiltrados));
 
-      return produtosFiltrados;
+      return idsFiltrados;
     });
+
+    setProdutosSalvos((produtosAntigos) =>
+      produtosAntigos.filter(({ idProduto }) => idProduto !== id)
+    );
   }
+
   function removeProduct(id) {
     setProdutosCarrinho((produtosAntigos) => {
       const produtosFiltrados = produtosAntigos.filter(
-        (item) => item.idProduto !== id
-      );
-
-      localStorage.setItem(
-        "@wesellItemsInCart",
-        JSON.stringify(produtosFiltrados)
+        (item) => item.idProduto != id
       );
 
       atualizarProdutosComFrete(produtosFiltrados);
@@ -98,6 +191,49 @@ export default function Carrinho() {
 
       return produtosFiltrados;
     });
+
+    setIdsProductsCart((idsAtuais) => {
+      const idsFiltrados = idsAtuais.filter((item) => item !== id);
+
+      localStorage.setItem("@wesellItemsInCart", JSON.stringify(idsFiltrados));
+
+      return idsFiltrados;
+    });
+  }
+
+  function addToCart(novoProduto) {
+    const carrinho = localStorage.getItem("@wesellItemsInCart");
+
+    let productsInCart = JSON.parse(carrinho) || [];
+    productsInCart.push(novoProduto.idProduto);
+    localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
+
+    setProdutosCarrinho((produtosAntigos) => {
+      const novoCarrinho = [...produtosAntigos, novoProduto];
+      atualizarProdutosComFrete(novoCarrinho);
+
+      const subtotalCalculado = novoCarrinho.reduce(
+        (acc, produto) => acc + produto.precoPromocional * produto.qtd,
+        0
+      );
+      setTotal(subtotalCalculado);
+      setSubtotal(subtotalCalculado);
+
+      const quantidadeTotal = novoCarrinho.reduce(
+        (acc, produto) => acc + produto.qtd,
+        0
+      );
+      setQuantidadeItens(quantidadeTotal);
+
+      return novoCarrinho;
+    });
+
+    setIdsProductsCart((idsAntigos) => {
+      const novosIds = [...idsAntigos, novoProduto.idProduto];
+      return novosIds;
+    });
+
+    removeProductSave(novoProduto.idProduto);
   }
 
   function handleQuantidadeChange(idProduto, novaQuantidade) {
@@ -128,38 +264,10 @@ export default function Carrinho() {
     });
   }
 
-  function addToCart(product) {
-    const carrinho = localStorage.getItem("@wesellItemsInCart");
-
-    let productsInCart = JSON.parse(carrinho) || [];
-
-    productsInCart.push(product);
-    localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
-
-    setProdutosCarrinho((produtosAntigos) => {
-      const novoCarrinho = [...produtosAntigos, product];
-      atualizarProdutosComFrete(novoCarrinho);
-      return novoCarrinho;
-    });
-
-    const subtotalCalculado = productsInCart.reduce(
-      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
-      0
-    );
-    setTotal(subtotalCalculado);
-    setSubtotal(subtotalCalculado);
-
-    const quantidadeTotal = productsInCart.reduce(
-      (acc, produto) => acc + produto.qtd,
-      0
-    );
-    setQuantidadeItens(quantidadeTotal);
-  }
-
   function saveItem(produto) {
     let salvos = JSON.parse(localStorage.getItem("wesell-saved-items")) || [];
-    if (!salvos.some((item) => item.idProduto === produto.idProduto)) {
-      salvos.push(produto);
+    if (!salvos.some((item) => item === produto.idProduto)) {
+      salvos.push(produto.idProduto);
       localStorage.setItem("wesell-saved-items", JSON.stringify(salvos));
     }
 
@@ -169,11 +277,6 @@ export default function Carrinho() {
       );
 
       atualizarProdutosComFrete(produtosFiltrados);
-
-      localStorage.setItem(
-        "@wesellItemsInCart",
-        JSON.stringify(produtosFiltrados)
-      );
 
       const subtotalCalculado = produtosFiltrados.reduce(
         (acc, produtoList) =>
@@ -197,6 +300,16 @@ export default function Carrinho() {
 
       return produtosFiltrados;
     });
+
+    setIdsProductsCart((idsAtuais) => {
+      const idsFiltrados = idsAtuais.filter(
+        (item) => item !== produto.idProduto
+      );
+
+      localStorage.setItem("@wesellItemsInCart", JSON.stringify(idsFiltrados));
+
+      return idsFiltrados;
+    });
   }
 
   function atualizarProdutosComFrete(produtos) {
@@ -207,7 +320,7 @@ export default function Carrinho() {
       for (let i = 0; i < item.qtd; i++) {
         modeloProdutos.push({
           idProduto: item.idProduto,
-          cepCd: item.lojista.cepCd,
+          cepCd: item?.lojista?.cepCd,
           altura: item.altura,
           largura: item.largura,
           profundidade: item.profundidade,
@@ -221,7 +334,7 @@ export default function Carrinho() {
   function continuarCompra() {
     if (clientLogado) {
       localStorage.setItem(
-        "@wesellItemsInCart",
+        "@wesellItemsCheckout",
         JSON.stringify(produtosCarrinho)
       );
       localStorage.setItem(

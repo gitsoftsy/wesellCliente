@@ -308,11 +308,7 @@ export default function DetalhesProduto() {
                         <button
                           className={styles.purchase}
                           onClick={() => {
-                            addToCart({
-                              ...produto,
-                              qtd: 1,
-                              imagem: selectedImage,
-                            });
+                            addToCart(produto.idProduto);
                             navigate("/carrinho");
                           }}
                         >
@@ -322,11 +318,7 @@ export default function DetalhesProduto() {
                           type="button"
                           className={styles.addCart}
                           onClick={() => {
-                            addToCart({
-                              ...produto,
-                              qtd: 1,
-                              imagem: selectedImage,
-                            });
+                            addToCart(produto.idProduto);
                           }}
                         >
                           Adicionar ao carrinho
@@ -338,11 +330,7 @@ export default function DetalhesProduto() {
                       <button
                         className={styles.purchase}
                         onClick={() => {
-                          addToCart({
-                            ...produto,
-                            qtd: 1,
-                            imagem: selectedImage,
-                          });
+                          addToCart(produto.idProduto);
                           navigate("/carrinho");
                         }}
                       >
@@ -352,11 +340,7 @@ export default function DetalhesProduto() {
                         type="button"
                         className={styles.addCart}
                         onClick={() => {
-                          addToCart({
-                            ...produto,
-                            qtd: 1,
-                            imagem: selectedImage,
-                          });
+                          addToCart(produto.idProduto);
                         }}
                       >
                         Adicionar ao carrinho

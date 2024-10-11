@@ -8,6 +8,7 @@ import { url_base } from "../../services/apis";
 
 export default function Favoritos() {
   const [products, setProducts] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [ids, setIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
