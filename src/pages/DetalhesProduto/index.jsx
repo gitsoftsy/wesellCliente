@@ -26,6 +26,7 @@ export default function DetalhesProduto() {
   const [freteGratis, setFreteGratis] = useState(false);
   const [isActive, setActive] = useState(true);
   const [avaliationsProduct, setAvaliationsProduct] = useState([]);
+  const params = useParams();
 
   const getLink = async (link) => {
     const url = decodeURIComponent(link);
@@ -87,16 +88,18 @@ export default function DetalhesProduto() {
 
   useEffect(() => {
     if (path.pathname.includes("static")) {
+      console.log('Params:')
+      console.log(params)
       const jsonPage = {
-        idProduto: 204,
-        idVendedor: 2,
+        idProduto: params.id,
+        idVendedor: params.idVendedor,
         nomeVendedor: "Luiz",
         url: path.pathname,
       };
 
       localStorage.setItem("statusPage", JSON.stringify(jsonPage));
     }
-  }, [path.pathname]);
+  }, [path.pathname, params]);
 
   async function getProdutosSimilares(produto) {
     if (produto.categorias) {
