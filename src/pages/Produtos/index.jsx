@@ -78,7 +78,7 @@ export default function Produtos() {
       ) {
         lojistasArray.push({
           id: produto.lojistaId,
-          nome: produto.lojista,
+          nome: produto.nomeFantasia,
         });
       }
     });

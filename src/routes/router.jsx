@@ -49,6 +49,8 @@ const router = createBrowserRouter([
       { path: "signup", element: <CreateAccount /> },
       { path: "carrinho/endereco", element: <Endereco /> },
       { path: "carrinho/endereco/pagamentos", element: <FormasPagamento /> },
+      { path: "favoritos", element: <Favoritos /> },
+      { path: "minha-conta/pedidos/avaliacao/:idVendaItem", element: <Avaliacao /> },
     ],
   },
   { path: "/login", element: <Login /> },
