@@ -12,7 +12,8 @@
   gap: 1.8em;
 }
 
-.navbar a, .categorias {
+.navbar a,
+.categorias {
   color: white;
   height: min-content;
   font-size: 15px;
@@ -70,11 +71,12 @@
 
 .categoryList li {
   text-align: center;
-  color: white; 
-  cursor: pointer; 
-  background-color: var(--preto-secundario); 
+  color: white;
+  cursor: pointer;
+  background-color: var(--preto-secundario);
   border-bottom: 1px solid var(--preto-secundario);
-  transition: border-bottom 0.4s; 
+  transition: border-bottom 0.4s;
+  list-style: none;
 }
 
 .categoryList li:hover {

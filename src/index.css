@@ -160,7 +160,36 @@ ul.pagination {
   padding: 2rem 3rem;
 }
 
-@media screen and (max-width: 767px) { 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.spinner-grow {
+  animation: fadeIn 1s infinite;
+}
+
+.spinner-delay-1 {
+  animation-delay: 0s;
+}
+
+.spinner-delay-2 {
+  animation-delay: 0.1s;
+}
+
+.spinner-delay-3 {
+  animation-delay: 0.2s;
+}
+
+.spinner-delay-4 {
+  animation-delay: 0.3s;
+}
+
+@media screen and (max-width: 767px) {
   .paddingModal {
     padding: 1rem;
   }

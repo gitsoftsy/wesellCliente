@@ -177,7 +177,7 @@ export default function DetalhesProduto() {
   useEffect(() => {
     const favoritos =
       JSON.parse(localStorage.getItem("wesell-favorites-comprador")) || [];
-    const favoritado = favoritos.some((item) => item.idProduto == id);
+    const favoritado = favoritos.some((item) => item == id);
     setIsFavoritado(favoritado);
 
     let listIds =
