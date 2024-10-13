@@ -34,6 +34,7 @@ export default function FormasPagamento() {
   const [msgModal, setMsgModal] = useState("");
   const [imgQrCode, setImgQrCode] = useState("");
   const [qrCode, setQrCode] = useState("");
+  const [boleto, setBoleto] = useState(null);
 
   const { client } = useContexts();
 
@@ -95,8 +96,55 @@ export default function FormasPagamento() {
     } else if (formaPagamento === "pix") {
       gerarQrCode();
     } else {
-      setShowBoleto(true);
+      gerarBoleto();
     }
+  };
+
+  const gerarBoleto = async () => {
+    setLoading(true);
+    const dadosInfluencer = localStorage.getItem("statusPage");
+
+    const objetoBoleto = {
+      idCliente: client.id,
+      idEnderecoEntrega: orderData.enderecoId,
+      // verificar se o produto esta sendo comprado por um link de influencer e pegar o id dele
+      idVendedor:
+        dadosInfluencer != undefined ? dadosInfluencer.idVendedor : null,
+      formaPagamento: "BOLETO",
+      itens: orderData.itens,
+    };
+
+    if (boleto != null) {
+      setLoading(false);
+      setStatusCompra(true);
+      setShowBoleto(true);
+      return;
+    }
+
+    await axios
+      .post(apiFinanceiro + `/venda`, objetoBoleto)
+      .then((response) => {
+        const data = response.data;
+        if (data.sucesso) {
+          setBoleto(data.retorno);
+          if (data.retorno.status === "PAGO") {
+            setLoading(false);
+            console.log(data.retorno);
+            setStatusCompra(true);
+            setShowBoleto(true);
+          } else {
+            setStatusCompra(false);
+            setMsgModal(data.retorno.mensagemErro);
+            setShowBoleto(true);
+            console.log(data.retorno.codigoErro);
+          }
+        } else {
+          setLoading(false);
+          console.log(response.data);
+          setStatusCompra(false);
+          setMsgModal(data.retorno.status);
+        }
+      });
   };
 
   function limparMascara(valor) {
@@ -115,12 +163,14 @@ export default function FormasPagamento() {
     } = dataCart;
 
     const possuiParcelamento = orderData?.lojista?.possuiParcelamento === "S";
+    const dadosInfluencer = localStorage.getItem("statusPage");
 
     const objeto = {
       idCliente: client.id,
       idEnderecoEntrega: orderData.enderecoId,
       // verificar se o produto esta sendo comprado por um link de influencer e pegar o id dele
-      idVendedor: null,
+      idVendedor:
+        dadosInfluencer != undefined ? dadosInfluencer.idVendedor : null,
       formaPagamento: "CARTAO_CREDITO",
       itens: orderData.itens,
       cartaoCredito: {
@@ -159,10 +209,13 @@ export default function FormasPagamento() {
   async function gerarQrCode() {
     setLoading(true);
 
+    const dadosInfluencer = localStorage.getItem("statusPage");
+
     const objeto = {
       idCliente: client.id,
       idEnderecoEntrega: orderData.enderecoId,
-      idVendedor: null,
+      idVendedor:
+        dadosInfluencer != undefined ? dadosInfluencer.idVendedor : null,
       formaPagamento: "PIX",
       itens: orderData.itens,
     };
@@ -180,8 +233,10 @@ export default function FormasPagamento() {
               apiFinanceiro + `/venda/status?idVenda=${data.retorno.idVenda}`
             );
 
-
-            if (responseStatus.data.sucesso && responseStatus.data.retorno === "PAGO") {
+            if (
+              responseStatus.data.sucesso &&
+              responseStatus.data.retorno === "PAGO"
+            ) {
               setShowPix(false);
               setStatusCompra(true);
               setShowModal(true);
@@ -492,7 +547,11 @@ export default function FormasPagamento() {
         imgQrCode={imgQrCode}
         qrCode={qrCode}
       />
-      <ModalBoleto isShow={showBoleto} setIsShow={setShowBoleto} />
+      <ModalBoleto
+        isShow={showBoleto}
+        setIsShow={setShowBoleto}
+        boleto={boleto}
+      />
     </div>
   );
 }

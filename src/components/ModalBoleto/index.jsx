@@ -4,46 +4,46 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { toast } from "react-toastify";
 import Barcode from "react-barcode";
 import { MdContentCopy, MdDownload } from "react-icons/md";
-import jsPDF from "jspdf";
 
-export default function ModalBoleto({ isShow, setIsShow }) {
-  const numeroDoBoleto = "0123456789012345678901234567890123456789";
+export default function ModalBoleto({ isShow, setIsShow, boleto }) {
+  const numeroDoBoleto = boleto ? boleto.line : '';
+  
 
   function copiarBoleto() {
-    navigator.clipboard.writeText(numeroDoBoleto).then(() => {
+    navigator.clipboard.writeText(numeroDoBoleto != null? numeroDoBoleto : '').then(() => {
       toast.success("Número do boleto copiado!");
     });
   }
 
-  const gerarBoleto = () => {
-    const doc = new jsPDF();
+  // const gerarBoleto = () => {
+  //   const doc = new jsPDF();
 
-    // Adiciona o título do boleto
-    doc.setFontSize(20);
-    doc.text("Boleto Bancário", 10, 10);
+  //   // Adiciona o título do boleto
+  //   doc.setFontSize(20);
+  //   doc.text("Boleto Bancário", 10, 10);
 
-    // Informações do pagador
-    doc.setFontSize(12);
-    doc.text("Nome: João da Silva", 10, 30);
-    doc.text("CPF: 123.456.789-00", 10, 40);
-    doc.text("Endereço: Rua Elton, 123", 10, 50);
+  //   // Informações do pagador
+  //   doc.setFontSize(12);
+  //   doc.text("Nome: João da Silva", 10, 30);
+  //   doc.text("CPF: 123.456.789-00", 10, 40);
+  //   doc.text("Endereço: Rua Elton, 123", 10, 50);
 
-    // Informações do boleto
-    doc.text("Banco: 001 - Banco do Brasil", 10, 70);
-    doc.text("Agência/Código beneficiário: 1234 / 56789-0", 10, 80);
-    doc.text("Data de vencimento: 30/11/2024", 10, 90);
-    doc.text("Valor: R$ 500,00", 10, 100);
+  //   // Informações do boleto
+  //   doc.text("Banco: 001 - Banco do Brasil", 10, 70);
+  //   doc.text("Agência/Código beneficiário: 1234 / 56789-0", 10, 80);
+  //   doc.text("Data de vencimento: 30/11/2024", 10, 90);
+  //   doc.text("Valor: R$ 500,00", 10, 100);
 
-    // Linha digitável fictícia
-    doc.text(
-      "Linha Digitável: " + numeroDoBoleto,
-      10,
-      120
-    );
+  //   // Linha digitável fictícia
+  //   doc.text(
+  //     "Linha Digitável: " + numeroDoBoleto,
+  //     10,
+  //     120
+  //   );
 
-    // Salva o boleto como PDF
-    doc.save("boleto-wesell.pdf");
-  };
+  //   // Salva o boleto como PDF
+  //   doc.save("boleto-wesell.pdf");
+  // };
 
   return (
     <Modal
@@ -71,17 +71,18 @@ export default function ModalBoleto({ isShow, setIsShow }) {
             Utilize o número do código de barras para realizar o pagamento da
             sua compra.
           </p>
-          <Barcode size={300} value={numeroDoBoleto} />
+          <Barcode size={300} value={numeroDoBoleto != null? numeroDoBoleto : ''} />
           <div className="mt-4 btns btns-boleto btns-carrinho">
             <button className="btn btn-primary me-3" onClick={copiarBoleto}>
               <MdContentCopy size={22} className="me-2" /> Copiar Boleto
             </button>
-            <button
+            <a
               className="btn btn-primary"
-              onClick={gerarBoleto}
+              download={true}
+              href={boleto != null? boleto.pdf : ''}
             >
               <MdDownload size={22} className="me-2" /> Baixar Boleto
-            </button>
+            </a>
           </div>
         </div>
       </Modal.Body>
