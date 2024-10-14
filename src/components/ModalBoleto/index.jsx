@@ -6,55 +6,37 @@ import Barcode from "react-barcode";
 import { MdContentCopy, MdDownload } from "react-icons/md";
 
 export default function ModalBoleto({ isShow, setIsShow, boleto }) {
-  const numeroDoBoleto = boleto ? boleto.line : '';
-  
+  const numeroDoBoleto = boleto?.line ?? "";
+  const urlBoleto = boleto?.pdf ?? "";
 
   function copiarBoleto() {
-    navigator.clipboard.writeText(numeroDoBoleto != null? numeroDoBoleto : '').then(() => {
-      toast.success("Número do boleto copiado!");
-    });
+    if (numeroDoBoleto) {
+      navigator.clipboard.writeText(numeroDoBoleto).then(() => {
+        toast.success("Número do boleto copiado!");
+      });
+    } else {
+      toast.error("Número do boleto indisponível para cópia.");
+    }
   }
 
-  // const gerarBoleto = () => {
-  //   const doc = new jsPDF();
-
-  //   // Adiciona o título do boleto
-  //   doc.setFontSize(20);
-  //   doc.text("Boleto Bancário", 10, 10);
-
-  //   // Informações do pagador
-  //   doc.setFontSize(12);
-  //   doc.text("Nome: João da Silva", 10, 30);
-  //   doc.text("CPF: 123.456.789-00", 10, 40);
-  //   doc.text("Endereço: Rua Elton, 123", 10, 50);
-
-  //   // Informações do boleto
-  //   doc.text("Banco: 001 - Banco do Brasil", 10, 70);
-  //   doc.text("Agência/Código beneficiário: 1234 / 56789-0", 10, 80);
-  //   doc.text("Data de vencimento: 30/11/2024", 10, 90);
-  //   doc.text("Valor: R$ 500,00", 10, 100);
-
-  //   // Linha digitável fictícia
-  //   doc.text(
-  //     "Linha Digitável: " + numeroDoBoleto,
-  //     10,
-  //     120
-  //   );
-
-  //   // Salva o boleto como PDF
-  //   doc.save("boleto-wesell.pdf");
-  // };
+  async function baixarBoleto() {
+    if (urlBoleto) {
+      window.open(urlBoleto, "_blank");
+    } else {
+      toast.error("Boleto indisponível para download.");
+    }
+  }
 
   return (
     <Modal
       show={isShow}
       onHide={!isShow}
-      backdrop="static" // Impede o fechamento ao clicar fora da modal
-      keyboard={false} // Impede o fechamento ao pressionar a tecla Esc
-      dialogClassName="modal-dialog-centered modal-lg" // Adiciona classes ao dialog
+      backdrop="static"
+      keyboard={false}
+      dialogClassName="modal-dialog-centered modal-lg"
     >
       <Modal.Body
-        className={`paddingModal d-flex flex-column align-items-center w-100`}
+        className={` modal-boleto d-flex flex-column align-items-center w-100`}
       >
         <div className="modal-header">
           <h1 className="modal-title fs-5" id="staticBackdropLabel">
@@ -71,18 +53,17 @@ export default function ModalBoleto({ isShow, setIsShow, boleto }) {
             Utilize o número do código de barras para realizar o pagamento da
             sua compra.
           </p>
-          <Barcode size={300} value={numeroDoBoleto != null? numeroDoBoleto : ''} />
-          <div className="mt-4 btns btns-boleto btns-carrinho">
+          <Barcode
+            size={300}
+            value={numeroDoBoleto != null ? numeroDoBoleto : ""}
+          />
+          <div className="btnsBoleto mt-4">
             <button className="btn btn-primary me-3" onClick={copiarBoleto}>
               <MdContentCopy size={22} className="me-2" /> Copiar Boleto
             </button>
-            <a
-              className="btn btn-primary"
-              download={true}
-              href={boleto != null? boleto.pdf : ''}
-            >
+            <button className="btn btn-primary" onClick={baixarBoleto}>
               <MdDownload size={22} className="me-2" /> Baixar Boleto
-            </a>
+            </button>
           </div>
         </div>
       </Modal.Body>

@@ -102,12 +102,11 @@ export default function FormasPagamento() {
 
   const gerarBoleto = async () => {
     setLoading(true);
-    const dadosInfluencer = localStorage.getItem("statusPage");
+    const dadosInfluencer = JSON.parse(localStorage.getItem("statusPage"));
 
     const objetoBoleto = {
       idCliente: client.id,
       idEnderecoEntrega: orderData.enderecoId,
-      // verificar se o produto esta sendo comprado por um link de influencer e pegar o id dele
       idVendedor:
         dadosInfluencer != undefined ? dadosInfluencer.idVendedor : null,
       formaPagamento: "BOLETO",
@@ -129,14 +128,12 @@ export default function FormasPagamento() {
           setBoleto(data.retorno);
           if (data.retorno.status === "PAGO") {
             setLoading(false);
-            console.log(data.retorno);
             setStatusCompra(true);
             setShowBoleto(true);
           } else {
             setStatusCompra(false);
             setMsgModal(data.retorno.mensagemErro);
             setShowBoleto(true);
-            console.log(data.retorno.codigoErro);
           }
         } else {
           setLoading(false);
@@ -144,6 +141,9 @@ export default function FormasPagamento() {
           setStatusCompra(false);
           setMsgModal(data.retorno.status);
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -163,7 +163,7 @@ export default function FormasPagamento() {
     } = dataCart;
 
     const possuiParcelamento = orderData?.lojista?.possuiParcelamento === "S";
-    const dadosInfluencer = localStorage.getItem("statusPage");
+    const dadosInfluencer = JSON.parse(localStorage.getItem("statusPage"));
 
     const objeto = {
       idCliente: client.id,
@@ -209,16 +209,18 @@ export default function FormasPagamento() {
   async function gerarQrCode() {
     setLoading(true);
 
-    const dadosInfluencer = localStorage.getItem("statusPage");
+    const dadosInfluencer = JSON.parse(localStorage.getItem("statusPage"));
 
     const objeto = {
       idCliente: client.id,
       idEnderecoEntrega: orderData.enderecoId,
-      idVendedor:
-        dadosInfluencer != undefined ? dadosInfluencer.idVendedor : null,
+      idVendedor: dadosInfluencer ? dadosInfluencer.idVendedor : null,
       formaPagamento: "PIX",
       itens: orderData.itens,
     };
+
+    console.log(objeto);
+    
     await axios.post(apiFinanceiro + `/venda`, objeto).then((response) => {
       const data = response.data;
       if (data.sucesso) {
@@ -255,7 +257,7 @@ export default function FormasPagamento() {
         setLoading(false);
         console.log(response.data);
         setStatusCompra(false);
-        setMsgModal(data.retorno.status);
+        setMsgModal(data.mensagem);
         setShowModal(true);
       }
     });
