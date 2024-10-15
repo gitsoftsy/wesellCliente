@@ -12,6 +12,7 @@ ClienteProvider.propTypes = {
 
 export default function ClienteProvider({ children }) {
   const [categorias, setCategorias] = useState([]);
+  const [orderData, setOrderData] = useState(null);
   const [client, setClient] = useState(
     JSON.parse(localStorage.getItem("wesell-user-comprador"))
   );
@@ -85,12 +86,12 @@ export default function ClienteProvider({ children }) {
   function limpaStorage() {
     localStorage.removeItem("@wesellItemsInCart");
     localStorage.removeItem("@wesellOrderData");
-    localStorage.removeItem("@wesellItemsCheckout");
-    localStorage.removeItem("@wesellItemsFreight");
   }
 
   const dados = {
     categorias,
+    setOrderData,
+    orderData,
     addToCart,
     limpaStorage,
     client,

@@ -23,18 +23,17 @@ export default function Carrinho() {
   const [numberPlaceholders, setNumberPlaceholders] = useState(1);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
-  const { clientLogado } = useContexts();
+  const { clientLogado, setOrderData } = useContexts();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const produtos = JSON.parse(localStorage.getItem("@wesellItemsInCart"));
-    const idsInListSave = JSON.parse(
-      localStorage.getItem("wesell-saved-items")
-    );
+    const idsInListSave = JSON.parse(localStorage.getItem("@wesellSavedItems"));
+
+    setOrderData(null)
 
     if (produtos && produtos.length > 0) {
-      console.log('entrou')
       setLoadingProducts(true);
       setNumberPlaceholders(produtos.length);
       getProducts(produtos);
@@ -114,19 +113,7 @@ export default function Carrinho() {
       setTotal(subtotalCalculado);
       setSubtotal(subtotalCalculado);
 
-      const productsFilter = listaProdutos.filter(
-        (item) => item.freteGratis === "N"
-      );
-      let modeloProdutos = productsFilter.map((item) => ({
-        idProduto: item.idProduto,
-        cepCd: item?.lojista?.cepCd,
-        altura: item?.altura,
-        largura: item?.largura,
-        profundidade: item?.profundidade,
-        peso: item?.peso,
-      }));
-
-      setProdutosComFrete(modeloProdutos);
+      atualizarProdutosComFrete(listaProdutos)
     } catch (error) {
       console.log(error);
     } finally {
@@ -173,7 +160,7 @@ export default function Carrinho() {
     setIdsProductsSave((idsAtuais) => {
       const idsFiltrados = idsAtuais.filter((item) => item !== id);
 
-      localStorage.setItem("wesell-saved-items", JSON.stringify(idsFiltrados));
+      localStorage.setItem("@wesellSavedItems", JSON.stringify(idsFiltrados));
 
       return idsFiltrados;
     });
@@ -291,10 +278,10 @@ export default function Carrinho() {
   }
 
   function saveItem(produto) {
-    let salvos = JSON.parse(localStorage.getItem("wesell-saved-items")) || [];
+    let salvos = JSON.parse(localStorage.getItem("@wesellSavedItems")) || [];
     if (!salvos.some((item) => item === produto.idProduto)) {
       salvos.push(produto.idProduto);
-      localStorage.setItem("wesell-saved-items", JSON.stringify(salvos));
+      localStorage.setItem("@wesellSavedItems", JSON.stringify(salvos));
     }
 
     setProdutosCarrinho((produtosAntigos) => {
@@ -360,13 +347,10 @@ export default function Carrinho() {
   function continuarCompra() {
     if (clientLogado) {
       localStorage.setItem(
-        "@wesellItemsCheckout",
-        JSON.stringify(produtosCarrinho)
+        "@wesellItemsInCart",
+        JSON.stringify(idsProductsCart)
       );
-      localStorage.setItem(
-        "@wesellItemsFreight",
-        JSON.stringify(produtosComFrete)
-      );
+     
       navigate("endereco");
     } else {
       localStorage.setItem("@wesellRouteOnCar", true);
@@ -449,6 +433,7 @@ export default function Carrinho() {
             quantidadeFretes={produtosComFrete.length}
             quantidadeItens={quantidadeItens}
             subtotal={subtotal}
+            showAreaFrete={true}
             total={total}
             continuarCompra={continuarCompra}
           />

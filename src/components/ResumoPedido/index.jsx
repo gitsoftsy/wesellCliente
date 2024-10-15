@@ -22,17 +22,17 @@ export default function ResumoPedido({
       </div>
       <div className={styles.infoResumo}>
         <span>
-          <p>Itens ({quantidadeItens})</p> <p>{formatCurrencyBR(subtotal)}</p>
+          <p>Itens {quantidadeItens && `(${quantidadeItens})`}</p> <p>{subtotal ? formatCurrencyBR(subtotal) : "--"}</p>
         </span>
         {showAreaFrete && (
           <span>
-            <p>Fretes ({quantidadeFretes})</p>
+            <p>Fretes {quantidadeFretes > 0 && `(${quantidadeFretes})`}</p>
             <p>{valorFrete ? formatCurrencyBR(valorFrete) : "--"}</p>
           </span>
         )}
 
         <span className={styles.spanTotal}>
-          <p>Total</p> <p>{formatCurrencyBR(total)}</p>
+          <p>Total</p> <p>{total ? formatCurrencyBR(total) : '--'}</p>
         </span>
       </div>
       <div id={styles.areaBtn}>

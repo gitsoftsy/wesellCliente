@@ -3,7 +3,7 @@ import styles from "./pagamentos.module.css";
 import { MdOutlinePayment, MdPix } from "react-icons/md";
 import ReactInputMask from "react-input-mask";
 import { FaBarcode, FaCreditCard } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import ModalCompra from "../../components/ModalCompra";
 import ModalPix from "../../components/ModalPix";
@@ -19,7 +19,6 @@ export default function FormasPagamento() {
   const [showModal, setShowModal] = useState(false);
   const [showPix, setShowPix] = useState(false);
   const [showBoleto, setShowBoleto] = useState(false);
-  const [orderData, setOrderData] = useState(null);
   const [dataCart, setDataCart] = useState({
     numeroCartao: "",
     nomeCartao: "",
@@ -36,7 +35,7 @@ export default function FormasPagamento() {
   const [qrCode, setQrCode] = useState("");
   const [boleto, setBoleto] = useState(null);
 
-  const { client, limpaStorage } = useContexts();
+  const { client, limpaStorage, orderData } = useContexts();
 
   const listMes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const listAno = [
@@ -44,8 +43,12 @@ export default function FormasPagamento() {
     2035,
   ];
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    setOrderData(JSON.parse(localStorage.getItem("@wesellOrderData")));
+    if (!orderData) {
+      navigate(-1, { replace: true }); 
+    }
   }, []);
 
   const handleChangePagamento = (e) => {

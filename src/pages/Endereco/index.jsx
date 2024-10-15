@@ -12,7 +12,7 @@ import { FiArrowLeft } from "react-icons/fi";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import ResumoPedido from "../../components/ResumoPedido";
-import { url_base } from "../../services/apis";
+import { url_base, url_img } from "../../services/apis";
 import useContexts from "../../hooks/useContext";
 import { calculaFrete } from "../../hooks/calculaFrete";
 import CardProdutoFrete from "../../components/CardProdutoFrete";
@@ -21,11 +21,10 @@ import CardProdutoFreteMobile from "../../components/CardProdutoFrete/CardProdut
 export default function Endereco() {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState("");
   const [endereco, setEndereco] = useState(null);
-  const [quantidadeTotalProdutos, setQuantidadeTotalProdutos] = useState(0);
+  const [quantidadeItens, setQuantidadeItens] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loadingFrete, setLoadingFrete] = useState(false);
-  const [subtotal, setSubtotal] = useState(0);
+  const [subtotal, setSubtotal] = useState(null);
   const [total, setTotal] = useState(null);
   const [valorFrete, setValorFrete] = useState(null);
   const [exibirFormulario, setExibirFormulario] = useState(false);
@@ -48,7 +47,7 @@ export default function Endereco() {
 
   const firtsRender = useRef(true);
 
-  const { client, isMobile } = useContexts();
+  const { client, isMobile, setOrderData } = useContexts();
   const navigate = useNavigate();
 
   function limparMascara(valor) {
@@ -56,7 +55,6 @@ export default function Endereco() {
   }
 
   async function handleCalculaFrete(itens, cep) {
-    setLoadingFrete(true);
     try {
       const response = await calculaFrete(itens, cep);
 
@@ -71,55 +69,17 @@ export default function Endereco() {
       }
     } catch (erro) {
       console.log(erro);
-    } finally {
-      setLoadingFrete(false);
     }
   }
 
   useEffect(() => {
-    const productsInCart = localStorage.getItem("@wesellItemsCheckout");
-    const productsFreight =
-      JSON.parse(localStorage.getItem("@wesellItemsFreight")) || [];
-    const products = JSON.parse(productsInCart) || [];
-    setProdutos(products);
-    setProdutosComFrete(productsFreight);
-
-    const subtotalCalculado = products.reduce(
-      (acc, produto) => acc + produto.precoPromocional * produto.qtd,
-      0
+    const productsInCart = JSON.parse(
+      localStorage.getItem("@wesellItemsInCart")
     );
-    const quantidadeTotal = products.reduce(
-      (acc, produto) => acc + produto.qtd,
-      0
-    );
-    setQuantidadeTotalProdutos(quantidadeTotal);
-    setSubtotal(subtotalCalculado);
-    setTotal(subtotalCalculado);
-    async function getAddress() {
-      try {
-        const response = await axios.get(
-          `${url_base}/clienteEnderecos/cliente/${
-            client.id || client.idCliente
-          }`
-        );
 
-        if (response.data && response.data.length > 0) {
-          setAddresses(response.data);
-          setEnderecoSelecionado(response.data[0].idClienteEndereco);
-          setEndereco(response.data[0]);
-
-          await handleCalculaFrete(productsFreight, response.data[0].cep);
-        } else {
-          setExibirFormulario(true);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
+    if (productsInCart && productsInCart.length > 0) {
+      getProducts(productsInCart);
     }
-
-    getAddress();
   }, []);
 
   useEffect(() => {
@@ -130,6 +90,123 @@ export default function Endereco() {
 
     montarItensComFrete(produtos, fretes);
   }, [fretes]);
+
+  async function getImagensProduto(idProduto) {
+    try {
+      const response = await axios.get(
+        url_base + `/imagens/produto/${idProduto}`
+      );
+      if (response.data.length > 0) {
+        let caminho = response.data[0].imagem.split("ROOT");
+        return `${url_img}${caminho[1]}`;
+      }
+      return null;
+    } catch (error) {
+      console.log(error);
+      console.log(error.message);
+      return null;
+    }
+  }
+
+  async function getProducts(produtos) {
+    try {
+      const listaIds = produtos.map((produto) => produto.id);
+
+      const response = await axios.post(url_base + "/produtos/recentes", {
+        ids: listaIds,
+      });
+
+      const data = response.data;
+
+      let listaProdutos = await Promise.all(
+        data.map(async (item) => {
+          const imagemProduto = await getImagensProduto(item.idProduto);
+
+          const produtoCorrespondente = produtos.find(
+            (produto) => produto.id === item.idProduto
+          );
+
+          return {
+            idProduto: item.idProduto,
+            nomeProduto: item.nomeProduto,
+            imagem: imagemProduto,
+            precoPromocional: item.precoPromocional,
+            freteGratis: item.freteGratis,
+            lojista: item.lojista,
+            altura: item.altura,
+            largura: item.largura,
+            profundidade: item.profundidade,
+            peso: item.peso,
+            qtd: produtoCorrespondente.qtd,
+          };
+        })
+      );
+
+      setProdutos(listaProdutos);
+
+      const { quantidadeTotal, subtotalCalculado } = listaProdutos.reduce(
+        (acc, produto) => {
+          acc.quantidadeTotal += produto.qtd;
+          acc.subtotalCalculado += produto.precoPromocional * produto.qtd;
+          return acc;
+        },
+        { quantidadeTotal: 0, subtotalCalculado: 0 }
+      );
+
+      setQuantidadeItens(quantidadeTotal);
+      setTotal(subtotalCalculado);
+      setSubtotal(subtotalCalculado);
+
+      atualizarProdutosComFrete(listaProdutos);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function atualizarProdutosComFrete(produtos) {
+    
+    const productsFilter = produtos.filter((item) => item.freteGratis === "N");
+    let listaProdutosFrete = [];
+
+    productsFilter.forEach((item) => {
+      for (let i = 0; i < item.qtd; i++) {
+        listaProdutosFrete.push({
+          idProduto: item.idProduto,
+          cepCd: item?.lojista?.cepCd,
+          altura: item.altura,
+          largura: item.largura,
+          profundidade: item.profundidade,
+          peso: item.peso,
+        });
+      }
+    });
+    setProdutosComFrete(listaProdutosFrete);
+    getAddress(listaProdutosFrete);
+  }
+
+  async function getAddress(listaProdutosFrete) {
+    try {
+      const response = await axios.get(
+        `${url_base}/clienteEnderecos/cliente/${
+          client.id || client.idCliente
+        }`
+      );
+
+      if (response.data && response.data.length > 0) {
+        setAddresses(response.data);
+        setEnderecoSelecionado(response.data[0].idClienteEndereco);
+        setEndereco(response.data[0]);
+
+        await handleCalculaFrete(listaProdutosFrete, response.data[0].cep);
+      } else {
+        setExibirFormulario(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const handleEnderecoChange = async (id, item) => {
     setEnderecoSelecionado(id);
@@ -306,7 +383,7 @@ export default function Endereco() {
       enderecoId: enderecoSelecionado,
       itens: itensComFrete,
       resumo: {
-        qtdProdutos: quantidadeTotalProdutos,
+        qtdProdutos: quantidadeItens,
         qtdFretes: produtosComFrete.length,
         subtotal: subtotal,
         valorFrete: valorFrete,
@@ -314,7 +391,7 @@ export default function Endereco() {
       },
     };
 
-    localStorage.setItem("@wesellOrderData", JSON.stringify(data));
+    setOrderData(data)
     navigate("pagamentos");
   }
 
@@ -658,7 +735,6 @@ export default function Endereco() {
                 </h5>
                 {!isMobile && (
                   <>
-                    
                     <span className="col text-center">Preço unitário</span>
                     <span className="col text-center">Quantia</span>
                     <span className="col text-center">Subtotal</span>
@@ -677,9 +753,9 @@ export default function Endereco() {
           )}
         </div>
         <ResumoPedido
-          disabled={exibirFormulario || loadingFrete}
+          disabled={exibirFormulario || loading}
           continuarCompra={irParaPagamento}
-          quantidadeItens={quantidadeTotalProdutos}
+          quantidadeItens={quantidadeItens}
           quantidadeFretes={produtosComFrete.length}
           subtotal={subtotal}
           total={total + valorFrete}
