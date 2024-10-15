@@ -36,7 +36,7 @@ export default function FormasPagamento() {
   const [qrCode, setQrCode] = useState("");
   const [boleto, setBoleto] = useState(null);
 
-  const { client } = useContexts();
+  const { client, limpaStorage } = useContexts();
 
   const listMes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const listAno = [
@@ -188,9 +188,9 @@ export default function FormasPagamento() {
       if (data.sucesso) {
         if (data.retorno.status === "PAGO") {
           setLoading(false);
-          console.log(data.retorno);
           setStatusCompra(true);
           setShowModal(true);
+          limpaStorage();
         } else {
           setStatusCompra(false);
           setMsgModal(data.retorno.mensagemErro);
@@ -206,6 +206,7 @@ export default function FormasPagamento() {
       }
     });
   }
+
   async function gerarQrCode() {
     setLoading(true);
 
@@ -219,8 +220,6 @@ export default function FormasPagamento() {
       itens: orderData.itens,
     };
 
-    console.log(objeto);
-    
     await axios.post(apiFinanceiro + `/venda`, objeto).then((response) => {
       const data = response.data;
       if (data.sucesso) {
@@ -242,6 +241,7 @@ export default function FormasPagamento() {
               setShowPix(false);
               setStatusCompra(true);
               setShowModal(true);
+              limpaStorage();
             } else {
               setTimeout(checkPaymentStatus, 1000);
             }
@@ -550,6 +550,7 @@ export default function FormasPagamento() {
         qrCode={qrCode}
       />
       <ModalBoleto
+        limpaStorage={limpaStorage}
         isShow={showBoleto}
         setIsShow={setShowBoleto}
         boleto={boleto}

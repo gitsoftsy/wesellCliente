@@ -322,6 +322,7 @@ export default function DetalhesProduto() {
                           className={styles.addCart}
                           onClick={() => {
                             addToCart(produto.idProduto);
+                            navigate("/carrinho");
                           }}
                         >
                           Adicionar ao carrinho

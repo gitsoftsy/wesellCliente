@@ -4,10 +4,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { toast } from "react-toastify";
 import Barcode from "react-barcode";
 import { MdContentCopy, MdDownload } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-export default function ModalBoleto({ isShow, setIsShow, boleto }) {
+export default function ModalBoleto({
+  limpaStorage,
+  isShow,
+  setIsShow,
+  boleto,
+}) {
   const numeroDoBoleto = boleto?.line ?? "";
   const urlBoleto = boleto?.pdf ?? "";
+  const navigate = useNavigate();
 
   function copiarBoleto() {
     if (numeroDoBoleto) {
@@ -61,8 +68,16 @@ export default function ModalBoleto({ isShow, setIsShow, boleto }) {
             <button className="btn btn-primary me-3" onClick={copiarBoleto}>
               <MdContentCopy size={22} className="me-2" /> Copiar Boleto
             </button>
-            <button className="btn btn-primary" onClick={baixarBoleto}>
+            <button className="btn btn-primary me-3" onClick={baixarBoleto}>
               <MdDownload size={22} className="me-2" /> Baixar Boleto
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                limpaStorage(), navigate("/minha-conta/pedidos");
+              }}
+            >
+              Concluir
             </button>
           </div>
         </div>

@@ -65,26 +65,34 @@ export default function ClienteProvider({ children }) {
 
   function addToCart(id) {
     const carrinho = localStorage.getItem("@wesellItemsInCart");
-
+  
     let productsInCart = JSON.parse(carrinho) || [];
-
-    const hasCurso = productsInCart.some(
-      (idInCart) => idInCart == id
-    );
-
-    if (hasCurso) {
-      toast.warning("Este produto já está no carrinho.");
-      return;
+  
+    const produtoIndex = productsInCart.findIndex((produto) => produto.id == id);
+  
+    if (produtoIndex !== -1) {
+      productsInCart[produtoIndex].qtd += 1;
+      localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
+      toast.success("Quantidade atualizada no carrinho!");
+    } else {
+      productsInCart.push({ id: id, qtd: 1 });
+      localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
+      toast.success("Adicionado com sucesso!");
     }
+  }
+  
 
-    productsInCart.push(id);
-    localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
-    toast.success("Adicionado com sucesso!");
+  function limpaStorage() {
+    localStorage.removeItem("@wesellItemsInCart");
+    localStorage.removeItem("@wesellOrderData");
+    localStorage.removeItem("@wesellItemsCheckout");
+    localStorage.removeItem("@wesellItemsFreight");
   }
 
   const dados = {
     categorias,
     addToCart,
+    limpaStorage,
     client,
     clientLogado: !!client,
     setClient,

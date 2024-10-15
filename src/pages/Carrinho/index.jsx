@@ -10,6 +10,7 @@ import ResumoPedido from "../../components/ResumoPedido/index.jsx";
 import useContexts from "../../hooks/useContext.js";
 import axios from "axios";
 import { url_base, url_img } from "../../services/apis.js";
+import CardProdutoCarrinhoLoading from "../../components/CardProdutoCarrinhoLoading/index.jsx";
 
 export default function Carrinho() {
   const [idsProductsCart, setIdsProductsCart] = useState([]);
@@ -18,6 +19,8 @@ export default function Carrinho() {
   const [produtosCarrinho, setProdutosCarrinho] = useState([]);
   const [produtosSalvos, setProdutosSalvos] = useState([]);
   const [quantidadeItens, setQuantidadeItens] = useState(0);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [numberPlaceholders, setNumberPlaceholders] = useState(1);
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
   const { clientLogado } = useContexts();
@@ -25,16 +28,21 @@ export default function Carrinho() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const idsInCart = JSON.parse(localStorage.getItem("@wesellItemsInCart"));
+    const produtos = JSON.parse(localStorage.getItem("@wesellItemsInCart"));
     const idsInListSave = JSON.parse(
       localStorage.getItem("wesell-saved-items")
     );
 
-    if (idsInCart) {
-      getProducts(idsInCart);
+    if (produtos && produtos.length > 0) {
+      console.log('entrou')
+      setLoadingProducts(true);
+      setNumberPlaceholders(produtos.length);
+      getProducts(produtos);
+    } else {
+      setLoadingProducts(false);
     }
 
-    if (idsInListSave) {
+    if (idsInListSave && idsInListSave.length > 0) {
       getProductsSave(idsInListSave);
     }
   }, []);
@@ -56,18 +64,24 @@ export default function Carrinho() {
     }
   }
 
-  async function getProducts(listaIds) {
+  async function getProducts(produtos) {
     try {
+      const listaIds = produtos.map((produto) => produto.id);
+
       const response = await axios.post(url_base + "/produtos/recentes", {
         ids: listaIds,
       });
 
       const data = response.data;
-      setIdsProductsCart(listaIds);
+      setIdsProductsCart(produtos);
 
       let listaProdutos = await Promise.all(
         data.map(async (item) => {
           const imagemProduto = await getImagensProduto(item.idProduto);
+
+          const produtoCorrespondente = produtos.find(
+            (produto) => produto.id === item.idProduto
+          );
 
           return {
             idProduto: item.idProduto,
@@ -80,7 +94,7 @@ export default function Carrinho() {
             largura: item.largura,
             profundidade: item.profundidade,
             peso: item.peso,
-            qtd: 1,
+            qtd: produtoCorrespondente ? produtoCorrespondente.qtd : 1,
           };
         })
       );
@@ -115,6 +129,8 @@ export default function Carrinho() {
       setProdutosComFrete(modeloProdutos);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingProducts(false);
     }
   }
 
@@ -193,7 +209,7 @@ export default function Carrinho() {
     });
 
     setIdsProductsCart((idsAtuais) => {
-      const idsFiltrados = idsAtuais.filter((item) => item !== id);
+      const idsFiltrados = idsAtuais.filter((item) => item.id !== id);
 
       localStorage.setItem("@wesellItemsInCart", JSON.stringify(idsFiltrados));
 
@@ -205,7 +221,7 @@ export default function Carrinho() {
     const carrinho = localStorage.getItem("@wesellItemsInCart");
 
     let productsInCart = JSON.parse(carrinho) || [];
-    productsInCart.push(novoProduto.idProduto);
+    productsInCart.push({ id: novoProduto.idProduto, qtd: 1 });
     localStorage.setItem("@wesellItemsInCart", JSON.stringify(productsInCart));
 
     setProdutosCarrinho((produtosAntigos) => {
@@ -229,7 +245,7 @@ export default function Carrinho() {
     });
 
     setIdsProductsCart((idsAntigos) => {
-      const novosIds = [...idsAntigos, novoProduto.idProduto];
+      const novosIds = [...idsAntigos, { id: novoProduto.idProduto, qtd: 1 }];
       return novosIds;
     });
 
@@ -261,6 +277,16 @@ export default function Carrinho() {
       setQuantidadeItens(quantidadeTotal);
 
       return novoCarrinho;
+    });
+
+    setIdsProductsCart((idsAntigos) => {
+      const novosIds = idsAntigos.map((item) =>
+        item.id === idProduto ? { ...item, qtd: novaQuantidade } : item
+      );
+
+      localStorage.setItem("@wesellItemsInCart", JSON.stringify(novosIds));
+
+      return novosIds;
     });
   }
 
@@ -303,7 +329,7 @@ export default function Carrinho() {
 
     setIdsProductsCart((idsAtuais) => {
       const idsFiltrados = idsAtuais.filter(
-        (item) => item !== produto.idProduto
+        (item) => item.id !== produto.idProduto
       );
 
       localStorage.setItem("@wesellItemsInCart", JSON.stringify(idsFiltrados));
@@ -352,7 +378,17 @@ export default function Carrinho() {
     <div className={styles.containerCart}>
       <section className={`container ${styles.contentCart}`}>
         <div className={`${styles.sectionItensCarrinho}`}>
-          {produtosCarrinho.length > 0 ? (
+          {loadingProducts ? (
+            <section className={`${styles.cardItensCarrinho} card`}>
+              <div className={styles.titleCarrinho}>
+                <h5>Carrinho de compras</h5>
+                <p>Preço</p>
+              </div>
+              {Array.from({ length: numberPlaceholders }).map((_, index) => (
+                <CardProdutoCarrinhoLoading key={index} />
+              ))}
+            </section>
+          ) : produtosCarrinho.length > 0 ? (
             <section className={`${styles.cardItensCarrinho} card`}>
               <div className={styles.titleCarrinho}>
                 <h5>Carrinho de compras</h5>

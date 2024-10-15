@@ -62,19 +62,19 @@ export default function ModalFrete({ produto, freteGratis }) {
         if (allErrors) {
           setFrete({ error: true });
         } else {
-          const freteMaiorValor = fretes
+          const freteMenorValor = fretes
             .filter((item) => !item.error)
             .reduce(
-              (maxFrete, currentFrete) => {
-                return parseFloat(currentFrete.price) >
-                  parseFloat(maxFrete.price)
+              (minFrete, currentFrete) => {
+                return parseFloat(currentFrete.price) <
+                  parseFloat(minFrete.price)
                   ? currentFrete
-                  : maxFrete;
+                  : minFrete;
               },
-              { price: "0.00" }
+              { price: "Infinity" }
             );
 
-          setFrete(freteMaiorValor);
+          setFrete(freteMenorValor);
         }
 
         setLoading(false);
