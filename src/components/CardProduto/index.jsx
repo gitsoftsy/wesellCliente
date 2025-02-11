@@ -32,7 +32,7 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
         .get(url_base + `/imagens/produto/${produto.idProduto}`)
         .then((response) => {
           if (response.data.length > 0) {
-            let caminho = response.data[0].imagem.split("ROOT");
+            let caminho = response.data[0].imagem.split("webapps");
             setSrcImage(`${url_img}${caminho[1]}`);
           }
         })

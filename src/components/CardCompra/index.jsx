@@ -25,7 +25,7 @@ export default function CardCompra({ pedido, status }) {
     axios
       .get(url_base + `/imagens/produto/` + pedido.idProduto)
       .then((response) => {
-        let caminho = response.data[0].imagem.split("ROOT");
+        let caminho = response.data[0].imagem.split("webapps");
         setImagemProduto(`${url_img}${caminho[1]}`);
       })
       .catch((error) => {

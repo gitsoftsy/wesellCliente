@@ -120,7 +120,7 @@ export default function DetalhesProduto() {
 
   async function getProduto() {
     await axios
-      .get(url_base + `/produtos/transacoes/${id}`)
+      .get(url_base + `/produtos/${id}`)
       .then(async (response) => {
         const data = response.data;
         console.log(data);
@@ -168,7 +168,7 @@ export default function DetalhesProduto() {
       .get(url_base + `/imagens/produto/${id}`)
       .then((response) => {
         setListImages(response.data);
-        let caminho = response.data[0].imagem.split("ROOT");
+        let caminho = response.data[0].imagem.split("webapps");
         setSelectedImage(`${url_img}${caminho[1]}`);
         setActive(false);
       })
@@ -217,12 +217,12 @@ export default function DetalhesProduto() {
                     {listImages?.map((image) => (
                       <img
                         key={image.idImagemProduto}
-                        src={`${url_img}${image.imagem.split("ROOT")[1]}`}
+                        src={`${url_img}${image.imagem.split("webapps")[1]}`}
                         alt={`Thumbnail`}
                         className={styles.thumbnail}
                         onMouseEnter={() =>
                           handleThumbnailClick(
-                            `${url_img}${image.imagem.split("ROOT")[1]}`
+                            `${url_img}${image.imagem.split("webapps")[1]}`
                           )
                         }
                       />

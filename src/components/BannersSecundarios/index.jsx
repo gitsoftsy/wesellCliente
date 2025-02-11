@@ -24,7 +24,7 @@ export default function BannersSecundarios({ banners }) {
       >
         {bannersOrdenados.map((item) => {
           const newPathImagem = item.pathImagem.replace(
-            "/opt/apache-tomcat-9.0.89/webapps/ROOT",
+            "/opt/apache-tomcat-9.0.89/webapps",
             url_img
           );
           return (

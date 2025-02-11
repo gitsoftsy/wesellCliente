@@ -73,20 +73,6 @@ export default function NavBar() {
         </NavLink>
 
         <NavLink
-          to="/tecnologia"
-          className={({ isActive }) => (isActive ? styles.active : undefined)}
-        >
-          Tecnologia
-        </NavLink>
-
-        <NavLink
-          to="/esportes"
-          className={({ isActive }) => (isActive ? styles.active : undefined)}
-        >
-          Esportes
-        </NavLink>
-
-        <NavLink
           to="/favoritos"
           className={({ isActive }) => (isActive ? styles.active : undefined)}
         >

@@ -97,7 +97,7 @@ export default function Endereco() {
         url_base + `/imagens/produto/${idProduto}`
       );
       if (response.data.length > 0) {
-        let caminho = response.data[0].imagem.split("ROOT");
+        let caminho = response.data[0].imagem.split("webapps");
         return `${url_img}${caminho[1]}`;
       }
       return null;

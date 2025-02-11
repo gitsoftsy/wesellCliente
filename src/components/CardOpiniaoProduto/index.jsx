@@ -29,7 +29,7 @@ export default function CardOpiniaoProduto({
     axios
       .get(url_base + `/imagens/produto/` + idProduto)
       .then((response) => {
-        let caminho = response.data[0].imagem.split("ROOT");
+        let caminho = response.data[0].imagem.split("webapps");
         setImage(`${url_img}${caminho[1]}`);
       })
       .catch((error) => {

@@ -157,6 +157,7 @@ export default function Produtos() {
       await axios
         .post(url_base + "/produtos/listar", params)
         .then((response) => {
+          console.log(response);
           setProdutos(response.data);
           getFilters(response.data);
           setLoading(false);

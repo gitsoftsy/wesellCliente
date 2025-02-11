@@ -24,7 +24,7 @@ export default function Avaliacao() {
         axios
           .get(url_base + `/imagens/produto/` + res.data[0].idProduto)
           .then((response) => {
-            let caminho = response.data[0].imagem.split("ROOT");
+            let caminho = response.data[0].imagem.split("webapps");
             setImgProduto(`${url_img}${caminho[1]}`);
           })
           .catch((error) => {
