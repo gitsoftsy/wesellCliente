@@ -35,7 +35,7 @@ export default function ClienteProvider({ children }) {
       await axios
         .get(url_base + "/categorias/ativos")
         .then((response) => {
-          setCategorias(response.data);
+          setCategorias(response.data.data);
         })
         .catch((error) => {
           toast.error(error.message);
