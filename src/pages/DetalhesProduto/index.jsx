@@ -27,6 +27,7 @@ export default function DetalhesProduto() {
   const [isActive, setActive] = useState(true);
   const [avaliationsProduct, setAvaliationsProduct] = useState([]);
   const params = useParams();
+  const [mediaAvaliaco, setMediaAvaliaco] = useState(0);
 
   const getLink = async (link) => {
     const url = decodeURIComponent(link);
@@ -88,8 +89,8 @@ export default function DetalhesProduto() {
 
   useEffect(() => {
     if (path.pathname.includes("static")) {
-      console.log('Params:')
-      console.log(params)
+      console.log("Params:");
+      console.log(params);
       const jsonPage = {
         idProduto: params.id,
         idVendedor: params.idVendedor,
@@ -131,6 +132,19 @@ export default function DetalhesProduto() {
           .get(url_base + `/produtos/avaliacoes?idProduto=${id}`)
           .then((response) => {
             console.log(response.data);
+            const somaEstrelas =
+              response.data.length > 0 &&
+              response.data.reduce(
+                (acc, avaliacao) => acc + avaliacao.avaliacao,
+                0
+              );
+            let media =
+              response.data.length > 0
+                ? somaEstrelas / response.data.length
+                : 0;
+            media = Math.min(5, Math.max(0, media));
+            media = parseFloat(media.toFixed(1));
+            setMediaAvaliaco(media);
             setAvaliationsProduct(
               response.data !=
                 "Nenhum resultado encontrado para os parâmetros informados." &&
@@ -248,9 +262,16 @@ export default function DetalhesProduto() {
                     </div>
                     <h6>{produto.nomeProduto}</h6>
                     <div className={styles.stars}>
-                      <span className={styles.textStar}>4.3</span>
-                      <AvaliacaoFixa mediaAvaliacoes={4.3} heigth="18px" />
-                      <span className={styles.textStar}>(25)</span>
+                      <span className={styles.textStar}>
+                        {avaliationsProduct ? mediaAvaliaco : 0}
+                      </span>
+                      <AvaliacaoFixa
+                        mediaAvaliacoes={avaliationsProduct ? mediaAvaliaco : 0}
+                        heigth="18px"
+                      />
+                      <span className={styles.textStar}>
+                        ({avaliationsProduct ? avaliationsProduct.length : 0})
+                      </span>
                     </div>
                   </div>
                   <div className={styles.soldPlus_console}>
