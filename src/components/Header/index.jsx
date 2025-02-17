@@ -30,8 +30,16 @@ export default function Header() {
 
   useEffect(() => {
     if(client){
-      setNomeUsuario(client.nomeSocial ? client.nomeSocial.split(' ')[0] : client.nomeCompleto.split(' ')[0])
+      setNomeUsuario(
+        client?.nomeSocial?.trim() ? client.nomeSocial.split(' ')[0] :
+        client?.nome?.trim() ? client.nome.split(' ')[0] :
+        ''
+      );
+      
     }
+
+
+    
 
     if (categoria) {
       setSearchTerm("");

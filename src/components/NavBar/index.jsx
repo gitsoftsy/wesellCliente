@@ -78,12 +78,6 @@ export default function NavBar() {
         >
           Favoritos
         </NavLink>
-        <NavLink
-          to="/suporte-ao-cliente"
-          className={({ isActive }) => (isActive ? styles.active : undefined)}
-        >
-          Suporte ao cliente
-        </NavLink>
       </nav>
 
       <CategoryDropdown

@@ -31,7 +31,9 @@ export default function GridProdutos({
           produtos
             .slice(0, visibleCount)
             .map((produto) => (
+              produto.lojista.idTransacoes != null ?
               <CardProduto produto={produto} key={produto.idProduto} btnVisivel={btnVisivel} removeFavorites={removeFavorites}/>
+              : ''
             ))
         )}
       </div>
