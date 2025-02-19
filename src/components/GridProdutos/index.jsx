@@ -32,7 +32,7 @@ export default function GridProdutos({
             .slice(0, visibleCount)
             .map(
               (produto) =>
-                produto.lojista.idTransacoes != null && (
+                produto.idTransacoes != null && (
                   <CardProduto
                     produto={produto}
                     key={produto.idProduto}
