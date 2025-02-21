@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import axios from "axios";
+import { url_base } from "../../services/apis";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import useContexts from "../../hooks/useContext";
 import styles from "./navbar.module.css";
+import { useEffect } from "react";
 
 const CategoryDropdown = ({ visible, onMouseLeave }) => {
   const { categorias, setCategoria  } = useContexts();
@@ -47,6 +50,32 @@ const CategoryDropdown = ({ visible, onMouseLeave }) => {
 
 export default function NavBar() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [categorias, setCategorias] = useState([]);
+
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+
+  const formatCategory = (categoria) => {
+    return removeAccents(categoria).toLowerCase().replace(/\s+/g, "-");
+  };
+
+  useEffect(() =>{
+    async function getCategorias() {
+      await axios
+        .get(url_base + "/categorias/destaques")
+        .then((response) => {
+          setCategorias(response.data.data);
+        })
+        .catch((error) => {
+          toast.error(error.message);
+          console.log(error);
+        });
+    }
+
+    getCategorias()
+  })
 
   const handleMouseEnter = () => {
     if (!showDropdown) {
@@ -78,6 +107,20 @@ export default function NavBar() {
         >
           Favoritos
         </NavLink>
+        {categorias
+          .map((categoria) => {
+            
+            const formattedCategory = formatCategory(categoria.categoria)
+
+            
+
+     return (      <NavLink
+        to={`/c/${formattedCategory}`}
+        className={({ isActive }) => (isActive ? styles.active : undefined)}
+        >
+          {categoria.categoria}
+        </NavLink>   )       
+})}
       </nav>
 
       <CategoryDropdown
