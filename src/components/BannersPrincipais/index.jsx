@@ -20,7 +20,7 @@ export default function BannersPrincipais({ banners }) {
     >
       {bannersOrdenados.map((item) => {
         const newPathImagem = item.pathImagem.replace(
-          "/opt/apache-tomcat-9.0.89/webapps",
+          "/opt/tomcat9/webapps",
           url_img
         );
         return (

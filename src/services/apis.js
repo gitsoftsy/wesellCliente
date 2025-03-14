@@ -1,5 +1,5 @@
 // const url_base = 'http://ec2-18-235-243-90.compute-1.amazonaws.com:8080/api-wesell';
-const url_img = "http://10.40.110.2:8080/api-wesell";
+const url_img = "http://10.40.110.2:8080";
 const url_base = "http://10.40.110.2:8080/api-wesell";
 const apiFinanceiro = "http://10.40.110.2:8080/api-venda-wesell";
 const apiFrete =

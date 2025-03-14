@@ -35,7 +35,7 @@ export default function CarrosselCategorias({ dadosApi, isMobile }) {
           const formattedCategory = formatCategory(item.categoria);
 
           const newPathImagem = item.pathImagem?.replace(
-            "/opt/apache-tomcat-9.0.89/webapps",
+            "/opt/tomcat9/webapps",
             url_img
           );
           return (
