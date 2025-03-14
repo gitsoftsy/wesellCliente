@@ -15,6 +15,10 @@ import FormasPagamento from "../pages/FormasPagamento";
 import Avaliacao from "../pages/Avaliacao";
 import Favoritos from "../pages/Favoritos";
 import ProdutosOpiniaoPendentes from "../pages/ProdutosOpiniaoPendentes";
+import RedefinirSenhaLayout from "../pages/RedefinirSenhaLayout";
+import Acesso from "../pages/RedefinirSenha/Acesso";
+import Verificacao from "../pages/RedefinirSenha/Verificacao";
+import MudarSenha from "../pages/RedefinirSenha/MudarSenha";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +39,15 @@ const router = createBrowserRouter([
       { path: "carrinho/endereco/pagamentos", element: <FormasPagamento /> },
       { path: "favoritos", element: <Favoritos /> },
       { path: "minha-conta/pedidos/avaliacao/:idVendaItem", element: <Avaliacao /> },
+    ],
+  },
+  {
+    path: "/redefinit-senha",
+    element: <RedefinirSenhaLayout />,
+    children: [
+      { index: true, element: <Acesso /> },
+      { path: "mudar-senha", element: <MudarSenha /> },
+      { path: "verificacao", element: <Verificacao /> }
     ],
   },
   {

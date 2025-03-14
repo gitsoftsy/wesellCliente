@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import styles from "./login.module.css";
 import logo from "../../assets/logoWesell.svg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { url_base } from "../../services/apis";
 import { toast } from "react-toastify";
 import useContexts from "../../hooks/useContext";
@@ -43,8 +43,8 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        console.log(error)
-        console.log(error.response.status)
+        console.log(error);
+        console.log(error.response.status);
         if (error.response.status == 403) {
           toast.error("Email ou senha inválidos.");
           setLoading(false);
@@ -88,17 +88,23 @@ export default function Login() {
                 required
               />
 
-              <label htmlFor="password">
-                Senha:<span>*</span>
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div>
+                <label className="w-100" htmlFor="password">
+                  Senha:<span>*</span>
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="mb-0"
+                />
+                <p className="m-0 mt-1 mb-4 w-100 d-flex">
+                  <Link to="/redefinit-senha">Esqueci a senha. </Link>
+                </p>
+              </div>
 
               <button type="submit">
                 {loading ? (

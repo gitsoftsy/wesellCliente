@@ -1,0 +1,83 @@
+.containerAcesso {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--preto-secundario);
+}
+
+.containerAcesso h1 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.containerAcesso img {
+  background-color: #f8f8f8;
+  padding: 0.8em;
+  border-radius: 6px;
+  width: 400px;
+}
+
+.formulario { 
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    padding: 32px 40px;
+    border-radius: 6px;
+    border: 2px solid var(--amarelo);
+    color: white;
+}
+
+
+.formulario label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-align: left;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.formulario label span {
+    color: red;
+}
+
+.formulario input {
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    appearance: textfield;
+}
+
+.formulario button { 
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    background-color: var(--amarelo);
+}
+
+
+.formulario input::-webkit-inner-spin-button,
+.formulario input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .containerAcesso {
+    padding: 0px 12px;
+  }
+
+  .formulario label {
+    text-align: center;
+  }
+
+  .containerAcesso img {
+    width: 100%;
+  }
+}
