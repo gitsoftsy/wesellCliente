@@ -19,11 +19,9 @@ export default function CarrosselProdutos({ produtos, isMobile }) {
         className={styles.carrosselProdutos}
       >
         {produtos.map((produto) => (
-          produto.lojista.idTransacoes != null ?
           <SwiperSlide key={produto.id}>
             <CardProduto produto={produto} />
-          </SwiperSlide> : ""
-        ))}
+          </SwiperSlide>))}
       </Swiper>
     </div>
   );

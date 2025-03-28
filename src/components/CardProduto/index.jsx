@@ -38,7 +38,6 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
         })
         .catch((error) => {
           console.log(error);
-          console.log(error.message);
         });
     }
     getImagensProduto();

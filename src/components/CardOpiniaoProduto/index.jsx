@@ -47,9 +47,6 @@ export default function CardOpiniaoProduto({
     axios
       .put(url_base + "/vendaItens/avaliacao/" + idVendaItem, objeto)
       .then((response) => {
-        console.log("====================================");
-        console.log(response);
-        console.log("====================================");
         toast.success(`Avaliado com sucesso!`);
         funcReload()
       })

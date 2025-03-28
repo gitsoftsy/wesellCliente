@@ -378,7 +378,7 @@ export default function Produtos() {
                     : `Resultados para "${valueSearch}"`}
                 </h4>
                 <p className="mb-0">
-                  Mais de {produtos.length - 1} produtos encontrados.
+                  Total de {produtos.length} produtos encontrados.
                 </p>
               </div>
             </section>
@@ -393,7 +393,7 @@ export default function Produtos() {
                 <p className="mb-0">
                   {produtos.length < 2
                     ? `${produtos.length} produto encontrado.`
-                    : `Mais de ${produtos.length - 1} ${
+                    : `Total de ${produtos.length} ${
                         produtos.length < 3
                           ? "produto encontrado."
                           : "produtos encontrados."

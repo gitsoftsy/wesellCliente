@@ -7,9 +7,10 @@ import { IoIosArrowDown } from "react-icons/io";
 import useContexts from "../../hooks/useContext";
 import styles from "./navbar.module.css";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const CategoryDropdown = ({ visible, onMouseLeave }) => {
-  const { categorias, setCategoria  } = useContexts();
+  const { categorias, setCategoria } = useContexts();
   const navigate = useNavigate();
 
   const removeAccents = (str) => {
@@ -32,10 +33,10 @@ const CategoryDropdown = ({ visible, onMouseLeave }) => {
 
             return (
               <li
-              onClick={() => {
-                navigate("/c/" + formattedCategory);
-                setCategoria({nome: item.categoria, id: item.idCategoria})
-              }}
+                onClick={() => {
+                  navigate("/c/" + formattedCategory);
+                  setCategoria({ nome: item.categoria, id: item.idCategoria });
+                }}
                 key={item.idCategoria}
               >
                 {item.categoria}
@@ -56,12 +57,11 @@ export default function NavBar() {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
 
-
   const formatCategory = (categoria) => {
     return removeAccents(categoria).toLowerCase().replace(/\s+/g, "-");
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     async function getCategorias() {
       await axios
         .get(url_base + "/categorias/destaques")
@@ -74,8 +74,8 @@ export default function NavBar() {
         });
     }
 
-    getCategorias()
-  })
+    getCategorias();
+  });
 
   const handleMouseEnter = () => {
     if (!showDropdown) {
@@ -86,10 +86,7 @@ export default function NavBar() {
   return (
     <div className={styles.navbarContainer}>
       <nav className={styles.navbar}>
-        <div
-          className={styles.categorias}
-          onMouseEnter={handleMouseEnter}
-        >
+        <div className={styles.categorias} onMouseEnter={handleMouseEnter}>
           Categorias
           <IoIosArrowDown size={18} className={styles.arrowIcon} />
         </div>
@@ -107,20 +104,21 @@ export default function NavBar() {
         >
           Favoritos
         </NavLink>
-        {categorias
-          .map((categoria) => {
-            
-            const formattedCategory = formatCategory(categoria.categoria)
+        {categorias.map((categoria) => {
+          const formattedCategory = formatCategory(categoria.categoria);
 
-            
-
-     return (      <NavLink
-        to={`/c/${formattedCategory}`}
-        className={({ isActive }) => (isActive ? styles.active : undefined)}
-        >
-          {categoria.categoria}
-        </NavLink>   )       
-})}
+          return (
+            <NavLink
+              key={categoria.categoria}
+              to={`/c/${formattedCategory}`}
+              className={({ isActive }) =>
+                isActive ? styles.active : undefined
+              }
+            >
+              {categoria.categoria}
+            </NavLink>
+          );
+        })}
       </nav>
 
       <CategoryDropdown

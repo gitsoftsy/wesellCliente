@@ -124,7 +124,6 @@ export default function DetalhesProduto() {
       .get(url_base + `/produtos/${id}`)
       .then(async (response) => {
         const data = response.data;
-        console.log(data);
         setProduto(data);
         getProdutosSimilares(data);
 
@@ -283,9 +282,11 @@ export default function DetalhesProduto() {
                     <div className={styles.values}>
                       <hr />
                       <h4>Valor produto:</h4>
-                      <span className={styles.values_liquid}>
-                        <s>{formatCurrencyBR(produto.precoVenda)}</s>
-                      </span>
+                      {produto.precoVenda !== produto.precoPromocional && (
+                        <span className={styles.values_liquid}>
+                          <s>{formatCurrencyBR(produto.precoVenda)}</s>
+                        </span>
+                      )}
                       <h5 className={styles.values_deduction}>
                         {formatCurrencyBR(produto.precoPromocional)}
                       </h5>
