@@ -85,10 +85,8 @@
   min-width: 22em;
   gap: 15px;
   border: 1px solid #2e2e2e3f;
-  border-bottom: transparent;
   padding: 20px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border-radius: 12px;
 }
 
 .description {

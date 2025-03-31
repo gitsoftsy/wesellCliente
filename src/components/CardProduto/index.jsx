@@ -73,9 +73,11 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
         <div>
           {produto.precoVenda && (
             <>
-              <span className={styles.values_liquid}>
-                <s>{formatCurrencyBR(produto.precoVenda)}</s>
-              </span>
+              {produto.precoVenda !== produto.precoPromocional && (
+                <span className={styles.values_liquid}>
+                  <s>{formatCurrencyBR(produto.precoVenda)}</s>
+                </span>
+              )}
               <p className={styles.valor}>
                 {formatCurrencyBR(produto.precoPromocional)}
               </p>
@@ -95,8 +97,7 @@ export default function CardProduto({ produto, btnVisivel, removeFavorites }) {
             className={styles.btnBuy}
             type="button"
             onClick={() => {
-              addToCart(produto.idProduto),
-                navigate("/carrinho");
+              addToCart(produto.idProduto), navigate("/carrinho");
             }}
           >
             Adicionar ao carrinho

@@ -303,14 +303,10 @@ export default function DetalhesProduto() {
                     )}
                   </div>
                 </div>
-                <div
-                  className={`${styles.frete} ${
-                    !calculaFrete && "justify-content-center"
-                  }`}
-                >
+                <div className={`${styles.frete} justify-content-center`}>
                   {calculaFrete ? (
                     <>
-                      <div className={styles.freeShipping_deadline_calculate}>
+                      {/* <div className={styles.freeShipping_deadline_calculate}>
                         <h5 className={styles.freeShipping}>Calcule o frete</h5>
                         <span className={styles.deadline}>
                           Saiba os prazos de entrega e as formas de envio.
@@ -322,7 +318,7 @@ export default function DetalhesProduto() {
                         >
                           Calcular o prazo de entrega
                         </span>
-                      </div>
+                      </div> */}
                       <div className={styles.stock_quantity_unit}>
                         <span className={styles.stock}>Estoque disponível</span>
                         <a href="#" className={styles.unit}>
